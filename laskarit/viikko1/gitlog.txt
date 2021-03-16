@@ -1,0 +1,232 @@
+commit 53ad6fda27a88305a1d9ef8c8784d01146b53ebe (HEAD -> master)
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:45:46 2021 +0200
+
+    file muokkausta
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 59ae634ef827ee59f036443a89a2825b32b8e458
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:41:47 2021 +0200
+
+    uusi hakemisto
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e8c530312ee2eca59b2b0ff4059459addc52feac
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+ ESCOD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+commit 53ad6fda27a88305a1d9ef8c8784d01146b53ebe (HEAD -> master)
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:45:46 2021 +0200
+
+    file muokkausta
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 59ae634ef827ee59f036443a89a2825b32b8e458
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:41:47 2021 +0200
+
+    uusi hakemisto
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e8c530312ee2eca59b2b0ff4059459addc52feac
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+ ESCOD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+commit 53ad6fda27a88305a1d9ef8c8784d01146b53ebe (HEAD -> master)
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:45:46 2021 +0200
+
+    file muokkausta
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 59ae634ef827ee59f036443a89a2825b32b8e458
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:41:47 2021 +0200
+
+    uusi hakemisto
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e8c530312ee2eca59b2b0ff4059459addc52feac
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+ ESCOC
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ master)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ESCOD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+commit 53ad6fda27a88305a1d9ef8c8784d01146b53ebe (HEAD -> master)
+commit 53ad6fda27a88305a1d9ef8c8784d01146b53ebe (HEAD -> master)
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:45:46 2021 +0200
+
+    file muokkausta
+
+ tiedostoja/file2             | 0
+ tiedostoja/{file1 => file22} | 0
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+
+commit 59ae634ef827ee59f036443a89a2825b32b8e458
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:41:47 2021 +0200
+
+    uusi hakemisto
+
+ tiedostoja/file1 | 0
+ tiedostoja/file2 | 0
+ tiedostoja/file3 | 0
+ 3 files changed, 0 insertions(+), 0 deletions(-)
+
+commit e8c530312ee2eca59b2b0ff4059459addc52feac
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Tue Mar 16 20:35:33 2021 +0200
+
+    lisää muutoksia
+
+ eka.txt    | 4 +++-
+ kolmas.txt | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+commit 91566ce2171c680806fb979bcbe767d7f21e31f2
+Author: heinapaa <heini.koivumaki@helsinki.fi>
+Date:   Mon Mar 15 21:27:06 2021 +0200
+
+    uusi nimi
+
+ tiedosto.txt => eka.txt | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)

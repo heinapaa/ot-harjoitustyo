@@ -9,3 +9,5 @@
 [komentorivi.txt](https://github.com/heinapaa/ot-harjoitustyo/blob/main/laskarit/viikko1/komentorivi.txt)
 
 Jokin muutos.
+
+Jokin toinen muutos.

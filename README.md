@@ -1,5 +1,9 @@
-# Iso otsikko
+# Ohjelmistotekniikka, harjoitustyö
 
-## Pienempi otsikko
+## Tehtävät
 
-Lorem ipsum **lorem** *ipsum* vai _**lorem ipsum**_!
+### Viikko 1
+
+[gitlog.txt](https://github.com/heinapaa/ot-harjoitustyo/blob/main/laskarit/viikko1/gitlog.txt)
+
+[komentorivi.txt](https://github.com/heinapaa/ot-harjoitustyo/blob/main/laskarit/viikko1/komentorivi.txt)

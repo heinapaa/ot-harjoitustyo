@@ -4,10 +4,6 @@
 
 Sovelluksen avulla käyttäjät voivat tallentaa reseptien ainesosaluetteloita ja generoida kauppalistoja näiden pohjalta. Sovelluksen käyttäminen vaatii rekisteröitymisen, ja tallennetut ainesosalistat ovat käyttäjäkohtaisia.
 
-## Sovelluksen käyttäjät
-
-Sovelluksessa on yksi käyttäjärooli, *normaali käyttäjä*.
-
 ## Sovelluksen perustoiminnallisuus
 
 ### Toiminnallisuus ennen kirjautumista

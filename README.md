@@ -1,13 +1,5 @@
 # Ohjelmistotekniikka, harjoitustyö
 
-## Tehtävät
-
-### Viikko 1
-
-[gitlog.txt](https://github.com/heinapaa/ot-harjoitustyo/blob/main/laskarit/viikko1/gitlog.txt)
-
-[komentorivi.txt](https://github.com/heinapaa/ot-harjoitustyo/blob/main/laskarit/viikko1/komentorivi.txt)
-
-Jokin muutos.
-
-Jokin toinen muutos.
+## Dokumentaatio
+[Vaatimusmäärittely](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/vaatimusmaarittelu.md)
+[Tuntikirjanpito](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/tuntikirjanpito.md)

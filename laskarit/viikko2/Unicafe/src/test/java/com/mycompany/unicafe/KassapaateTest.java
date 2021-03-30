@@ -14,13 +14,38 @@ public class KassapaateTest {
     }
     
     @Test
+    public void kassanSummaAlussaOikein() {
+        assertEquals(100000, paate.kassassaRahaa());
+    }
+    
+    @Test
+    public void myydytLounaatAlussaOikein() {
+        assertEquals(0, paate.maukkaitaLounaitaMyyty() + paate.edullisiaLounaitaMyyty());
+    } 
+    
+    @Test
+    public void lataaRahaaKassaKasvaa() {
+        paate.lataaRahaaKortille(new Maksukortti(0), 100);
+        assertEquals(100100, paate.kassassaRahaa());
+    }
+    
+    @Test
+    public void lataaRahaaNegatiivinenEiToimi() {
+        paate.lataaRahaaKortille(new Maksukortti(0), -100);
+        assertEquals(100000, paate.kassassaRahaa());
+    }
+    
+    // EDULLINEN - RAHA RIITTAA
+    
+    @Test
     public void syoEdullisestiRahaRiittaaVaihtoraha() {
         assertEquals(100, paate.syoEdullisesti(340));
     }
     
     @Test
-    public void syoEdullisestiRahaEiRiitaVaihtoraha() {
-        assertEquals(1, paate.syoEdullisesti(1));
+    public void syoEdullisestiRahaRiitaaMyyntiKasvaa() {
+        paate.syoEdullisesti(340);
+        assertEquals(1, paate.edullisiaLounaitaMyyty());
     }
     
     @Test
@@ -29,11 +54,26 @@ public class KassapaateTest {
         assertEquals(100240,paate.kassassaRahaa());
     }
     
+    // EDULLINEN - RAHA EI RIITTA
+    
     @Test
-    public void syoEdullisestiRahaEiRiittaKassaEiKasva() {
+    public void syoEdullisestiRahaEiRiitaVaihtoraha() {
+        assertEquals(1, paate.syoEdullisesti(1));
+    }
+    
+    @Test
+    public void syoEdullisestiRahaEiRiitaMyyntiEiKasva() {
+        paate.syoEdullisesti(1);
+        assertEquals(0, paate.edullisiaLounaitaMyyty());
+    }
+      
+    @Test
+    public void syoEdullisestiRahaEiRiitaKassaEiKasva() {
         paate.syoEdullisesti(1);
         assertEquals(100000,paate.kassassaRahaa());
     }
+    
+    // MAUKAS - RAHA RIITTAA    
     
     @Test
     public void syoMaukkaastiRahaRiittaaVaihtoraha() {
@@ -41,14 +81,28 @@ public class KassapaateTest {
     }
     
     @Test
-    public void syoMaukkaastiRahaEiRiitaVaihtoraha() {
-        assertEquals(1, paate.syoMaukkaasti(1));
+    public void syoMaukkaastiRahaRiitaaMyyntiKasvaa() {
+        paate.syoMaukkaasti(500);
+        assertEquals(1, paate.maukkaitaLounaitaMyyty());
     }
     
     @Test
     public void syoMaukkaastiRahaRiittaaKassaKasvaa() {
         paate.syoMaukkaasti(500);
         assertEquals(100400,paate.kassassaRahaa());
+    }
+     
+    // MAUKAS - RAHA EI RIITA  
+
+    @Test
+    public void syoMaukkaastiRahaEiRiitaVaihtoraha() {
+        assertEquals(1, paate.syoMaukkaasti(1));
+    }
+    
+    @Test
+    public void syoMaukkaastiRahaEiRiitaMyyntiEiKasva() {
+        paate.syoMaukkaasti(1);
+        assertEquals(0, paate.maukkaitaLounaitaMyyty());
     }
     
     @Test
@@ -57,23 +111,12 @@ public class KassapaateTest {
         assertEquals(100000,paate.kassassaRahaa());
     }
     
-    @Test
-    public void syoEdullisestiKortillaRahaEiRiita() {
-        Maksukortti kortti = new Maksukortti(100);
-        assertTrue(!paate.syoEdullisesti(kortti));
-    }
+    // EDULLINEN - KORTTI - RAHA RIITTAA
     
     @Test
     public void syoEdullisestiKortillaRahaRiittaa() {
         Maksukortti kortti = new Maksukortti(1000);
         assertTrue(paate.syoEdullisesti(kortti));
-    }
-    
-    @Test
-    public void syoEdullisestiKortillaRahaEiRiitaSaldoEiMuutu() {
-        Maksukortti kortti = new Maksukortti(100);
-        paate.syoEdullisesti(kortti);
-        assertEquals(100, kortti.saldo());
     }
     
     @Test
@@ -84,10 +127,50 @@ public class KassapaateTest {
     }
     
     @Test
-    public void syoMaukkaastiKortillaRahaEiRiita() {
-        Maksukortti kortti = new Maksukortti(100);
-        assertTrue(!paate.syoMaukkaasti(kortti));
+    public void syoEdullisestiKortillaRahaRiittaaMyyntiKasvaa() {
+        Maksukortti kortti = new Maksukortti(1000);
+        paate.syoEdullisesti(kortti);
+        assertEquals(1, paate.edullisiaLounaitaMyyty());        
     }
+    
+    @Test
+    public void syoEdullisestiKortillaRahaRiittaaKassaEiKasva() {
+        Maksukortti kortti = new Maksukortti(1000);
+        paate.syoEdullisesti(kortti);
+        assertEquals(100000, paate.kassassaRahaa());        
+    }
+    
+    
+    // EDULLINEN - KORTTI - RAHA EI RIITA
+    
+    @Test
+    public void syoEdullisestiKortillaRahaEiRiita() {
+        Maksukortti kortti = new Maksukortti(100);
+        assertTrue(!paate.syoEdullisesti(kortti));
+    }
+
+    @Test
+    public void syoEdullisestiKortillaRahaEiRiitaSaldoEiMuutu() {
+        Maksukortti kortti = new Maksukortti(100);
+        paate.syoEdullisesti(kortti);
+        assertEquals(100, kortti.saldo());
+    }
+    
+    @Test
+    public void syoEdullisestiKortillaRahaEiRiittaMyyntiEiKasvaa() {
+        Maksukortti kortti = new Maksukortti(1);
+        paate.syoEdullisesti(kortti);
+        assertEquals(0, paate.edullisiaLounaitaMyyty());        
+    }
+    
+    @Test
+    public void syoEdullisestiKortillaRahaEiRiitaKassaEiKasva() {
+        Maksukortti kortti = new Maksukortti(1);
+        paate.syoEdullisesti(kortti);
+        assertEquals(100000, paate.kassassaRahaa());        
+    }    
+    
+    // MAUKAS - KORTTI - RAHA RIITTAA
     
     @Test
     public void syoMaukkaastiKortillaRahaRiittaa() {
@@ -96,45 +179,53 @@ public class KassapaateTest {
     }
     
     @Test
-    public void syoMaukkaastiKortillaRahaEiRiitaSaldoEiMuutu() {
-        Maksukortti kortti = new Maksukortti(100);
-        paate.syoMaukkaasti(kortti);
-        assertEquals(100, kortti.saldo());
-    }
-    
-    @Test
     public void syoMaukkaastiKortillaRahaRiittaaSaldoMuuttuu() {
         Maksukortti kortti = new Maksukortti(1000);
         paate.syoMaukkaasti(kortti);
         assertEquals(600, kortti.saldo());
-    }   
+    }  
     
     @Test
-    public void edullinenLaskuri() {
-        Maksukortti kortti = new Maksukortti(1000);
-        paate.syoEdullisesti(kortti);
-        paate.syoEdullisesti(240);
-        assertEquals(2, paate.edullisiaLounaitaMyyty());
-    }    
-    
-    @Test
-    public void maukasLaskuri() {
+    public void syoMaukkaastiKortillaRahaRiittaaMyyntiKasvaa() {
         Maksukortti kortti = new Maksukortti(1000);
         paate.syoMaukkaasti(kortti);
-        paate.syoMaukkaasti(400);
-        assertEquals(2, paate.maukkaitaLounaitaMyyty());
+        assertEquals(1, paate.maukkaitaLounaitaMyyty());        
     }
     
     @Test
-    public void lataaRahaaKassaKasvaa() {
-        paate.lataaRahaaKortille(new Maksukortti(0), 100);
-        assertEquals(100100, paate.kassassaRahaa());
+    public void syoMaukkaastiKortillaRahaRiittaaKassaEiKasva() {
+        Maksukortti kortti = new Maksukortti(1000);
+        paate.syoMaukkaasti(kortti);
+        assertEquals(100000, paate.kassassaRahaa());        
+    }    
+    
+    // MAUKAS - KORTTI - RAHA EI RIITA    
+    
+    @Test
+    public void syoMaukkaastiKortillaRahaEiRiita() {
+        Maksukortti kortti = new Maksukortti(100);
+        assertTrue(!paate.syoMaukkaasti(kortti));
     }
     
     @Test
-    public void lataaRahaaNegatiivinen() {
-        paate.lataaRahaaKortille(new Maksukortti(0), -100);
-        assertEquals(100000, paate.kassassaRahaa());
+    public void syoMaukkaastiKortillaRahaEiRiitaSaldoEiMuutu() {
+        Maksukortti kortti = new Maksukortti(100);
+        paate.syoMaukkaasti(kortti);
+        assertEquals(100, kortti.saldo());
+    }     
+
+    @Test
+    public void syoMaukkaastiKortillaRahaEiRiittaMyyntiEiKasvaa() {
+        Maksukortti kortti = new Maksukortti(1);
+        paate.syoMaukkaasti(kortti);
+        assertEquals(0, paate.maukkaitaLounaitaMyyty());        
     }
+    
+    @Test
+    public void syoMaukkaastiKortillaRahaEiRiitaKassaEiKasva() {
+        Maksukortti kortti = new Maksukortti(1);
+        paate.syoMaukkaasti(kortti);
+        assertEquals(100000, paate.kassassaRahaa());        
+    }     
     
 }

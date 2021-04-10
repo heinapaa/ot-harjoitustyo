@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-checkstyle</actionName>
+            <displayName>checkstyle</displayName>
+            <goals>
+                <goal>jxr:jxr</goal>
+                <goal>checkstyle:checkstyle</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-compile</actionName>
+            <displayName>compile</displayName>
+            <goals>
+                <goal>exec:java</goal>
+                <goal>-Dexec.mainClass=pakkaus.Paaohjelma</goal>
+            </goals>
+        </action>
+    </actions>

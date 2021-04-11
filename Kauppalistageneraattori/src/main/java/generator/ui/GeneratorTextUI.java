@@ -7,6 +7,7 @@ import java.util.Scanner;
  *
  * @author heinapaa
  */
+
 public class GeneratorTextUI {
     
     private Scanner lukija;

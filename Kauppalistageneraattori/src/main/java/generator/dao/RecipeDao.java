@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package generator.dao;
 
-/**
- *
- * @author heinapaa
- */
-public class RecipeDao {
+import generator.domain.Ingredient;
+import generator.domain.Recipe;
+
+public interface RecipeDao {
+    
+    void create(Recipe recipe) throws Exception;
+    void addIngredient(String name, double amount, String unit);
     
 }

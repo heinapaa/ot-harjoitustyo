@@ -36,6 +36,11 @@ public class Recipe implements RecipeDao {
         this.serving = serving;
     }
 
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+    
+
     @Override
     public void create(Recipe recipe) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");

@@ -5,9 +5,9 @@ import generator.domain.User;
 
 public interface UserDao {
     
-    void create(User user) throws Exception;  
-    void addRecipe(Recipe recipe);
-    void removeRecipe(Recipe recipe);
+    void create(User user) throws Exception;
     Recipe getRecipeByName(String name);
+    void addRecipe(Recipe recipe);
+    void removeRecipe(Recipe recipe);    
 
 }

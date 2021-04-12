@@ -3,7 +3,7 @@ package generator.domain;
 import generator.dao.RecipeDao;
 import java.util.*;
 
-public class Recipe implements RecipeDao {
+public class Recipe {
     
     private String name;
     private int serving;
@@ -15,7 +15,6 @@ public class Recipe implements RecipeDao {
         this.ingredients = new ArrayList<>();
     }   
     
-    @Override
     public void addIngredient(String name, double amount, String unit) {
         ingredients.add(new Ingredient(name, amount, unit));
     }
@@ -24,26 +23,12 @@ public class Recipe implements RecipeDao {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getServing() {
         return serving;
-    }
-
-    public void setServing(int serving) {
-        this.serving = serving;
     }
 
     public List<Ingredient> getIngredients() {
         return ingredients;
     }
-    
-
-    @Override
-    public void create(Recipe recipe) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
-    } 
      
 }

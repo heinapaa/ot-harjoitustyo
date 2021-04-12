@@ -9,7 +9,7 @@ public class RecipeService {
     private RecipeDao recipeDao;
     private IngredientDao ingredientDao;
     private UserDao userDao;
-    private User loggedIn;
+    private User currentUser;
     
     public RecipeService(RecipeDao recipeDao, IngredientDao ingredientDao, UserDao userDao) {
         this.recipeDao = recipeDao;

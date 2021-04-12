@@ -2,7 +2,7 @@ package generator.domain;
 
 import generator.dao.IngredientDao;
 
-public class Ingredient implements IngredientDao {
+public class Ingredient {
     
     private String name;
     private double amount;
@@ -18,29 +18,13 @@ public class Ingredient implements IngredientDao {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
 
     public String getUnit() {
         return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    @Override
-    public void create(Ingredient ingredient) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

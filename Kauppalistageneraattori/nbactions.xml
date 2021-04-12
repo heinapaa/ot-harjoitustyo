@@ -16,4 +16,11 @@
                 <goal>-Dexec.mainClass=pakkaus.Paaohjelma</goal>
             </goals>
         </action>
+        <action>
+            <actionName>CUSTOM-testikattavuus</actionName>
+            <displayName>testikattavuus</displayName>
+            <goals>
+                <goal>jacoco:report</goal>
+            </goals>
+        </action>
     </actions>

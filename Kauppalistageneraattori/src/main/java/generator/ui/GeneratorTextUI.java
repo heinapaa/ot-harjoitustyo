@@ -43,7 +43,7 @@ public class GeneratorTextUI {
         User kayttaja = new User(nimi);
         
         if (onKayttaja(nimi)) {
-            kayttaja = lueTiedot(nimi);
+            kayttaja = lueKayttajanTiedot(nimi);
         }
 
         while (true) {
@@ -60,7 +60,7 @@ public class GeneratorTextUI {
             else System.out.println("Viallinen syöte, yritä uudelleen!");
         }
         
-        tallenna(kayttaja);
+        tallennaReseptit(kayttaja);
         System.out.println("Kiitos ja hyvää päivänjatkoa!");
     }
     
@@ -125,7 +125,7 @@ public class GeneratorTextUI {
                
     }
     
-    public User lueTiedot(String nimi) throws Exception {
+    public User lueKayttajanTiedot(String nimi) throws Exception {
         
         User kayttaja = new User(nimi);
         
@@ -156,7 +156,7 @@ public class GeneratorTextUI {
        
     }
     
-    public void tallenna(User kayttaja) throws Exception {
+    public void tallennaReseptit(User kayttaja) throws Exception {
         
         FileWriter kirjoittaja = new FileWriter("users.txt", true);
         

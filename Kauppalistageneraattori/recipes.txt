@@ -1,2 +1,0 @@
-kakku,10,heinapaa
-kakku,4,kana

@@ -7,17 +7,13 @@ public class Recipe {
     
     private String name;
     private int serving;
-    private List<Ingredient> ingredients;
+    private User owner;
     
-    public Recipe(String name, int serving) {
+    public Recipe(String name, int serving, User user) {
         this.name = name;
         this.serving = serving;
-        this.ingredients = new ArrayList<>();
+        this.owner = user;
     }   
-    
-    public void addIngredient(String name, double amount, String unit) {
-        ingredients.add(new Ingredient(name, amount, unit));
-    }
 
     public String getName() {
         return name;
@@ -26,9 +22,9 @@ public class Recipe {
     public int getServing() {
         return serving;
     }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
+    
+    public User getOwner() {
+        return this.owner;
     }
      
 }

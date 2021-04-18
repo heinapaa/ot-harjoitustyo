@@ -7,3 +7,6 @@ päivä | h | log
 11.4. | 2.5 | perusrakennetta + perustoimintoja (reseptin lisäys, listaus, poisto)
 12.4. | 3.0 | tallennus (tiedostoon) + testauksen aloittelu
 13.4. | 2.0 | laaja rakennemuutos
+14.4. | 2.5 | perustoimintoja (ainesosien listaus, ostoslistan luonti)
+18.4. | 1.0 | tyylikorjauksia ja testausta
+

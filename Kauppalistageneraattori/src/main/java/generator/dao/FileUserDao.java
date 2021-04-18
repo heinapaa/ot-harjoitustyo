@@ -16,7 +16,7 @@ public class FileUserDao implements UserDao {
     private List<User> users;
     private String file;
     
-    public FileUserDao() throws IOException {
+    public FileUserDao() throws Exception {
         this.users = new ArrayList<>();
         this.file = "users.txt";    
         

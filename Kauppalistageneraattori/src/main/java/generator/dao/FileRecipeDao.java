@@ -14,10 +14,12 @@ public class FileRecipeDao implements RecipeDao {
     
     private List<Recipe> recipes;
     private String file;
+    int latestId;
     
     public FileRecipeDao(UserDao users) throws Exception {
         this.recipes = new ArrayList<>();
         this.file = "recipes.txt";
+        latestId = 1;
         
         File recipeList = new File(file);
         
@@ -26,7 +28,8 @@ public class FileRecipeDao implements RecipeDao {
                 while (tiedostonLukija.hasNextLine()) {
                     String rivi = tiedostonLukija.nextLine();
                     String[] palat = rivi.split(",");
-                    recipes.add(new Recipe(palat[0],Integer.valueOf(palat[1]), users.findByUsername(palat[2])));
+                    recipes.add(new Recipe(Integer.valueOf(palat[0]), palat[1], Integer.valueOf(palat[2]), users.findByUsername(palat[3])));
+                    if (Integer.valueOf(palat[0])>latestId) latestId = Integer.valueOf(palat[0]);
                 }
             }             
         }        
@@ -35,13 +38,20 @@ public class FileRecipeDao implements RecipeDao {
     private void save() throws Exception {
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (Recipe recipe : recipes) {
-                kirjoittaja.write(recipe.getName() + "," + recipe.getServing() + "," + recipe.getOwner().getUsername() + "\n");
+                kirjoittaja.write(recipe.getId() + "," + recipe.getName() + "," + recipe.getServing() + "," + recipe.getOwner().getUsername() + "\n");
             }
         }         
+    }
+    
+    private int generateId() {
+        latestId++;
+        return latestId;
     }
 
     @Override
     public void create(Recipe recipe) throws Exception {
+        Recipe newRecipe = recipe;
+        newRecipe.setId(generateId());
         recipes.add(recipe);
         save();
     }
@@ -60,6 +70,26 @@ public class FileRecipeDao implements RecipeDao {
         
         return null;
     }    
+    
+    @Override
+    public Recipe findById(int id) {
+        for (Recipe recipe : recipes) {
+            if (recipe.getId() == id) return recipe;
+        }
+        
+        return null;
+    }
+    
+    @Override
+    public List<Recipe> findByUser(User user) {
+       List<Recipe> userRecipes = new ArrayList<>();
+       
+       for (Recipe recipe : recipes) {
+           if (recipe.getOwner().getUsername().equals(user.getUsername())) userRecipes.add(recipe);
+       }
+        
+       return userRecipes;
+    }
 
     @Override
     public List<Recipe> findAll() {

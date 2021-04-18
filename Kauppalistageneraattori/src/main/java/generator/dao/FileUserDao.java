@@ -48,7 +48,9 @@ public class FileUserDao implements UserDao {
     @Override
     public User findByUsername(String name) {
         for (User user : users) {
-            if (user.getUsername().equals(name)) return user;
+            if (user.getUsername().equals(name)) {
+                return user;
+            }
         }
         
         return null;

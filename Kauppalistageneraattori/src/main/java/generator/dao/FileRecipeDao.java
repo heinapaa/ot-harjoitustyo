@@ -29,7 +29,9 @@ public class FileRecipeDao implements RecipeDao {
                     String rivi = tiedostonLukija.nextLine();
                     String[] palat = rivi.split(",");
                     recipes.add(new Recipe(Integer.valueOf(palat[0]), palat[1], Integer.valueOf(palat[2]), users.findByUsername(palat[3])));
-                    if (Integer.valueOf(palat[0])>latestId) latestId = Integer.valueOf(palat[0]);
+                    if (Integer.valueOf(palat[0]) > latestId) {
+                        latestId = Integer.valueOf(palat[0]);
+                    }
                 }
             }             
         }        
@@ -65,30 +67,34 @@ public class FileRecipeDao implements RecipeDao {
     @Override
     public Recipe findByName(String name) {
         for (Recipe recipe : recipes) {
-            if (recipe.getName().equals(name)) return recipe;
-        }
-        
+            if (recipe.getName().equals(name)) {
+                return recipe;
+            }
+        }  
         return null;
     }    
     
     @Override
     public Recipe findById(int id) {
         for (Recipe recipe : recipes) {
-            if (recipe.getId() == id) return recipe;
-        }
-        
+            if (recipe.getId() == id) {
+                return recipe;
+            }
+        }     
         return null;
     }
     
     @Override
     public List<Recipe> findByUser(User user) {
-       List<Recipe> userRecipes = new ArrayList<>();
-       
-       for (Recipe recipe : recipes) {
-           if (recipe.getOwner().getUsername().equals(user.getUsername())) userRecipes.add(recipe);
-       }
+        List<Recipe> userRecipes = new ArrayList<>();
         
-       return userRecipes;
+        for (Recipe recipe : recipes) {
+            if (recipe.getOwner().getUsername().equals(user.getUsername())) {
+                userRecipes.add(recipe);
+            }
+        }
+        
+        return userRecipes;
     }
 
     @Override

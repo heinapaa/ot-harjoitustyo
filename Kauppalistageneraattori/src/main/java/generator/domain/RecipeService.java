@@ -35,7 +35,9 @@ public class RecipeService {
         List<Recipe> allRecipes = recipeDao.findAll();
         List<Recipe> returnRecipes = new ArrayList<>();
         for (Recipe recipe : allRecipes) {
-            if (recipe.getOwner().equals(currentUser)) returnRecipes.add(recipe);
+            if (recipe.getOwner().equals(currentUser)) {
+                returnRecipes.add(recipe);
+            }
         }
         
         return returnRecipes;
@@ -54,11 +56,11 @@ public class RecipeService {
     
     public User login(String nimi) throws Exception {
         
-            if (userDao.findByUsername(nimi) == null) {
-                userDao.create(new User(nimi));
-            }
-            this.currentUser = userDao.findByUsername(nimi);
-            return currentUser;
+        if (userDao.findByUsername(nimi) == null) {
+            userDao.create(new User(nimi));
+        }
+        this.currentUser = userDao.findByUsername(nimi);
+        return currentUser;
             
     }
     
@@ -69,11 +71,11 @@ public class RecipeService {
             Recipe recipe = recipeDao.findByName(reseptinNimi);
             List<Ingredient> ingredients = ingredientDao.findByRecipe(recipe);
             
-            for (Ingredient ingredient : ingredients) shoppingList.add(ingredient.toString());
+            for (Ingredient ingredient : ingredients) {
+                shoppingList.add(ingredient.toString());
+            }
         }
         
         return shoppingList;
-    }
-
-    
+    }  
 }

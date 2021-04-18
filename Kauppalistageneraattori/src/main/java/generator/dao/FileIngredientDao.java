@@ -34,7 +34,9 @@ public class FileIngredientDao implements IngredientDao {
                     int recipeId = Integer.valueOf(palat[4]);
                     Recipe recipe = recipes.findById(recipeId);
                     ingredients.add(new Ingredient(ingredientId, ingredientName, ingredientAmount, ingredientUnit, recipe));
-                    if (ingredientId>latestId) latestId = ingredientId;
+                    if (ingredientId > latestId) {
+                        latestId = ingredientId;
+                    }
                 }
             }             
         }                          
@@ -72,7 +74,9 @@ public class FileIngredientDao implements IngredientDao {
         List<Ingredient> deleteList = new ArrayList<>();
         
         for (Ingredient ingredient : ingredients) {
-            if (ingredient.getRecipe().getId() == recipe.getId()) deleteList.add(ingredient);
+            if (ingredient.getRecipe().getId() == recipe.getId()) {
+                deleteList.add(ingredient);
+            }
         }
         
         for (Ingredient ingredient : deleteList) {
@@ -86,7 +90,9 @@ public class FileIngredientDao implements IngredientDao {
     public List<Ingredient> findByRecipe(Recipe recipe) {
         List<Ingredient> ingredientList = new ArrayList<>();
         for (Ingredient ingredient : ingredients) {
-            if (ingredient.getRecipe().getId() == recipe.getId()) ingredientList.add(ingredient);
+            if (ingredient.getRecipe().getId() == recipe.getId()) {
+                ingredientList.add(ingredient);
+            }
         }
         
         return ingredientList;
@@ -95,7 +101,9 @@ public class FileIngredientDao implements IngredientDao {
     @Override
     public Ingredient findById(int id) {
         for (Ingredient ingredient : ingredients) {
-            if (ingredient.getId() == id) return ingredient;
+            if (ingredient.getId() == id) {
+                return ingredient;
+            }
         }
         
         return null;

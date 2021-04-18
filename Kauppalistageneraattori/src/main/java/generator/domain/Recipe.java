@@ -39,5 +39,32 @@ public class Recipe {
     public User getOwner() {
         return this.owner;
     }
+    
+    @Override
+    public boolean equals(Object object) {
+        
+        if (this == object) {
+            return true;
+        }
+        else if (object == null) {
+            return false;
+        }
+        else if (getClass() != object.getClass()) {
+            return false;
+        }
+        else {
+            Recipe resepti = (Recipe) object;
+            if (resepti.getId() != this.id) {
+                return false;
+            } else if (!resepti.getName().equals(this.name)) {
+                return false;
+            } else if (resepti.getServing() != this.serving) {
+                return false;
+            } else if (!resepti.getOwner().equals(this.owner)) {
+                return false;
+            }                 
+        }
+        return true;
+    }     
      
 }

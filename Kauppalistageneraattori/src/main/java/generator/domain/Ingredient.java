@@ -55,6 +55,35 @@ public class Ingredient {
     public String toString() {
         return name + ", " + amount + " " + unit;
     }
+    
+    @Override
+    public boolean equals(Object object) {
+        
+        if (this == object) {
+            return true;
+        }
+        else if (object == null) {
+            return false;
+        }
+        else if (getClass() != object.getClass()) {
+            return false;
+        }
+        else {
+            Ingredient ainesosa = (Ingredient) object;
+            if (ainesosa.getId() != this.id) {
+                return false;
+            } else if (!ainesosa.getName().equals(this.name)) {
+                return false;
+            } else if (ainesosa.getAmount() != this.amount) {
+                return false;
+            } else if (!ainesosa.getUnit().equals(this.unit)) {
+                return false;
+            } else if (!ainesosa.getRecipe().equals(this.recipe)) {
+                return false;
+            }                 
+        }
+        return true;
+    }    
 
     
 }

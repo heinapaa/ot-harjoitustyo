@@ -58,17 +58,13 @@ public class Ingredient {
     
     @Override
     public boolean equals(Object object) {
-        
         if (this == object) {
             return true;
-        }
-        else if (object == null) {
+        } else if (object == null) {
             return false;
-        }
-        else if (getClass() != object.getClass()) {
+        } else if (getClass() != object.getClass()) {
             return false;
-        }
-        else {
+        } else {
             Ingredient ainesosa = (Ingredient) object;
             if (ainesosa.getId() != this.id) {
                 return false;
@@ -84,6 +80,5 @@ public class Ingredient {
         }
         return true;
     }    
-
-    
+  
 }

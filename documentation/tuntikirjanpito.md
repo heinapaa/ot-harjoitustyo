@@ -9,4 +9,4 @@ päivä | h | log
 13.4. | 2.0 | laaja rakennemuutos
 14.4. | 2.5 | perustoimintoja (ainesosien listaus, ostoslistan luonti)
 18.4. | 1.0 | tyylikorjauksia ja testausta
-
+19.4. | 1.5 | testausta ja exceptioneiden hoitoa

@@ -25,4 +25,24 @@ public class RecipeTest {
         assertEquals(resepti.getServing(), 2);
     }
     
+    @Test
+    public void eiEqualKunEriNimi() {
+        Recipe toinenResepti = new Recipe("ToinenResepti", 2, kayttaja);
+        assertFalse(resepti.equals(toinenResepti));
+    }
+    
+    @Test
+    public void eiEqualKunEriOmistaja() {
+        User toinenKayttaja = new User("toinen");
+        Recipe toinenResepti = new Recipe("TestiResepti", 2, toinenKayttaja);
+        assertFalse(resepti.equals(toinenResepti));    
+    }
+    
+    @Test
+    public void eiEqualKunEriId() {
+        resepti.setId(1);
+        Recipe toinenResepti = new Recipe(2, "TestiResepti", 2, kayttaja);
+        assertFalse(resepti.equals(toinenResepti));
+    }
+    
 }

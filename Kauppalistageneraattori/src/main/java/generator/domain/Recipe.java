@@ -42,17 +42,13 @@ public class Recipe {
     
     @Override
     public boolean equals(Object object) {
-        
         if (this == object) {
             return true;
-        }
-        else if (object == null) {
+        } else if (object == null) {
             return false;
-        }
-        else if (getClass() != object.getClass()) {
+        } else if (getClass() != object.getClass()) {
             return false;
-        }
-        else {
+        } else {
             Recipe resepti = (Recipe) object;
             if (resepti.getId() != this.id) {
                 return false;

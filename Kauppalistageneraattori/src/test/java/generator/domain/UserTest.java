@@ -15,25 +15,28 @@ import static org.junit.Assert.*;
  */
 public class UserTest {
     
+    private User kayttaja;
+    
+    @Before
+    public void setUp() {
+        this.kayttaja = new User("testaaja");
+    }
+    
     @Test
     public void konstruktoriAsettaaNimenOikein() {
-        User kayttaja = new User("testaaja");
         assertEquals(kayttaja.getUsername(), "testaaja");
     }
     
     @Test
     public void equalKunSamaNimi() {
-        User ensimmainen = new User("testaaja");
-        User toinen = new User("testaaja");
-        assertTrue(ensimmainen.equals(toinen));
+        User toinenKayttaja = new User("testaaja");
+        assertTrue(kayttaja.equals(toinenKayttaja));
     }
     
     @Test
     public void eiEqualKunEriNimi() {
-        User ensimmainen = new User("testaaja");
-        User toinen = new User("toinenTestaaja");
-        assertFalse(ensimmainen.equals(toinen));
+        User toinenKayttaja = new User("toinenTestaaja");
+        assertFalse(kayttaja.equals(toinenKayttaja));
     }
-        
-    
+
 }

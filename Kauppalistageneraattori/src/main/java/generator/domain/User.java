@@ -16,17 +16,13 @@ public class User {
     
     @Override
     public boolean equals(Object object) {
-        
         if (this == object) {
             return true;
-        }
-        else if (object == null) {
+        } else if (object == null) {
             return false;
-        }
-        else if (getClass() != object.getClass()) {
+        } else if (getClass() != object.getClass()) {
             return false;
-        }
-        else {
+        } else {
             User kayttaja = (User) object;
             if (kayttaja.getUsername().equals(this.username)) {
                 return true;

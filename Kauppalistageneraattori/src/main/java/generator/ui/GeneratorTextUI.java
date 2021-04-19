@@ -71,9 +71,17 @@ public class GeneratorTextUI {
     }
     
     public void kirjaudu() throws Exception {
-        System.out.println("Anna käyttäjä:");
-        String nimi = lukija.nextLine();
-        recipeService.login(nimi);        
+        boolean login = false;
+        while (true) {
+            if (login) break;
+            System.out.println("Anna käyttäjä:");
+            String nimi = lukija.nextLine();
+            try {
+                login = recipeService.login(nimi);              
+            } catch (Exception e) {
+                System.out.println("Kirjautuminen epäonnistui, yritä uudestaan!");
+            }     
+        }   
     }
     
     public void tulostaOhjeet() {
@@ -90,42 +98,62 @@ public class GeneratorTextUI {
         int reseptinAnnosKoko = Integer.valueOf(lukija.nextLine());
         System.out.println("");
         
-        recipeService.createRecipe(reseptinNimi, reseptinAnnosKoko);
-        
+        try {
+            recipeService.createRecipe(reseptinNimi, reseptinAnnosKoko);
+        } catch (Exception e) {
+            System.out.println("Reseptin lisäys epäonnistui :(");
+        }
+
         while (true) {
             System.out.println("Lisätäänkö ainesosa? (y/n)");
             String kasky = lukija.nextLine();
-            
-            if (kasky.equals("n")) break;
-            if (kasky.equals("y")) {
+            if (kasky.equals("n")) {
+                break;
+            } else if (kasky.equals("y")) {
                 System.out.println("Ainesosan nimi:");
                 String ainesosanNimi = lukija.nextLine();
                 System.out.println("Ainesosan yksikkö:");
                 String ainesosanYksikko = lukija.nextLine();
                 System.out.println("Ainesosan määrä:");
                 double ainesosanMaara = Double.parseDouble(lukija.nextLine());
-                recipeService.addIngredient(reseptinNimi, ainesosanNimi, ainesosanYksikko, ainesosanMaara);
+                try {
+                    recipeService.addIngredient(reseptinNimi, ainesosanNimi, ainesosanYksikko, ainesosanMaara);
+                    System.out.println("Ainesosa lisätty!");
+                } catch (Exception e) {
+                    System.out.println("Ainesosan lisäys epäonnistui :(");
+                }
             }
-            else System.out.println("Virheellinen syöte, yritä uudelleen!");
-        }
-    }
+            else {
+                System.out.println("Virheellinen syöte, yritä uudelleen!");
+            }
+        }            
+
+    }   
     
     public void poistaResepti() throws Exception {
         System.out.println("Syötä poistettavan reseptin nimi:");
         String reseptinNimi = lukija.nextLine();
-        
-        recipeService.removeRecipe(reseptinNimi);
+        try {
+            recipeService.removeRecipe(reseptinNimi);
+        } catch (Exception e) {
+            System.out.println("Reseptin poistaminen epäonnistui :(");
+        }
     }
     
-    public void tarkasteleResepteja() {
+    public void tarkasteleResepteja() throws Exception {
         while (true) {
             listaaReseptit();
             System.out.println("");
             System.out.println("Kirjoita reseptin nimi jos haluat nähdä ainekset / x = palaa");
             String valinta = lukija.nextLine();
             
-            if (valinta.equals("x")) break;
-            else listaaAinekset(valinta);
+            if (valinta.equals("x")) {
+                break;
+            } else if (!recipeService.recipeExists(valinta)) {
+                System.out.println("Virheellinen syöte, yritä uudelleen");
+            } else {
+                listaaAinekset(valinta);
+            }
         }          
     }
     
@@ -136,16 +164,25 @@ public class GeneratorTextUI {
  
     }
     
-    public void listaaAinekset(String resepti) {;
-        List<Ingredient> ainesLista = recipeService.getIngredients(resepti);
+    public void listaaAinekset(String resepti) throws Exception {
+        if(!recipeService.recipeExists(resepti)) {
+            System.out.println("Virheellinen syöte, reseptiä ei olemassa!"); 
+            return;
+        }
         
+        List<Ingredient> ainesLista = recipeService.getIngredients(resepti);
+
         System.out.println("");
         System.out.println("Ainekset reseptissä " + resepti + ":");
-        for (Ingredient aines : ainesLista) System.out.println(aines);
+        if (ainesLista.size() == 0) {
+            System.out.println("Ei aineksia.");
+        } else {
+            for (Ingredient aines : ainesLista) System.out.println(aines);            
+        }
         System.out.println("");
     }
     
-    public void luoOstoslista() {
+    public void luoOstoslista() throws Exception {
         listaaReseptit();
         System.out.println("");
         System.out.println("Kirjoita reseptin nimi jonka haluat lisätä listalle / x = valmis");        
@@ -154,8 +191,13 @@ public class GeneratorTextUI {
         
         while (true) {
             String kasky = lukija.nextLine();
-            if (kasky.equals("x")) break;
-            else valinnat.add(kasky);
+            if (kasky.equals("x")) {
+                break;
+            } else if (!recipeService.recipeExists(kasky)) {
+                System.out.println("Virheellinen syöte, yritä uudelleen");
+            } else {
+                valinnat.add(kasky);
+            }
         }
         
         List<String> ostoslista = recipeService.createShoppingList(valinnat);

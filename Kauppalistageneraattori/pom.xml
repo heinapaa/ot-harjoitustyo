@@ -52,6 +52,11 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>generator/ui/*</exclude>
+                    </excludes>     
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>
@@ -59,7 +64,7 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>              
             </plugin>  
             
             <plugin>

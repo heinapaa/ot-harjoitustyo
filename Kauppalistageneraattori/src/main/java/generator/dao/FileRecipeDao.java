@@ -33,16 +33,18 @@ public class FileRecipeDao implements RecipeDao {
                         latestId = Integer.valueOf(palat[0]);
                     }
                 }
-            }             
+            }            
         }        
     }
     
-    private void save() throws Exception {
+    private void save(){
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (Recipe recipe : recipes) {
                 kirjoittaja.write(recipe.getId() + "," + recipe.getName() + "," + recipe.getServing() + "," + recipe.getOwner().getUsername() + "\n");
             }
-        }         
+        } catch (Exception e) {
+            
+        }        
     }
     
     private int generateId() {
@@ -51,7 +53,7 @@ public class FileRecipeDao implements RecipeDao {
     }
 
     @Override
-    public void create(Recipe recipe) throws Exception {
+    public void create(Recipe recipe) {
         Recipe newRecipe = recipe;
         newRecipe.setId(generateId());
         recipes.add(recipe);
@@ -59,7 +61,7 @@ public class FileRecipeDao implements RecipeDao {
     }
 
     @Override
-    public void remove(Recipe recipe) throws Exception {
+    public void remove(Recipe recipe) {
         recipes.remove(recipe);
         save();
     }

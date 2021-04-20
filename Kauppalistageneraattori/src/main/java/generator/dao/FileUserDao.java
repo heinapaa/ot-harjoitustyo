@@ -31,16 +31,18 @@ public class FileUserDao implements UserDao {
         }                          
     }
     
-    private void save() throws Exception {
+    private void save() {
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (User user : users) {
                 kirjoittaja.write(user.getUsername() + "\n");
             }
-        }         
+        } catch (Exception e) {
+            
+        }       
     }
 
     @Override
-    public void create(User user) throws Exception {
+    public void create(User user) {
         users.add(user);
         save();
     }

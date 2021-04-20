@@ -4,6 +4,7 @@ import generator.domain.Ingredient;
 import generator.domain.Recipe;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,7 @@ public class FileIngredientDao implements IngredientDao {
         }                          
     }   
     
-    private void save() throws Exception {
+    private void save(){
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (Ingredient ingredient : ingredients) {
                 int ingredientId = ingredient.getId();
@@ -52,7 +53,9 @@ public class FileIngredientDao implements IngredientDao {
                 int recipeId = ingredient.getRecipe().getId();
                 kirjoittaja.write(ingredientId + "," + ingredientName + "," + ingredientAmount + "," + ingredientUnit + "," + recipeId + "\n");
             }
-        }         
+        } catch (Exception e) {
+            
+        }
     }    
     
     private int generateId() {
@@ -61,7 +64,7 @@ public class FileIngredientDao implements IngredientDao {
     }    
 
     @Override
-    public void create(Ingredient ingredient) throws Exception {
+    public void create(Ingredient ingredient){
         Ingredient newIngredient = ingredient;
         newIngredient.setId(generateId());
         ingredients.add(newIngredient);
@@ -70,7 +73,7 @@ public class FileIngredientDao implements IngredientDao {
     
     
     @Override
-    public void removeByRecipe(Recipe recipe) throws Exception {
+    public void removeByRecipe(Recipe recipe) {
         List<Ingredient> deleteList = new ArrayList<>();
         
         for (Ingredient ingredient : ingredients) {

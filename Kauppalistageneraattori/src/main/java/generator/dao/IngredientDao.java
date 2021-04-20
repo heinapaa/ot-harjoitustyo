@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface IngredientDao {
     
-    void create(Ingredient ingredient) throws Exception;
-    void removeByRecipe(Recipe recipe) throws Exception;
+    void create(Ingredient ingredient);
+    void removeByRecipe(Recipe recipe);
     List<Ingredient> findByRecipe(Recipe recipe);    
     Ingredient findById(int id);
     List<Ingredient> findAll();

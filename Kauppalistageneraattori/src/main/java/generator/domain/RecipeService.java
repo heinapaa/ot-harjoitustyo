@@ -19,7 +19,7 @@ public class RecipeService {
         this.ingredientDao = ingredientDao;
     }    
     
-    public boolean createRecipe(String name, int portion) throws Exception {
+    public boolean createRecipe(String name, int portion) {
         Recipe newRecipe = new Recipe(name, portion, currentUser);
         try {
             recipeDao.create(newRecipe);   
@@ -29,7 +29,7 @@ public class RecipeService {
         return true;
     }
     
-    public boolean removeRecipe(String name) throws Exception {
+    public boolean removeRecipe(String name) {
         try {
             Recipe recipeToDelete = recipeDao.findByName(name);
             if (recipeToDelete == null) {
@@ -55,14 +55,10 @@ public class RecipeService {
         return returnRecipes;
     }
     
-    public boolean addIngredient(String recipeName, String ingredientName, String ingredientUnit, double ingredientAmount) throws Exception {
+    public boolean addIngredient(String recipeName, String ingredientName, String ingredientUnit, double ingredientAmount) {
         Ingredient newIngredient = new Ingredient(ingredientName, ingredientAmount, ingredientUnit);
-        try {
-            newIngredient.setRecipe(recipeDao.findByName(recipeName));
-            ingredientDao.create(newIngredient);            
-        } catch (Exception e) {
-            return false;
-        }
+        newIngredient.setRecipe(recipeDao.findByName(recipeName));
+        ingredientDao.create(newIngredient);
         return true;
     }
     
@@ -71,7 +67,22 @@ public class RecipeService {
         return ingredientDao.findByRecipe(recipe);
     }
     
-    public boolean login(String nimi) throws Exception {
+    public Recipe getRecipe(String recipeName) {
+        return recipeDao.findByName(recipeName);
+    }
+    
+    public Ingredient getIngredient(String recipeName, String ingredientName) {
+        Recipe recipe = recipeDao.findByName(recipeName);
+        List<Ingredient> ingredientsInRecipe = ingredientDao.findByRecipe(recipe);
+        for (Ingredient ingredient : ingredientsInRecipe) {
+            if (ingredientName.equals(ingredient.getName())) {
+                return ingredient;
+            }
+        }
+        return null;
+    }
+    
+    public boolean login(String nimi) {
         if (userDao.findByUsername(nimi) == null) {
             userDao.create(new User(nimi));
         }
@@ -93,14 +104,12 @@ public class RecipeService {
         return shoppingList;
     }
     
-    public boolean recipeExists(String name) throws Exception {
-        try {
-            if (recipeDao.findByName(name) == null) {
-                return false;
-            }
-        } catch (Exception e) {
+    public boolean recipeExists(String name) {
+
+        if (recipeDao.findByName(name) == null) {
             return false;
         }
+
         return true;
     }
 }

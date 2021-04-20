@@ -6,4 +6,5 @@
 
 <suppressions>
     <suppress files="generator.ui.GeneratorTextUI" checks="[a-zA-Z0-9]*"/>
+    <suppress files="generator.ui.GeneratorUI" checks="[a-zA-Z0-9]*"/>
 </suppressions>

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserDao {
     
-    void create(User user) throws Exception;    
+    void create(User user);    
     User findByUsername(String name);
     List<User> findAll();
 

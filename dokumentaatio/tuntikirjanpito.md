@@ -11,5 +11,5 @@ päivä | h | log
 18.4. | 1.0 | tyylikorjauksia ja testausta
 19.4. | 1.5 | testausta ja exceptioneiden hoitoa
 20.4. | 3.0 | graafisen käyttöliittymän kehittelyä ja testailua
------ | --- | ---
-|19.5|
+
+Yhteensä 19.5h

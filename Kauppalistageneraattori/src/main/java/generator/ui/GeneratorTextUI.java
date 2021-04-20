@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
+import org.apache.commons.validator.GenericValidator;
 
 public class GeneratorTextUI {
     
     private Scanner lukija;
+    private GenericValidator validator;
     private Map<String, String> komennot;
     private UserDao userDao;
     private RecipeDao recipeDao;
@@ -74,8 +76,14 @@ public class GeneratorTextUI {
         boolean login = false;
         while (true) {
             if (login) break;
-            System.out.println("Anna käyttäjä:");
+            System.out.println("Anna käyttäjätunnus (vähintään 3 kirjainta):");
             String nimi = lukija.nextLine();
+         
+            while (!validator.minLength(nimi, 3)) {
+                System.out.println("Liian lyhyt tunnus, yritä uudelleen!");
+                nimi = lukija.nextLine();
+            }
+            
             try {
                 login = recipeService.login(nimi);              
             } catch (Exception e) {

@@ -84,8 +84,7 @@ public class RecipeService {
         
         for (String reseptinNimi : recipes) {
             Recipe recipe = recipeDao.findByName(reseptinNimi);
-            List<Ingredient> ingredients = ingredientDao.findByRecipe(recipe);
-            
+            List<Ingredient> ingredients = ingredientDao.findByRecipe(recipe);       
             for (Ingredient ingredient : ingredients) {
                 shoppingList.add(ingredient.toString());
             }

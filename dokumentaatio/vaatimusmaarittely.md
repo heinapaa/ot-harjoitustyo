@@ -16,14 +16,14 @@ Sovelluksen avulla käyttäjät voivat tallentaa reseptien ainesosaluetteloita j
 
 ### Toiminnallisuus kirjautumisen jälkeen
 
-* käyttäjä voi lisätä reseptin - ok
-	* reseptillä tulee olla nimi, sekä lista vaadituista aineksista ja niiden määristä (HUOM! kesken!)
-* käyttäjä voi poistaa reseptin - ok
-* käyttäjä näkee listan omista resepteistään - ok
-* käyttäjä voi generoida kauppalistan - perustaso ok
-	* kauppalista perustuu käyttäjän valitsemiin resepteihin - ok
+* käyttäjä voi lisätä reseptin - tehty
+	* reseptillä tulee olla nimi, sekä lista vaadituista aineksista ja niiden määristä
+* käyttäjä voi poistaa reseptin - tehty
+* käyttäjä näkee listan omista resepteistään - tehty
+* käyttäjä voi generoida kauppalistan - osittain tehty
+	* kauppalista perustuu käyttäjän valitsemiin resepteihin - tehty
 	* kauppalista luodaan suoraan tekstitiedostona
-* käyttäjä voi kirjautua ulos
+* käyttäjä voi kirjautua ulos - tehty (tavallaan -> käyttäjää pystyy vaihtamaan)
 
 ## Jatkokehitysideoita
 

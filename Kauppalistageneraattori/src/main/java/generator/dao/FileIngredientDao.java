@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -43,7 +44,7 @@ public class FileIngredientDao implements IngredientDao {
         }                          
     }   
     
-    private void save(){
+    private void save() {
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (Ingredient ingredient : ingredients) {
                 int ingredientId = ingredient.getId();
@@ -64,10 +65,16 @@ public class FileIngredientDao implements IngredientDao {
     }    
 
     @Override
-    public void create(Ingredient ingredient){
+    public void create(Ingredient ingredient) {
         Ingredient newIngredient = ingredient;
         newIngredient.setId(generateId());
         ingredients.add(newIngredient);
+        save();
+    }
+    
+    @Override
+    public void remove(Ingredient ingredient) {
+        ingredients.remove(ingredient);
         save();
     }
     
@@ -97,6 +104,8 @@ public class FileIngredientDao implements IngredientDao {
                 ingredientList.add(ingredient);
             }
         }
+        
+        Collections.sort(ingredientList);
         
         return ingredientList;
     }    

@@ -62,6 +62,17 @@ public class RecipeService {
         return true;
     }
     
+    public boolean removeIngredient(String recipeName, String ingredientName) {
+        List<Ingredient> ingredientList = ingredientDao.findByRecipe(recipeDao.findByName(recipeName));
+        for (Ingredient ingredient : ingredientList) {
+            if (ingredient.getName().equals(ingredientName)) {
+                ingredientDao.remove(ingredient);
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public List<Ingredient> getIngredients(String recipeName) {
         Recipe recipe = recipeDao.findByName(recipeName);
         return ingredientDao.findByRecipe(recipe);
@@ -89,21 +100,7 @@ public class RecipeService {
         this.currentUser = userDao.findByUsername(nimi);
         return true;         
     }
-    
-    public List<String> createShoppingList(List<String> recipes) {
-        List<String> shoppingList = new ArrayList<>();
-        
-        for (String reseptinNimi : recipes) {
-            Recipe recipe = recipeDao.findByName(reseptinNimi);
-            List<Ingredient> ingredients = ingredientDao.findByRecipe(recipe);       
-            for (Ingredient ingredient : ingredients) {
-                shoppingList.add(ingredient.toString());
-            }
-        }
-        
-        return shoppingList;
-    }
-    
+      
     public boolean recipeExists(String name) {
 
         if (recipeDao.findByName(name) == null) {

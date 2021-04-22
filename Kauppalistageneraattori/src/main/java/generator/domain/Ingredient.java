@@ -1,6 +1,6 @@
 package generator.domain;
 
-public class Ingredient {
+public class Ingredient implements Comparable<Ingredient> {
     
     private int id;
     private String name;
@@ -79,6 +79,13 @@ public class Ingredient {
             }                 
         }
         return true;
-    }    
+    }   
+
+    @Override
+    public int compareTo(Ingredient otherIngredient) {
+        return this.name.compareTo(otherIngredient.getName());
+    }
+    
+    
   
 }

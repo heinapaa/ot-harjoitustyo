@@ -10,6 +10,7 @@ import generator.dao.UserDao;
 import generator.domain.Ingredient;
 import generator.domain.Recipe;
 import generator.domain.RecipeService;
+import generator.domain.ShoppingListService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class GeneratorTextUI {
     private RecipeDao recipeDao;
     private IngredientDao ingredientDao;
     private RecipeService recipeService;
+    private ShoppingListService shoppingListService;    
 
     
     public GeneratorTextUI(Scanner lukija) throws Exception {
@@ -35,6 +37,7 @@ public class GeneratorTextUI {
         this.recipeDao = new FileRecipeDao(userDao);
         this.ingredientDao = new FileIngredientDao(recipeDao);
         this.recipeService = new RecipeService(userDao, recipeDao, ingredientDao);
+        this.shoppingListService = new ShoppingListService(userDao, recipeDao, ingredientDao);        
         
         this.komennot = new TreeMap<>();
         
@@ -208,11 +211,11 @@ public class GeneratorTextUI {
             }
         }
         
-        List<String> ostoslista = recipeService.createShoppingList(valinnat);
+        String ostosLista = shoppingListService.createShoppingList(valinnat);
         
         System.out.println("");
         System.out.println("Ostoslista:");
-        for (String rivi : ostoslista) System.out.println(rivi);
+        System.out.println(ostosLista);
         System.out.println("");
     }
     

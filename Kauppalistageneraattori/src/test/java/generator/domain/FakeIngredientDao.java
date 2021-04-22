@@ -63,5 +63,10 @@ public class FakeIngredientDao implements IngredientDao {
     public List<Ingredient> findAll() {
         return ingredients;
     }
+
+    @Override
+    public void remove(Ingredient ingredient) {
+        ingredients.remove(ingredient);
+    }
     
 }

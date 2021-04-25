@@ -22,7 +22,7 @@ public class RecipeTest {
     
     @Test
     public void konstruktoriAsettaaAnnoskoonOikein() {
-        assertEquals(resepti.getServing(), 2);
+        assertEquals(resepti.getPortion(), 2);
     }
     
     @Test

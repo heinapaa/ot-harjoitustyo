@@ -332,7 +332,7 @@ public class GeneratorUI extends Application {
             String recipeName = recipeList.getSelectionModel().getSelectedItem();
             updateIngredientList(recipeName);
             recipeInfo1.setText(recipeName);
-            recipeInfo2.setText(String.valueOf(recipeService.getRecipe(recipeName).getServing()));
+            recipeInfo2.setText(String.valueOf(recipeService.getRecipe(recipeName).getPortion()));
             infoBox.getChildren().add(editRecipe);            
         });          
         
@@ -396,7 +396,7 @@ public class GeneratorUI extends Application {
                 recipeServingRow.getChildren().add(recipeServingInput);
                 String recipeName = recipeList.getSelectionModel().getSelectedItem();
                 recipeNameInput.setText(recipeName);
-                recipeServingInput.setText(String.valueOf(recipeService.getRecipe(recipeName).getServing()));  
+                recipeServingInput.setText(String.valueOf(recipeService.getRecipe(recipeName).getPortion()));  
                 infoBox.getChildren().remove(editRecipe);
                 infoBox.getChildren().add(editRecipeButtons);
             } else {

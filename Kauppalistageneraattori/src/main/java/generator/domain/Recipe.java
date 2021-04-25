@@ -4,19 +4,19 @@ public class Recipe {
     
     private int id;
     private String name;
-    private int serving;
+    private int portion;
     private User owner;
     
-    public Recipe(int id, String name, int serving, User user) {
+    public Recipe(int id, String name, int portion, User user) {
         this.id = id;
         this.name = name;
-        this.serving = serving;
+        this.portion = portion;
         this.owner = user;
     }   
     
-    public Recipe(String name, int serving, User owner) {
+    public Recipe(String name, int portion, User owner) {
         this.name = name;
-        this.serving = serving;
+        this.portion = portion;
         this.owner = owner;
     }
     
@@ -31,9 +31,17 @@ public class Recipe {
     public String getName() {
         return name;
     }
+    
+    public void setName(String newName) {
+        this.name = newName;
+    }
 
-    public int getServing() {
-        return serving;
+    public int getPortion() {
+        return portion;
+    }
+    
+    public void setPortion(int newPortion) {
+        this.portion = newPortion;
     }
     
     public User getOwner() {
@@ -54,7 +62,7 @@ public class Recipe {
                 return false;
             } else if (!resepti.getName().equals(this.name)) {
                 return false;
-            } else if (resepti.getServing() != this.serving) {
+            } else if (resepti.getPortion() != this.portion) {
                 return false;
             } else if (!resepti.getOwner().equals(this.owner)) {
                 return false;

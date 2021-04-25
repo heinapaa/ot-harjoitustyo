@@ -42,7 +42,7 @@ public class FileRecipeDao implements RecipeDao {
     private void save() {
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (Recipe recipe : recipes) {
-                kirjoittaja.write(recipe.getId() + "," + recipe.getName() + "," + recipe.getServing() + "," + recipe.getOwner().getUsername() + "\n");
+                kirjoittaja.write(recipe.getId() + "," + recipe.getName() + "," + recipe.getPortion() + "," + recipe.getOwner().getUsername() + "\n");
             }
         } catch (Exception e) {
             

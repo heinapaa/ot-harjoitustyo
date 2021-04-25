@@ -54,6 +54,33 @@ public class RecipeService {
         return true;
     }
     
+    public boolean updateRecipe(String name, String portion) {
+        String nm = name.strip();
+        String pn = StringUtils.deleteWhitespace(portion);        
+        if (!validator.isValidRecipeName(nm)) {
+            return false;
+        }
+        if (!recipeExists(nm)) {
+            return false;
+        }
+        try {
+            Recipe recipeToUpdate = recipeDao.findByName(nm);
+            recipeToUpdate.setName(nm);
+            recipeToUpdate.setPortion(Integer.parseInt(pn));
+            recipeDao.create(recipeToUpdate);
+            List<Ingredient> ingredientsToAdd = ingredientDao.findByRecipe(recipeDao.findByName(nm));
+            for (Ingredient ingredient : ingredientsToAdd) {
+                Ingredient newIngredient = ingredient;
+                newIngredient.setRecipe(recipeToUpdate);
+                ingredientDao.remove(ingredient);
+                ingredientDao.create(newIngredient);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+    
     public List<Recipe> getAllRecipes(User user) {
         List<Recipe> allRecipes = recipeDao.findAll();
         List<Recipe> returnRecipes = new ArrayList<>();

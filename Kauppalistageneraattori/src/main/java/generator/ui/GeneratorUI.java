@@ -7,14 +7,18 @@ import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import generator.dao.UserDao;
 import generator.domain.Ingredient;
+import generator.domain.IngredientService;
+import generator.domain.InputValidator;
 import generator.domain.Recipe;
 import generator.domain.RecipeService;
 import generator.domain.ShoppingListService;
+import generator.domain.UserService;
 import java.util.Collections;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -27,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -35,27 +40,30 @@ import javafx.stage.Stage;
 
 public class GeneratorUI extends Application {
     
+    private UserService userService;
     private RecipeService recipeService;
+    private IngredientService ingredientService;
     private ShoppingListService shoppingListService;
     private ObservableList<String> recipeListItems;
     private ObservableList<String> ingredientListItems;  
     private ObservableList<String> chosenListItems;
-    private ObservableList<String> remainingListItems;
-            
+    private ObservableList<String> remainingListItems;            
     
     @Override
     public void init() throws Exception {
         UserDao userDao = new FileUserDao();
         RecipeDao recipeDao = new FileRecipeDao(userDao);
         IngredientDao ingredientDao = new FileIngredientDao(recipeDao);
-        this.recipeService = new RecipeService(userDao, recipeDao, ingredientDao);
-        this.shoppingListService = new ShoppingListService(userDao, recipeDao, ingredientDao);
-        recipeService.login("heinapaa");
+        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao);
+        this.userService = new UserService(userDao, validator);
+        this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
+        this.ingredientService = new IngredientService(recipeDao, ingredientDao, validator);
+        this.shoppingListService = new ShoppingListService(recipeDao, ingredientDao);
     }    
     
     public void updateRecipeList() {
         recipeListItems.clear();
-        List<Recipe> allRecipes = recipeService.getAllRecipes();
+        List<Recipe> allRecipes = recipeService.getAllRecipes(userService.getLoggedIn());
         for (Recipe recipe : allRecipes) {
             recipeListItems.add(recipe.getName());
         }
@@ -63,7 +71,7 @@ public class GeneratorUI extends Application {
     
     public void updateIngredientList(String recipeName) {
         ingredientListItems.clear();
-        List<Ingredient> ingredients = recipeService.getIngredients(recipeName);
+        List<Ingredient> ingredients = ingredientService.getIngredients(recipeName);
         for (Ingredient ingredient : ingredients) {
             ingredientListItems.add(ingredient.toString());
         }        
@@ -78,49 +86,82 @@ public class GeneratorUI extends Application {
     
     public void updateChosenList() {
         chosenListItems.clear();        
-    }    
-
+    }
+    
     @Override
     public void start(Stage window) {
 
         window.setTitle("Kauppalistageneraattori");
         
-        BorderPane listView = new BorderPane();                     
+        BorderPane listView = new BorderPane();    
+        
+        // Login-ruutu
+        
+        Label userName = new Label("Syötä käyttäjätunnus (vähintään 3 merkkiä):");
+        TextField userNameInput = new TextField();
+        Button logIn = new Button("Kirjaudu");
+        Button createUser = new Button("Luo uusi käyttäjä");
+        Label logInError = new Label("");
+        logInError.setTextFill(Color.RED);        
+        
+        VBox logInView = new VBox();
+        logInView.setAlignment(Pos.CENTER);
+        logInView.setSpacing(20);    
+        
+        HBox logInInput = new HBox();
+        logInInput.setAlignment(Pos.CENTER);
+        logInInput.setSpacing(20);   
+        
+        HBox logInButtons = new HBox();
+        logInButtons.setAlignment(Pos.CENTER);
+        logInButtons.setSpacing(20);           
                
-        // Resepti-infolaatikko
+        logInInput.getChildren().add(userName);
+        logInInput.getChildren().add(userNameInput);
+        logInInput.getChildren().add(logInError);   
+        
+        logInButtons.getChildren().add(logIn);
+        logInButtons.getChildren().add(createUser);
+        
+        logInView.getChildren().add(logInInput);
+        logInView.getChildren().add(logInButtons);         
+
+        
+      
+        // Resepti-infolaatikko                             
         
         Label recipeTitle = new Label("Valittu resepti");
-        recipeTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 14));        
-        VBox recipeInfoTitles = new VBox();
-        VBox recipeInfoContents = new VBox();
+        recipeTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 14));           
         
         Text recipeInfoTitle1 = new Text("Nimi:");
         Text recipeInfo1 = new Text(""); 
         Text recipeInfoTitle2 = new Text("Annoskoko:");
-        Text recipeInfo2 = new Text("");              
+        Text recipeInfo2 = new Text("");    
         
-        recipeInfoTitles.getChildren().add(recipeInfoTitle1);
-        recipeInfoTitles.getChildren().add(recipeInfoTitle2);        
+        Button editRecipe = new Button("Muokkaa reseptiä");        
 
-        recipeInfoContents.getChildren().add(recipeInfo1);
-        recipeInfoContents.getChildren().add(recipeInfo2);
-        
-        // Infobox-asettelu
-        
         VBox infoBox = new VBox();
         infoBox.setSpacing(20);
+
+        HBox recipeNameRow = new HBox();
+        recipeNameRow.setSpacing(20);          
+        HBox recipeServingRow = new HBox();
+        recipeServingRow.setSpacing(20);         
         
-        HBox recipeInfo = new HBox();
-        recipeInfo.setSpacing(10);
-        
-        recipeInfo.getChildren().add(recipeInfoTitles);
-        recipeInfo.getChildren().add(recipeInfoContents);        
-                   
+        recipeNameRow.getChildren().add(recipeInfoTitle1);
+        recipeNameRow.getChildren().add(recipeInfo1);        
+
+        recipeServingRow.getChildren().add(recipeInfoTitle2);
+        recipeServingRow.getChildren().add(recipeInfo2);        
+                              
         infoBox.getChildren().add(recipeTitle);
-        infoBox.getChildren().add(recipeInfo);
+        infoBox.getChildren().add(recipeNameRow);
+        infoBox.getChildren().add(recipeServingRow); 
         infoBox.setMinWidth(300);
         
-        // Splitpane
+        
+        
+        // Reseptit ja ainekset
         
         this.recipeListItems = FXCollections.observableArrayList();
         this.ingredientListItems = FXCollections.observableArrayList();         
@@ -134,21 +175,14 @@ public class GeneratorUI extends Application {
         
         SplitPane splitPane = new SplitPane(recipeList, ingredientList);     
         
+        
+        
         // Reseptin lisäys -näkymä
 
-        HBox editRecipeView = new HBox();
-
-        
-        VBox editRecipeLabels = new VBox(new Label("Reseptin nimi:"), new Label("Annoskoko:"));
-        
         TextField recipeNameInput = new TextField();  
-        TextField recipePortionInput = new TextField();        
-        VBox editRecipeInputs = new VBox(recipeNameInput, recipePortionInput);
+        TextField recipeServingInput = new TextField();        
         
-        editRecipeView.getChildren().add(editRecipeLabels);
-        editRecipeView.getChildren().add(editRecipeInputs);            
         
-        editRecipeView.setMinWidth(300);
         
         // Aineksen lisäys -ikkuna
         
@@ -193,6 +227,8 @@ public class GeneratorUI extends Application {
         addIngredientWindow.setScene(ingredientScene);
         addIngredientWindow.setWidth(300);  
         
+        
+        
         // Uusi ostoslista -ikkunan napit
         
         BorderPane shoppingListView = new BorderPane();  
@@ -210,6 +246,8 @@ public class GeneratorUI extends Application {
         shoppingListButtons.getChildren().add(cancelShoppingList);
 
         shoppingListView.setBottom(shoppingListButtons);        
+        
+        
         
         // Uusi ostoslista -valintaikkuna
         
@@ -234,6 +272,8 @@ public class GeneratorUI extends Application {
         shoppingListWindow.setWidth(500);  
         shoppingListWindow.setHeight(400);
         
+        
+        
         // Uusi ostoslista -tulosikkuna
         
         TextArea shoppingListBox = new TextArea();
@@ -246,11 +286,15 @@ public class GeneratorUI extends Application {
         shoppingListButtonsAlternative.getChildren().add(goBackToChoosingRecipes);
         shoppingListButtonsAlternative.getChildren().add(cancelShoppingList);        
 
+        
+        
         // Reseptin lisäys -napit
         
         Button commitAddRecipe = new Button("Tallenna resepti");
         Button cancelAddRecipe = new Button("Peruuta");      
         HBox addRecipeButtons = new HBox(commitAddRecipe, cancelAddRecipe);
+       
+        
         
         // Reseptin muokkaus -napit
         
@@ -259,21 +303,28 @@ public class GeneratorUI extends Application {
         Button addIngredient = new Button("Lisää ainesosa");
         Button deleteIngredient = new Button("Poista ainesosa");        
         Button deleteRecipe = new Button("Poista resepti");
-        HBox editRecipeButtons = new HBox(commitEditRecipe, cancelEditRecipe, addIngredient, deleteIngredient, deleteRecipe);
+        VBox editRecipeButtons = new VBox(commitEditRecipe, cancelEditRecipe, addIngredient, deleteIngredient, deleteRecipe);
      
-        // Ylänapit
+        
+        
+        // Perusnapit
         
         HBox topButtons = new HBox();
         topButtons.setSpacing(10);
         
-        Button addRecipe = new Button("Lisää resepti");
-        Button editRecipe = new Button("Muokkaa reseptiä");        
+        Button addRecipe = new Button("Lisää resepti");        
         Button newShoppingList = new Button("Uusi ostoslista");
+        Button changeUser = new Button("Vaihda käyttäjää");
         
-        topButtons.getChildren().add(addRecipe);
-        topButtons.getChildren().add(editRecipe);        
-        topButtons.getChildren().add(newShoppingList);    
-           
+        topButtons.getChildren().add(addRecipe);       
+        topButtons.getChildren().add(newShoppingList);
+        topButtons.getChildren().add(changeUser);
+        
+        Label errorLabel = new Label("");
+        errorLabel.setTextFill(Color.RED);
+          
+        
+        
         // Listeners
         
         recipeList.setOnMouseClicked(event -> {
@@ -281,87 +332,140 @@ public class GeneratorUI extends Application {
             String recipeName = recipeList.getSelectionModel().getSelectedItem();
             updateIngredientList(recipeName);
             recipeInfo1.setText(recipeName);
-            recipeInfo2.setText(String.valueOf(recipeService.getRecipe(recipeName).getServing()));    ;
+            recipeInfo2.setText(String.valueOf(recipeService.getRecipe(recipeName).getServing()));
+            infoBox.getChildren().add(editRecipe);            
         });          
         
         addRecipe.setOnMouseClicked(event -> {
-            recipeList.setMouseTransparent(true);            
-            listView.getChildren().remove(listView.getLeft());
-            listView.setLeft(editRecipeView);
-            listView.setBottom(addRecipeButtons);
-        });    
+            recipeList.setMouseTransparent(true);
+            changeUser.setMouseTransparent(true);
+            newShoppingList.setMouseTransparent(true);
+            errorLabel.setText("");            
+            recipeInfo1.setText("");
+            recipeInfo2.setText("");
+            
+            recipeNameRow.getChildren().remove(recipeInfo1);
+            recipeNameRow.getChildren().add(recipeNameInput);
+            recipeServingRow.getChildren().remove(recipeInfo2);
+            recipeServingRow.getChildren().add(recipeServingInput);
+            infoBox.getChildren().add(addRecipeButtons);
+        });
         
         commitAddRecipe.setOnMouseClicked(event -> {
+            errorLabel.setText("");       
+            
             String recipeName = recipeNameInput.getText();
-            int recipePortion = Integer.valueOf(recipePortionInput.getText());
-            recipeService.createRecipe(recipeName, recipePortion);     
-            updateRecipeList();
-            recipeNameInput.setText("");
-            recipePortionInput.setText("");            
-            listView.getChildren().remove(listView.getLeft());
-            listView.getChildren().remove(listView.getBottom());            
-            listView.setLeft(infoBox);
-            recipeList.setMouseTransparent(false);             
+            String recipeServing = recipeServingInput.getText();
+            if (recipeService.createRecipe(recipeName, recipeServing, userService.getLoggedIn())) {
+                updateRecipeList();
+                recipeList.getSelectionModel().select(recipeName);
+                infoBox.getChildren().remove(addRecipeButtons);
+                infoBox.getChildren().add(editRecipeButtons);                  
+            } else {
+                errorLabel.setText("Reseptin lisääminen epäonnistui!");
+            }
         });  
         
         cancelAddRecipe.setOnMouseClicked(event -> {
+            errorLabel.setText("");            
             recipeNameInput.setText("");
-            recipePortionInput.setText("");
-            listView.getChildren().remove(listView.getLeft());
-            listView.getChildren().remove(listView.getBottom());            
-            listView.setLeft(infoBox);
+            recipeServingInput.setText("");
+            
+            recipeNameRow.getChildren().remove(recipeNameInput);
+            recipeNameRow.getChildren().add(recipeInfo1);
+            recipeServingRow.getChildren().remove(recipeServingInput);
+            recipeServingRow.getChildren().add(recipeInfo2);
+            infoBox.getChildren().remove(addRecipeButtons);
+            
             recipeList.setMouseTransparent(false);   
+            changeUser.setMouseTransparent(false);
+            newShoppingList.setMouseTransparent(false);            
         });        
                  
         editRecipe.setOnMouseClicked(event -> {
+            errorLabel.setText("");          
+            
             if (recipeList.getSelectionModel().getSelectedItem() != null) {
-                recipeList.setMouseTransparent(true);                 
-                listView.setLeft(editRecipeView);
-                listView.setBottom(editRecipeButtons);
+                recipeList.setMouseTransparent(true);   
+                changeUser.setMouseTransparent(true);
+                newShoppingList.setMouseTransparent(true);                
+                
+                recipeNameRow.getChildren().remove(recipeInfo1);
+                recipeNameRow.getChildren().add(recipeNameInput);
+                recipeServingRow.getChildren().remove(recipeInfo2);
+                recipeServingRow.getChildren().add(recipeServingInput);
                 String recipeName = recipeList.getSelectionModel().getSelectedItem();
                 recipeNameInput.setText(recipeName);
-                recipePortionInput.setText(String.valueOf(recipeService.getRecipe(recipeName).getServing()));            
+                recipeServingInput.setText(String.valueOf(recipeService.getRecipe(recipeName).getServing()));  
+                infoBox.getChildren().remove(editRecipe);
+                infoBox.getChildren().add(editRecipeButtons);
+            } else {
+                errorLabel.setText("Valitse muokattava resepti!");
             }       
         });     
         
         cancelEditRecipe.setOnMouseClicked(event -> {
+            errorLabel.setText("");            
             recipeNameInput.setText("");
-            recipePortionInput.setText("");
-            listView.getChildren().remove(listView.getLeft());
-            listView.getChildren().remove(listView.getBottom());             
-            listView.setLeft(infoBox);
-            recipeList.setMouseTransparent(false);             
+            recipeServingInput.setText("");
+            
+            recipeNameRow.getChildren().remove(recipeNameInput);
+            recipeNameRow.getChildren().add(recipeInfo1);
+            recipeServingRow.getChildren().remove(recipeServingInput);
+            recipeServingRow.getChildren().add(recipeInfo2);            
+            infoBox.getChildren().remove(editRecipeButtons);
+            
+            recipeList.setMouseTransparent(false);  
+            changeUser.setMouseTransparent(false);
+            newShoppingList.setMouseTransparent(false);            
         }); 
         
-        deleteRecipe.setOnMouseClicked(event -> {     
+        deleteRecipe.setOnMouseClicked(event -> {   
+            errorLabel.setText(""); 
+            
             String recipeName = recipeList.getSelectionModel().getSelectedItem();            
-            recipeService.removeRecipe(recipeName);
-            updateRecipeList();
-            updateIngredientList(recipeName);
-            recipeNameInput.setText("");
-            recipePortionInput.setText("");
-            recipeInfo1.setText("");
-            recipeInfo2.setText("");            
-            listView.getChildren().remove(listView.getLeft());
-            listView.getChildren().remove(listView.getBottom());             
-            listView.setLeft(infoBox);
-            recipeList.setMouseTransparent(false);             
+            if (recipeService.removeRecipe(recipeName)) {
+                updateRecipeList();
+                ingredientListItems.clear();
+                recipeNameInput.setText("");
+                recipeServingInput.setText("");
+                recipeInfo1.setText("");
+                recipeInfo2.setText("");            
+                recipeNameRow.getChildren().remove(recipeNameInput);
+                recipeNameRow.getChildren().add(recipeInfo1);
+                recipeServingRow.getChildren().remove(recipeServingInput);
+                recipeServingRow.getChildren().add(recipeInfo2);            
+                infoBox.getChildren().remove(editRecipeButtons);
+                
+                recipeList.setMouseTransparent(false);       
+                changeUser.setMouseTransparent(false);
+                newShoppingList.setMouseTransparent(false);                
+            } else {
+                errorLabel.setText("Reseptin poistaminen epäonnistui!");
+            }
+            
         });    
         
         addIngredient.setOnMouseClicked(event -> { 
+            errorLabel.setText("");            
             addIngredientWindow.show();
         });   
         
         commitAddIngredient.setOnMouseClicked(event -> {
+            errorLabel.setText("");
+            
             String recipeName = recipeList.getSelectionModel().getSelectedItem();
             String ingredientName = ingredientNameInput.getText();
-            double ingredientAmount = Double.valueOf(ingredientAmountInput.getText());
+            String ingredientAmount = ingredientAmountInput.getText();
             String ingredientUnit = ingredientUnitInput.getValue().toString();
-            recipeService.addIngredient(recipeName, ingredientName,ingredientUnit, ingredientAmount);
-            updateIngredientList(recipeName);
-            ingredientNameInput.setText("");
-            ingredientAmountInput.setText("");
-            ingredientUnitInput.setValue(null);       
+            if (ingredientService.addIngredient(recipeName, ingredientName,ingredientUnit, ingredientAmount)) {
+                updateIngredientList(recipeName);
+                ingredientNameInput.setText("");
+                ingredientAmountInput.setText("");
+                ingredientUnitInput.setValue(null);                  
+            } else {
+                errorLabel.setText("Ainesosan lisääminen epäonnistui!");
+            }
         });      
         
         cancelAddIngredient.setOnMouseClicked(event -> {
@@ -372,13 +476,20 @@ public class GeneratorUI extends Application {
         });         
         
         deleteIngredient.setOnMouseClicked(event -> {
+            errorLabel.setText("");
+            
             String recipeName = recipeList.getSelectionModel().getSelectedItem();
             String ingredientName = ingredientList.getSelectionModel().getSelectedItem().split(",")[0];        
-            recipeService.removeIngredient(recipeName, ingredientName);
-            updateIngredientList(recipeName);
+            if (ingredientService.removeIngredient(recipeName, ingredientName)) {
+                updateIngredientList(recipeName);                
+            } else {
+                errorLabel.setText("Ainesosan poistaminen epäonnistui!");
+            }
         });      
         
         newShoppingList.setOnMouseClicked(event -> {
+            errorLabel.setText("");
+            
             shoppingListWindow.show();
             updateRemainingList();
             updateChosenList();            
@@ -415,10 +526,8 @@ public class GeneratorUI extends Application {
         });  
         
         generateShoppingList.setOnMouseClicked(event -> {
-            
             String shoppingList = shoppingListService.createShoppingList(chosenListItems);
             shoppingListBox.setText(shoppingList);
-            
             shoppingListView.getChildren().remove(shoppingListView.getCenter());
             shoppingListView.getChildren().remove(shoppingListView.getBottom());            
             shoppingListView.setCenter(shoppingListBox);
@@ -430,21 +539,70 @@ public class GeneratorUI extends Application {
             shoppingListView.getChildren().remove(shoppingListView.getBottom());              
             shoppingListView.setCenter(shoppingListSplitPane);
             shoppingListView.setBottom(shoppingListButtons);
+        });     
+        
+        logIn.setOnMouseClicked(event -> {
+            logInError.setText("");
+            if (userService.login(userNameInput.getText())) {
+                updateRecipeList();
+                userNameInput.setText("");
+                logInError.setText("");
+                listView.getChildren().remove(listView.getCenter());
+                listView.setTop(topButtons);
+                listView.setCenter(splitPane);
+                listView.setLeft(infoBox);    
+                listView.setBottom(errorLabel);
+            } else {
+                logInError.setText("Virheellinen käyttäjätunnus!");
+            }
+        });
+        
+        createUser.setOnMouseClicked(event -> {
+            logInError.setText("");
+            if (userService.addNewUser(userNameInput.getText())) {
+                userService.login(userNameInput.getText());
+                updateRecipeList();
+                userNameInput.setText("");
+                logInError.setText("");
+                listView.getChildren().remove(listView.getCenter());
+                listView.setTop(topButtons);
+                listView.setCenter(splitPane);
+                listView.setLeft(infoBox);       
+                listView.setBottom(errorLabel);
+            } else {
+                logInError.setText("Virheellinen käyttäjätunnus!");
+            }
+
         });        
-             
+        
+        changeUser.setOnMouseClicked(event -> {
+            errorLabel.setText("");
+            logInError.setText("");
+            recipeInfo1.setText("");
+            recipeInfo2.setText("");
+            
+            recipeListItems.clear();
+            ingredientListItems.clear();            
+            
+            listView.getChildren().remove(listView.getTop());
+            listView.getChildren().remove(listView.getLeft());            
+            listView.getChildren().remove(listView.getCenter());
+            listView.getChildren().remove(listView.getBottom());            
+            listView.setCenter(logInView);
+        });
+        
+       
+        
         // Asettelu
-        listView.setTop(topButtons);
-        listView.setCenter(splitPane);
-        listView.setLeft(infoBox);
-             
+        listView.setCenter(logInView);    
         Scene scene = new Scene(listView);
         window.setScene(scene);
         window.setWidth(900);
+        window.setHeight(600);
         window.show();
     }
 
     public static void main(String[] args) {
         launch(GeneratorUI.class);
-    }
-    
+    }   
 }

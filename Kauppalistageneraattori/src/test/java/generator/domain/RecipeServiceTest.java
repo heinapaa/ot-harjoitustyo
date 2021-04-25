@@ -8,11 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class RecipeServiceRecipeTest {
+public class RecipeServiceTest {
     
     private RecipeDao recipeDao;
     private UserDao userDao;
     private IngredientDao ingredientDao;
+    private UserService userService;
     private RecipeService recipeService;
     
     @Before
@@ -39,25 +40,27 @@ public class RecipeServiceRecipeTest {
         ingredientDao.create(i1);
         ingredientDao.create(i2);
         
-        this.recipeService = new RecipeService(userDao, recipeDao, ingredientDao);
+        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao);        
+        this.userService = new UserService(userDao, validator);
+        this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
     }
     
     @Test
     public void noRecipesWithoutLogin() {
-        List<Recipe> recipes = recipeService.getAllRecipes();
+        List<Recipe> recipes = recipeService.getAllRecipes(userService.getLoggedIn());
         assertEquals(0, recipes.size());
     }
     
     @Test
     public void listConstainsRecipesAfterLogin() {
-        recipeService.login("testaaja1");
-        List<Recipe> recipes = recipeService.getAllRecipes();
+        userService.login("testaaja1");
+        List<Recipe> recipes = recipeService.getAllRecipes(userService.getLoggedIn());
         assertEquals(1, recipes.size());        
     }
     
     @Test
     public void existQueryWorksForOwner() {
-        recipeService.login("testaaja1");
+        userService.login("testaaja1");
         assertTrue(recipeService.recipeExists("resepti1"));
         assertFalse(recipeService.recipeExists("fakeNews"));
     }
@@ -65,14 +68,14 @@ public class RecipeServiceRecipeTest {
 
     @Test
     public void recipeCanBeAdded() {
-        recipeService.login("testaaja1");
-        recipeService.createRecipe("resepti3", 2);
+        userService.login("testaaja1");
+        recipeService.createRecipe("resepti3", "2", userService.getLoggedIn());
         assertTrue(recipeService.recipeExists("resepti3"));       
     }
     
     @Test
     public void recipeCanBeRemoved() {
-        recipeService.login("testaaja1");
+        userService.login("testaaja1");
         recipeService.removeRecipe("resepti1");
         assertFalse(recipeService.recipeExists("resepti1"));
     }

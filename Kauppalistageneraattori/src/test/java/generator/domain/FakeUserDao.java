@@ -31,5 +31,15 @@ public class FakeUserDao implements UserDao {
     public List<User> findAll() {
         return users;
     }
+
+    @Override
+    public boolean isUser(String name) {
+        for (User user : users) {
+            if (user.getUsername().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
     
 }

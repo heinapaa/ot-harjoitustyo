@@ -9,5 +9,6 @@ public interface UserDao {
     void create(User user);    
     User findByUsername(String name);
     List<User> findAll();
+    boolean isUser(String name);
 
 }

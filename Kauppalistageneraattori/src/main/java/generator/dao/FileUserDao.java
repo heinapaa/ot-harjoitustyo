@@ -28,6 +28,8 @@ public class FileUserDao implements UserDao {
                     users.add(new User(tiedostonLukija.nextLine()));
                 }
             }             
+        } else {
+            userList.createNewFile();
         }                          
     }
     
@@ -49,18 +51,30 @@ public class FileUserDao implements UserDao {
 
     @Override
     public User findByUsername(String name) {
+        if (users.isEmpty()) {
+            return null;
+        }
         for (User user : users) {
             if (user.getUsername().equals(name)) {
                 return user;
             }
         }
-        
         return null;
     }
 
     @Override
     public List<User> findAll() {
         return users;
+    }
+    
+    @Override
+    public boolean isUser(String name) {
+        for (User user : users) {
+            if (user.getUsername().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

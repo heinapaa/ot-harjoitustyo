@@ -8,12 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class RecipeServiceIngredientTest {
+public class IngredientServiceTest {
     
     private RecipeDao recipeDao;
     private UserDao userDao;
-    private IngredientDao ingredientDao;
-    private RecipeService recipeService;    
+    private IngredientDao ingredientDao;  
+    private IngredientService ingredientService;
     
     @Before
     public void setUp() {
@@ -38,13 +38,14 @@ public class RecipeServiceIngredientTest {
         
         ingredientDao.create(i1);
         ingredientDao.create(i2);
-        
-        this.recipeService = new RecipeService(userDao, recipeDao, ingredientDao);        
+
+        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao);
+        this.ingredientService = new IngredientService(recipeDao, ingredientDao, validator);
     }
     
     @Test
     public void canGetAllIngredientsByRecipe() {
-        List<Ingredient> ingredients = recipeService.getIngredients("resepti1");
+        List<Ingredient> ingredients = ingredientService.getIngredients("resepti1");
         assertEquals(1, ingredients.size());
         assertTrue(ingredients.get(0).getName().equals("aines1"));
         assertTrue(ingredients.get(0).getUnit().equals("kg"));
@@ -53,7 +54,7 @@ public class RecipeServiceIngredientTest {
     
     @Test
     public void canGetOneIngredient() {
-        Ingredient ingredient = recipeService.getIngredient("resepti1", "aines1");
+        Ingredient ingredient = ingredientService.getIngredient("resepti1", "aines1");
         assertTrue(ingredient.getName().equals("aines1"));
         assertTrue(ingredient.getUnit().equals("kg"));
         assertTrue(ingredient.getAmount() == 1);        

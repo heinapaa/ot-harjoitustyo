@@ -34,6 +34,8 @@ public class FileRecipeDao implements RecipeDao {
                     }
                 }
             }            
+        } else {
+            recipeList.createNewFile();
         }        
     }
     

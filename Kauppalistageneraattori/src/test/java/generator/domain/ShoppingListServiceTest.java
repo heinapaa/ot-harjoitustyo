@@ -23,7 +23,7 @@ public class ShoppingListServiceTest {
         this.userDao = new FakeUserDao();
         this.recipeDao = new FakeRecipeDao();
         this.ingredientDao = new FakeIngredientDao();    
-        this.sls = new ShoppingListService(userDao, recipeDao, ingredientDao);
+        this.sls = new ShoppingListService(recipeDao, ingredientDao);
         
         Recipe r1 = new Recipe(1, "r1", 1, null);
         recipeDao.create(r1);

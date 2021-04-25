@@ -2,11 +2,9 @@ package generator.domain;
 
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
-import generator.dao.UserDao;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +14,10 @@ import java.util.TreeMap;
 public class ShoppingListService {
  
     private RecipeDao recipeDao;
-    private UserDao userDao;
     private IngredientDao ingredientDao;
-    private User currentUser;
     
-    public ShoppingListService(UserDao userDao, RecipeDao recipeDao, IngredientDao ingredientDao) {
+    public ShoppingListService(RecipeDao recipeDao, IngredientDao ingredientDao) {
         this.recipeDao = recipeDao;
-        this.userDao = userDao;
         this.ingredientDao = ingredientDao;
     }   
     

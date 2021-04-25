@@ -41,6 +41,8 @@ public class FileIngredientDao implements IngredientDao {
                     }
                 }
             }             
+        } else {
+            ingredientList.createNewFile();
         }                          
     }   
     

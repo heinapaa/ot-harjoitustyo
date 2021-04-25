@@ -12,5 +12,8 @@ päivä | h | log
 19.4. | 1.5 | testausta ja exceptioneiden hoitoa
 20.4. | 3.0 | graafisen käyttöliittymän kehittelyä ja testailua
 21.4. | 5.5 | graafinen käyttöliittymä, kauppalistatoiminto, testailua
+23.4. | 4.0 | testailua, rakenteen muutosta (erityyppiset palvelut omiin luokkiin), kauppalistatoiminto
+24.4. | 3.0 | käyttöliittymä, testailua
+25.4. | 5.0 | testailua ja syötteiden validointia
 
-Yhteensä 25h
+Yhteensä 37h

@@ -8,22 +8,22 @@ Sovelluksen avulla käyttäjät voivat tallentaa reseptien ainesosaluetteloita j
 
 ### Toiminnallisuus ennen kirjautumista
 
-* käyttäjä voi luoda käyttäjätunnuksen
-	* käyttäjätunnuksen täytyy olla uniikki ja vähintään kolme merkkiä
-* käyttäjä voi kirjautua sisään
-	* kirjautuminen onnistuu, kun käyttäjä syöttää olemassaolevan käyttäjätunnuksen kirjautumislomakkeeseen
-	* mikäli käyttäjätunnusta ei ole olemassa, käyttäjälle näytetään tästä ilmoitus
+* käyttäjä voi luoda käyttäjätunnuksen - tehty
+	* käyttäjätunnuksen täytyy olla uniikki ja vähintään kolme merkkiä - tehty
+* käyttäjä voi kirjautua sisään - tehty
+	* kirjautuminen onnistuu, kun käyttäjä syöttää olemassaolevan käyttäjätunnuksen kirjautumislomakkeeseen - tehty
+	* mikäli käyttäjätunnusta ei ole olemassa, käyttäjälle näytetään tästä ilmoitus - tehty
 
 ### Toiminnallisuus kirjautumisen jälkeen
 
 * käyttäjä voi lisätä reseptin - tehty
-	* reseptillä tulee olla nimi, sekä lista vaadituista aineksista ja niiden määristä
+	* reseptillä tulee olla nimi, sekä lista vaadituista aineksista ja niiden määristä - tehty (reseptin lisääminen ilman aineksia on mahdollista, mutta käyttäjän näkökulmasta turhaa)
 * käyttäjä voi poistaa reseptin - tehty
 * käyttäjä näkee listan omista resepteistään - tehty
 * käyttäjä voi generoida kauppalistan - osittain tehty
 	* kauppalista perustuu käyttäjän valitsemiin resepteihin - tehty
 	* kauppalista luodaan suoraan tekstitiedostona
-* käyttäjä voi kirjautua ulos - tehty (tavallaan -> käyttäjää pystyy vaihtamaan)
+* käyttäjä voi kirjautua ulos - tehty
 
 ## Jatkokehitysideoita
 
@@ -39,7 +39,7 @@ Kun perustoiminnallisuus on toteutettu toimivasti, sovellukseen voidaan lisätä
 	* nimen perusteella
 	* tietyn ainesosan perusteella
 * reseptien arvostelu
-* tallennettujen reseptien muokkaaminen
+* tallennettujen reseptien muokkaaminen - tehty
 * reseptin skaalaaminen sen mukaan, kuinka monelle henkilölle ruokaa ollaan tekemässä
 * reseptikohtainen laskuri (kuinka monta kertaa resepti on valittu kauppalistalle)
 * erillinen peruselintarvikkeet-lista, joka voidaan lisätä kauppalistalle

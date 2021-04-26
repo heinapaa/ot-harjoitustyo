@@ -3,12 +3,16 @@ package generator.dao;
 import generator.domain.Ingredient;
 import generator.domain.Recipe;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class FileIngredientDao implements IngredientDao {
@@ -19,7 +23,10 @@ public class FileIngredientDao implements IngredientDao {
     
     public FileIngredientDao(RecipeDao recipes) throws Exception {
         this.ingredients = new ArrayList<>();
-        this.file = "ingredients.txt";    
+        Properties properties = new Properties();
+        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
+        properties.load(inputStream);
+        this.file = properties.getProperty("ingredientFile");     
         this.latestId = 1;
         
         File ingredientList = new File(file);
@@ -28,7 +35,7 @@ public class FileIngredientDao implements IngredientDao {
             try (Scanner tiedostonLukija = new Scanner(Paths.get(file))) {
                 while (tiedostonLukija.hasNextLine()) {
                     String rivi = tiedostonLukija.nextLine();
-                    String[] palat = rivi.split(",");    
+                    String[] palat = rivi.split(";");    
                     int ingredientId = Integer.valueOf(palat[0]);
                     String ingredientName = palat[1];
                     Double ingredientAmount = Double.valueOf(palat[2]);
@@ -54,7 +61,7 @@ public class FileIngredientDao implements IngredientDao {
                 Double ingredientAmount = ingredient.getAmount();
                 String ingredientUnit = ingredient.getUnit();
                 int recipeId = ingredient.getRecipe().getId();
-                kirjoittaja.write(ingredientId + "," + ingredientName + "," + ingredientAmount + "," + ingredientUnit + "," + recipeId + "\n");
+                kirjoittaja.write(ingredientId + ";" + ingredientName + ";" + ingredientAmount + ";" + ingredientUnit + ";" + recipeId + "\n");
             }
         } catch (Exception e) {
             

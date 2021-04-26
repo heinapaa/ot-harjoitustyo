@@ -14,6 +14,7 @@ päivä | h | log
 21.4. | 5.5 | graafinen käyttöliittymä, kauppalistatoiminto, testailua
 23.4. | 4.0 | testailua, rakenteen muutosta (erityyppiset palvelut omiin luokkiin), kauppalistatoiminto
 24.4. | 3.0 | käyttöliittymä, testailua
-25.4. | 5.0 | testailua ja syötteiden validointia
+25.4. | 5.0 | testailua ja syötteiden validointia, käyttäjän rekisteröinti/kirjautuminen
+26.4. | 1.5 | konfiguraatiotiedosto, jar + syötteiden validointia
 
 Yhteensä 37h

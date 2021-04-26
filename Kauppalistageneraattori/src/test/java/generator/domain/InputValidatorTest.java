@@ -35,7 +35,8 @@ public class InputValidatorTest {
         assertFalse(validator.isValidUserName("   "));
         assertFalse(validator.isValidUserName("  h  h     "));
         assertFalse(validator.isValidUserName(" h h h "));     
-        assertFalse(validator.isValidUserName("Teuvo Testaaja"));        
+        assertFalse(validator.isValidUserName("Teuvo Testaaja"));   
+        assertFalse(validator.isValidUserName("test;aaja"));
     }
     
     @Test
@@ -50,7 +51,8 @@ public class InputValidatorTest {
     public void invalidRecipeNameIsInvalid() {
         assertFalse(validator.isValidRecipeName(""));
         assertFalse(validator.isValidRecipeName("   "));
-        assertFalse(validator.isValidRecipeName(" r r r "));        
+        assertFalse(validator.isValidRecipeName(" r r r "));   
+        assertFalse(validator.isValidRecipeName("rese;pti"));
     }
     
     @Test
@@ -81,7 +83,8 @@ public class InputValidatorTest {
     public void invalidIngredientNameIsInvalid() {
         assertFalse(validator.isValidIngredientName(""));
         assertFalse(validator.isValidIngredientName("   "));
-        assertFalse(validator.isValidIngredientName(" a a "));        
+        assertFalse(validator.isValidIngredientName(" a a "));  
+        assertFalse(validator.isValidIngredientName("aines;osa"));
     }
     
     @Test

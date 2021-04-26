@@ -3,11 +3,14 @@ package generator.dao;
 import generator.domain.Recipe;
 import generator.domain.User;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class FileRecipeDao implements RecipeDao {
@@ -18,7 +21,10 @@ public class FileRecipeDao implements RecipeDao {
     
     public FileRecipeDao(UserDao users) throws Exception {
         this.recipes = new ArrayList<>();
-        this.file = "recipes.txt";
+        Properties properties = new Properties();
+        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
+        properties.load(inputStream);    
+        this.file = properties.getProperty("recipeFile");  
         latestId = 1;
         
         File recipeList = new File(file);
@@ -27,7 +33,7 @@ public class FileRecipeDao implements RecipeDao {
             try (Scanner tiedostonLukija = new Scanner(Paths.get(file))) {
                 while (tiedostonLukija.hasNextLine()) {
                     String rivi = tiedostonLukija.nextLine();
-                    String[] palat = rivi.split(",");
+                    String[] palat = rivi.split(";");
                     recipes.add(new Recipe(Integer.valueOf(palat[0]), palat[1], Integer.valueOf(palat[2]), users.findByUsername(palat[3])));
                     if (Integer.valueOf(palat[0]) > latestId) {
                         latestId = Integer.valueOf(palat[0]);
@@ -42,7 +48,7 @@ public class FileRecipeDao implements RecipeDao {
     private void save() {
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (Recipe recipe : recipes) {
-                kirjoittaja.write(recipe.getId() + "," + recipe.getName() + "," + recipe.getPortion() + "," + recipe.getOwner().getUsername() + "\n");
+                kirjoittaja.write(recipe.getId() + ";" + recipe.getName() + ";" + recipe.getPortion() + ";" + recipe.getOwner().getUsername() + "\n");
             }
         } catch (Exception e) {
             

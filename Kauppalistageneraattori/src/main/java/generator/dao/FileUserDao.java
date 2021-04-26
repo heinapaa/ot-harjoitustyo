@@ -4,11 +4,14 @@ import generator.domain.Ingredient;
 import generator.domain.Recipe;
 import generator.domain.User;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class FileUserDao implements UserDao {
@@ -17,11 +20,13 @@ public class FileUserDao implements UserDao {
     private String file;
     
     public FileUserDao() throws Exception {
-        this.users = new ArrayList<>();
-        this.file = "users.txt";    
+        Properties properties = new Properties();
+        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
+        properties.load(inputStream);
+        this.file = properties.getProperty("userFile");         
+        this.users = new ArrayList<>();   
         
         File userList = new File(file);
-        
         if (userList.exists()) {
             try (Scanner tiedostonLukija = new Scanner(Paths.get("users.txt"))) {
                 while (tiedostonLukija.hasNextLine()) {

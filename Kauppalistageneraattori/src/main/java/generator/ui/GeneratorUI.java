@@ -333,7 +333,9 @@ public class GeneratorUI extends Application {
             updateIngredientList(recipeName);
             recipeInfo1.setText(recipeName);
             recipeInfo2.setText(String.valueOf(recipeService.getRecipe(recipeName).getPortion()));
-            infoBox.getChildren().add(editRecipe);            
+            if (!infoBox.getChildren().contains(editRecipe)) {
+                infoBox.getChildren().add(editRecipe);
+            }         
         });          
         
         addRecipe.setOnMouseClicked(event -> {

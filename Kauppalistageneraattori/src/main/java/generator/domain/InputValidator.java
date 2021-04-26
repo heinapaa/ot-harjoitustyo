@@ -22,7 +22,8 @@ public class InputValidator {
         if (input.isBlank()
                 || input.isEmpty()
                 || StringUtils.containsWhitespace(input)
-                || StringUtils.endsWith(input, " ")) {
+                || StringUtils.endsWith(input, " ")
+                || StringUtils.contains(input, ";")) {
             return false;
         }        
         String nm = StringUtils.deleteWhitespace(input);
@@ -37,7 +38,8 @@ public class InputValidator {
                 || input.isEmpty()
                 || StringUtils.trimToEmpty(input).isEmpty()
                 || StringUtils.startsWith(input, " ")
-                || StringUtils.endsWith(input, " ")) {
+                || StringUtils.endsWith(input, " ")
+                || StringUtils.contains(input, ";")) {
             return false;
         }
         return true;
@@ -60,7 +62,8 @@ public class InputValidator {
                 || input.isEmpty()
                 || StringUtils.trimToEmpty(input).isEmpty()
                 || StringUtils.startsWith(input, " ")
-                || StringUtils.endsWith(input, " ")) {
+                || StringUtils.endsWith(input, " ")
+                || StringUtils.contains(input, ";")) {
             return false;
         }        
         if (input.isBlank() || input.isEmpty()) {

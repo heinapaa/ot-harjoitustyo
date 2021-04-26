@@ -1,7 +1,7 @@
 # Kauppalistageneraattori
-Sovelluksen avulla käyttäjät voivat tallentaa reseptien ainesosaluetteloita.
+Sovelluksen avulla käyttäjät voivat tallentaa reseptejä ainesosaluetteloineen, ja generoida kauppalistoja valittujen reseptien pohjalta.
 
-Sovellus on luotu Helsingin yliopiston Tietojenkäsittelytieteen kurssin Ohjelmistotekniikka harjoitustyönä.
+Sovellus on luotu Helsingin yliopiston Tietojenkäsittelytieteen kurssin *Ohjelmistotekniikka* harjoitustyönä.
 
 ## Dokumentaatio
 [Vaatimusmäärittely](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/vaatimusmaarittely.md)

@@ -15,6 +15,7 @@ päivä | h | log
 23.4. | 4.0 | testailua, rakenteen muutosta (erityyppiset palvelut omiin luokkiin), kauppalistatoiminto
 24.4. | 3.0 | käyttöliittymä, testailua
 25.4. | 5.0 | testailua ja syötteiden validointia, käyttäjän rekisteröinti/kirjautuminen
-26.4. | 2.0 | konfiguraatiotiedosto, jar + syötteiden validointia
+26.4. | 3.0 | konfiguraatiotiedosto, jar + syötteiden validointia
+27.4. | 2.0 | reseptin muokkaus -toiminnallisuus + testailua
 
-Yhteensä 39h
+Yhteensä 42h

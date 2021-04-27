@@ -53,12 +53,16 @@ public class GeneratorUI extends Application {
     
     @Override
     public void init() throws Exception {
-        Properties properties = new Properties();
+        /*Properties properties = new Properties();
         InputStream inputStream = getClass().getResourceAsStream("/config.properties");
-        properties.load(inputStream);
+        properties.load(inputStream)
         String userFile = properties.getProperty("userFile");
         String recipeFile = properties.getProperty("recipeFile");
-        String ingredientFile = properties.getProperty("ingredientFile");      
+        String ingredientFile = properties.getProperty("ingredientFile");*/
+        
+        String userFile = "users.txt";
+        String recipeFile = "recipes.txt";
+        String ingredientFile = "ingredients.txt";
         
         UserDao userDao = new FileUserDao(userFile);
         RecipeDao recipeDao = new FileRecipeDao(recipeFile, userDao);

@@ -10,6 +10,9 @@ Sovellus on luotu Helsingin yliopiston Tietojenkäsittelytieteen kurssin *Ohjelm
 
 [Tuntikirjanpito](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/tuntikirjanpito.md)
 
+## Releaset
+[Viikko 5](https://github.com/heinapaa/ot-harjoitustyo)
+
 ## Komentorivitoiminnot
 
 ### Ohjelman ajaminen

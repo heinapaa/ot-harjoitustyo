@@ -58,15 +58,12 @@ public class Recipe {
             return false;
         } else {
             Recipe resepti = (Recipe) object;
-            if (resepti.getId() != this.id) {
+            if (resepti.getId() != this.id
+                    || !resepti.getName().equals(this.name)
+                    || resepti.getPortion() != this.portion
+                    || !resepti.getOwner().equals(this.owner)) {
                 return false;
-            } else if (!resepti.getName().equals(this.name)) {
-                return false;
-            } else if (resepti.getPortion() != this.portion) {
-                return false;
-            } else if (!resepti.getOwner().equals(this.owner)) {
-                return false;
-            }                 
+            }          
         }
         return true;
     }     

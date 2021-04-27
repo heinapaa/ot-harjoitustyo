@@ -19,16 +19,13 @@ public class FileUserDao implements UserDao {
     private List<User> users;
     private String file;
     
-    public FileUserDao() throws Exception {
-        Properties properties = new Properties();
-        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
-        properties.load(inputStream);
-        this.file = properties.getProperty("userFile");         
+    public FileUserDao(String file) throws Exception {
+        this.file = file;         
         this.users = new ArrayList<>();   
         
         File userList = new File(file);
         if (userList.exists()) {
-            try (Scanner tiedostonLukija = new Scanner(Paths.get("users.txt"))) {
+            try (Scanner tiedostonLukija = new Scanner(Paths.get(file))) {
                 while (tiedostonLukija.hasNextLine()) {
                     users.add(new User(tiedostonLukija.nextLine()));
                 }

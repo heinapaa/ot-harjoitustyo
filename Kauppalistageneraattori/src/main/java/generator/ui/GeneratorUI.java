@@ -13,8 +13,10 @@ import generator.domain.Recipe;
 import generator.domain.RecipeService;
 import generator.domain.ShoppingListService;
 import generator.domain.UserService;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,10 +53,18 @@ public class GeneratorUI extends Application {
     
     @Override
     public void init() throws Exception {
-        UserDao userDao = new FileUserDao();
-        RecipeDao recipeDao = new FileRecipeDao(userDao);
-        IngredientDao ingredientDao = new FileIngredientDao(recipeDao);
+        Properties properties = new Properties();
+        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
+        properties.load(inputStream);
+        String userFile = properties.getProperty("userFile");
+        String recipeFile = properties.getProperty("recipeFile");
+        String ingredientFile = properties.getProperty("ingredientFile");      
+        
+        UserDao userDao = new FileUserDao(userFile);
+        RecipeDao recipeDao = new FileRecipeDao(recipeFile, userDao);
+        IngredientDao ingredientDao = new FileIngredientDao(ingredientFile, recipeDao);
         InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao);
+        
         this.userService = new UserService(userDao, validator);
         this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
         this.ingredientService = new IngredientService(recipeDao, ingredientDao, validator);
@@ -404,7 +414,34 @@ public class GeneratorUI extends Application {
             } else {
                 errorLabel.setText("Valitse muokattava resepti!");
             }       
-        });     
+        });   
+        
+        commitEditRecipe.setOnMouseClicked(event -> {
+            
+            String oldName = recipeList.getSelectionModel().getSelectedItem();
+            String newName = recipeNameInput.getText();
+            String newPortion = recipeServingInput.getText();
+            
+            if (recipeService.updateRecipe(oldName, newName, newPortion)) {
+                errorLabel.setText("");
+                recipeNameInput.setText("");
+                recipeServingInput.setText("");
+                recipeInfo1.setText("");
+                recipeInfo2.setText("");
+                updateRecipeList();
+                recipeNameRow.getChildren().remove(recipeNameInput);
+                recipeNameRow.getChildren().add(recipeInfo1);
+                recipeServingRow.getChildren().remove(recipeServingInput);
+                recipeServingRow.getChildren().add(recipeInfo2);            
+                infoBox.getChildren().remove(editRecipeButtons);
+
+                recipeList.setMouseTransparent(false);  
+                changeUser.setMouseTransparent(false);
+                newShoppingList.setMouseTransparent(false);                  
+            } else {
+                errorLabel.setText("Reseptin päivittäminen epäonnistui!");
+            }          
+        });
         
         cancelEditRecipe.setOnMouseClicked(event -> {
             errorLabel.setText("");            

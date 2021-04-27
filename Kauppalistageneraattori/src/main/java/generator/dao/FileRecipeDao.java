@@ -19,12 +19,9 @@ public class FileRecipeDao implements RecipeDao {
     private String file;
     int latestId;
     
-    public FileRecipeDao(UserDao users) throws Exception {
-        this.recipes = new ArrayList<>();
-        Properties properties = new Properties();
-        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
-        properties.load(inputStream);    
-        this.file = properties.getProperty("recipeFile");  
+    public FileRecipeDao(String file, UserDao users) throws Exception {
+        this.recipes = new ArrayList<>();  
+        this.file = file;
         latestId = 1;
         
         File recipeList = new File(file);
@@ -110,6 +107,22 @@ public class FileRecipeDao implements RecipeDao {
     @Override
     public List<Recipe> findAll() {
         return recipes;
+    }
+    
+    @Override
+    public boolean update(String newName, int newPortion, Recipe recipe) {
+        Recipe recipeToUpdate = findByName(recipe.getName());
+        recipes.remove(recipeToUpdate);
+        recipeToUpdate.setName(newName);
+        recipeToUpdate.setPortion(newPortion);
+        recipes.add(recipeToUpdate);
+        
+        try {
+            save();
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
     
 }

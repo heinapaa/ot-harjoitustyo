@@ -21,7 +21,7 @@ public class RecipeService {
     public boolean createRecipe(String name, String portion, User user) {
         String nm = name.strip();
         String pn = StringUtils.deleteWhitespace(portion);
-        if (!validator.isValidRecipeName(nm) || !validator.isValidRecipePortion(pn)) {
+        if (!validator.isValidRecipePortion(pn)) {
             return false;
         }
         if (recipeExists(nm)) {
@@ -38,9 +38,6 @@ public class RecipeService {
     
     public boolean removeRecipe(String name) {
         String nm = name.strip();
-        if (!validator.isValidRecipeName(nm)) {
-            return false;
-        }
         if (!recipeExists(nm)) {
             return false;
         }
@@ -54,27 +51,21 @@ public class RecipeService {
         return true;
     }
     
-    public boolean updateRecipe(String name, String portion) {
-        String nm = name.strip();
-        String pn = StringUtils.deleteWhitespace(portion);        
-        if (!validator.isValidRecipeName(nm)) {
+    public boolean updateRecipe(String oldName, String newName, String newPortion) {
+        String oldnm = oldName.strip();
+        if (!recipeExists(oldnm)) {
             return false;
         }
-        if (!recipeExists(nm)) {
+        String newnm = newName.strip();
+        String pn = StringUtils.deleteWhitespace(newPortion); 
+        if (!validator.isValidRecipeName(newName) || !validator.isValidRecipePortion(pn)) {
+            return false;
+        }
+        if (!oldnm.equals(newnm) && recipeExists(newnm)) {
             return false;
         }
         try {
-            Recipe recipeToUpdate = recipeDao.findByName(nm);
-            recipeToUpdate.setName(nm);
-            recipeToUpdate.setPortion(Integer.parseInt(pn));
-            recipeDao.create(recipeToUpdate);
-            List<Ingredient> ingredientsToAdd = ingredientDao.findByRecipe(recipeDao.findByName(nm));
-            for (Ingredient ingredient : ingredientsToAdd) {
-                Ingredient newIngredient = ingredient;
-                newIngredient.setRecipe(recipeToUpdate);
-                ingredientDao.remove(ingredient);
-                ingredientDao.create(newIngredient);
-            }
+            recipeDao.update(newnm, Integer.parseInt(pn), getRecipe(oldnm));                   
         } catch (Exception e) {
             return false;
         }
@@ -98,8 +89,10 @@ public class RecipeService {
     }
       
     public boolean recipeExists(String name) {
-        String nm = name.strip();
-        if (recipeDao.findByName(nm) == null) {
+        if (!validator.isValidRecipeName(name)) {
+            return false;
+        }        
+        if (recipeDao.findByName(name) == null) {
             return false;
         }
         return true;

@@ -21,12 +21,9 @@ public class FileIngredientDao implements IngredientDao {
     private String file;
     private int latestId;
     
-    public FileIngredientDao(RecipeDao recipes) throws Exception {
+    public FileIngredientDao(String file, RecipeDao recipes) throws Exception {
         this.ingredients = new ArrayList<>();
-        Properties properties = new Properties();
-        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
-        properties.load(inputStream);
-        this.file = properties.getProperty("ingredientFile");     
+        this.file = file;     
         this.latestId = 1;
         
         File ingredientList = new File(file);

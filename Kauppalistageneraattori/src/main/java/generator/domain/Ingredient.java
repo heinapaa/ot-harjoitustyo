@@ -66,17 +66,13 @@ public class Ingredient implements Comparable<Ingredient> {
             return false;
         } else {
             Ingredient ainesosa = (Ingredient) object;
-            if (ainesosa.getId() != this.id) {
+            if (ainesosa.getId() != this.id
+                    || !ainesosa.getName().equals(this.name)
+                    || ainesosa.getAmount() != this.amount
+                    || !ainesosa.getUnit().equals(this.unit)
+                    || !ainesosa.getRecipe().equals(this.recipe)) {
                 return false;
-            } else if (!ainesosa.getName().equals(this.name)) {
-                return false;
-            } else if (ainesosa.getAmount() != this.amount) {
-                return false;
-            } else if (!ainesosa.getUnit().equals(this.unit)) {
-                return false;
-            } else if (!ainesosa.getRecipe().equals(this.recipe)) {
-                return false;
-            }                 
+            }  
         }
         return true;
     }   

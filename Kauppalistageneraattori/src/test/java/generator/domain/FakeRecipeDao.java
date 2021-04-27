@@ -61,5 +61,21 @@ public class FakeRecipeDao implements RecipeDao {
     public List<Recipe> findAll() {
         return recipes;
     }
+
+    @Override
+    public boolean update(String newName, int newPortion, Recipe recipe) {
+        Recipe recipeToUpdate = null;
+        for (Recipe r : recipes) {
+            if (r.equals(recipe)) {
+                recipeToUpdate = r;
+                break;
+            }
+        }
+        recipes.remove(recipeToUpdate);        
+        recipeToUpdate.setName(newName);
+        recipeToUpdate.setPortion(newPortion);
+        recipes.add(recipeToUpdate);
+        return true;
+    }
     
 }

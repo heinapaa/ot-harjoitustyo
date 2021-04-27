@@ -65,7 +65,6 @@ public class RecipeServiceTest {
         assertFalse(recipeService.recipeExists("fakeNews"));
     }
 
-
     @Test
     public void recipeCanBeAdded() {
         userService.login("testaaja1");
@@ -78,6 +77,12 @@ public class RecipeServiceTest {
         userService.login("testaaja1");
         recipeService.removeRecipe("resepti1");
         assertFalse(recipeService.recipeExists("resepti1"));
+    }
+    
+    @Test
+    public void recipeCanBeUpdated() {
+        recipeService.updateRecipe("resepti1", "uusiNimi", "1");
+        assertTrue(recipeService.recipeExists("uusiNimi"));
     }
     
 }

@@ -17,5 +17,7 @@ päivä | h | log
 25.4. | 5.0 | testailua ja syötteiden validointia, käyttäjän rekisteröinti/kirjautuminen
 26.4. | 3.0 | konfiguraatiotiedosto, jar + syötteiden validointia
 27.4. | 2.0 | reseptin muokkaus -toiminnallisuus + testailua
+28.4. | 5.0 | käyttöliittymä
+29.4. | 3.0 [ käyttöliittymä
 
-Yhteensä 42h
+Yhteensä 50h

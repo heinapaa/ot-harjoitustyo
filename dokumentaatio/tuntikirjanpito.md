@@ -18,6 +18,9 @@ päivä | h | log
 26.4. | 3.0 | konfiguraatiotiedosto, jar + syötteiden validointia
 27.4. | 2.0 | reseptin muokkaus -toiminnallisuus + testailua
 28.4. | 5.0 | käyttöliittymä
-29.4. | 3.0 [ käyttöliittymä
+29.4. | 3.0 | käyttöliittymä
+30.4. | 3.0 | käyttöliittymä
+1.5.  | 4.0 | reseptien rajaus tyypin perusteella + tähän liittyvä käyttöliittymä
 
-Yhteensä 50h
+
+Yhteensä 57h

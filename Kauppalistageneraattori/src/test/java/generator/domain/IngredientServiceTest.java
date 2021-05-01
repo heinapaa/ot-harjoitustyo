@@ -27,8 +27,8 @@ public class IngredientServiceTest {
         userDao.create(u1);
         userDao.create(u2);
         
-        Recipe r1 = new Recipe("resepti1", 2, u1);
-        Recipe r2 = new Recipe("resepti2", 4, u2);
+        Recipe r1 = new Recipe("resepti1", 2, "kasvis", u1);
+        Recipe r2 = new Recipe("resepti2", 4, "kasvis", u2);
         
         recipeDao.create(r1);
         recipeDao.create(r2);

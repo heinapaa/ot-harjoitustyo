@@ -3,14 +3,10 @@ package generator.dao;
 import generator.domain.Recipe;
 import generator.domain.User;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Scanner;
 
 public class FileRecipeDao implements RecipeDao {
@@ -22,7 +18,7 @@ public class FileRecipeDao implements RecipeDao {
     public FileRecipeDao(String file, UserDao users) throws Exception {
         this.recipes = new ArrayList<>();  
         this.file = file;
-        latestId = 1;
+        this.latestId = 1;
         
         File recipeList = new File(file);
         
@@ -31,7 +27,7 @@ public class FileRecipeDao implements RecipeDao {
                 while (tiedostonLukija.hasNextLine()) {
                     String rivi = tiedostonLukija.nextLine();
                     String[] palat = rivi.split(";");
-                    recipes.add(new Recipe(Integer.valueOf(palat[0]), palat[1], Integer.valueOf(palat[2]), users.findByUsername(palat[3])));
+                    recipes.add(new Recipe(Integer.valueOf(palat[0]), palat[1], Integer.valueOf(palat[2]), palat[3], users.findByUsername(palat[4])));
                     if (Integer.valueOf(palat[0]) > latestId) {
                         latestId = Integer.valueOf(palat[0]);
                     }
@@ -41,35 +37,24 @@ public class FileRecipeDao implements RecipeDao {
             recipeList.createNewFile();
         }        
     }
-    
-    private void save() {
-        try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
-            for (Recipe recipe : recipes) {
-                kirjoittaja.write(recipe.getId() + ";" + recipe.getName() + ";" + recipe.getPortion() + ";" + recipe.getOwner().getUsername() + "\n");
-            }
-        } catch (Exception e) {
-            
-        }        
-    }
-    
-    private int generateId() {
-        latestId++;
-        return latestId;
-    }
 
     @Override
-    public void create(Recipe recipe) {
+    public boolean create(Recipe recipe) {
         Recipe newRecipe = recipe;
         newRecipe.setId(generateId());
         recipes.add(recipe);
-        save();
+        return save();
     }
-
+    
     @Override
-    public void remove(Recipe recipe) {
-        recipes.remove(recipe);
-        save();
-    }
+    public Recipe findById(int id) {
+        for (Recipe recipe : recipes) {
+            if (recipe.getId() == id) {
+                return recipe;
+            }
+        }     
+        return null;
+    }    
     
     @Override
     public Recipe findByName(String name) {
@@ -82,47 +67,62 @@ public class FileRecipeDao implements RecipeDao {
     }    
     
     @Override
-    public Recipe findById(int id) {
+    public List<Recipe> findByType(String type) {
+        List<Recipe> typeRecipes = new ArrayList<>();
         for (Recipe recipe : recipes) {
-            if (recipe.getId() == id) {
-                return recipe;
+            if (recipe.getType().equals(type)) {
+                typeRecipes.add(recipe);
             }
-        }     
-        return null;
-    }
-    
+        }
+        return typeRecipes;
+    }    
+
     @Override
     public List<Recipe> findByUser(User user) {
         List<Recipe> userRecipes = new ArrayList<>();
-        
         for (Recipe recipe : recipes) {
             if (recipe.getOwner().getUsername().equals(user.getUsername())) {
                 userRecipes.add(recipe);
             }
         }
-        
         return userRecipes;
     }
 
     @Override
     public List<Recipe> findAll() {
         return recipes;
-    }
+    }  
     
     @Override
-    public boolean update(String newName, int newPortion, Recipe recipe) {
+    public boolean update(String newName, int newPortion, String newType, Recipe recipe) {
         Recipe recipeToUpdate = findByName(recipe.getName());
         recipes.remove(recipeToUpdate);
         recipeToUpdate.setName(newName);
         recipeToUpdate.setPortion(newPortion);
+        recipeToUpdate.setType(newType);
         recipes.add(recipeToUpdate);
-        
-        try {
-            save();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+        return save();
+    }    
+
+    @Override
+    public boolean remove(Recipe recipe) {
+        recipes.remove(recipe);
+        return save();
     }
     
+    private int generateId() {
+        latestId++;
+        return latestId;
+    } 
+    
+    private boolean save() {
+        try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
+            for (Recipe recipe : recipes) {
+                kirjoittaja.write(recipe.getId() + ";" + recipe.getName() + ";" + recipe.getPortion() + ";" + recipe.getType() + ";" + recipe.getOwner().getUsername() + "\n");
+            }
+        } catch (Exception e) {
+            return false;
+        }     
+        return true;
+    }      
 }

@@ -1,7 +1,13 @@
 package generator.ui;
 
+import generator.domain.Recipe;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
@@ -15,23 +21,84 @@ public class ShoppingListView {
     private HBox shoppingListButtons;
     private HBox shoppingListButtonsAlternative;
     private TextArea shoppingListBox;
-    private ListView<String> remainingRecipesList;
-    private ListView<String> chosenRecipesList;      
+    private ListView<Recipe> remainingRecipesList;
+    private ListView<Recipe> chosenRecipesList;      
+    private String chosenRecipe;
+    private ComboBox recipeTypeComboBox;
+    private FilteredList<Recipe> filteredRecipes;
+    private Label labelRecipeType;
+    private HBox recipeTypeRow;
     
     public BorderPane set(Button addToShoppingList, Button removeFromShoppingList, Button generateShoppingList, 
-            Button cancelShoppingList, ObservableList<String> remainingRecipesItems, ObservableList<String> chosenRecipesItems) {
+            Button cancelShoppingList, Button goBackToRecipes, ObservableList<Recipe> remainingRecipesItems, 
+            ObservableList<Recipe> chosenRecipesItems) {
         
-        this.remainingRecipesList = new ListView<>(remainingRecipesItems);       
+        this.filteredRecipes = new FilteredList<>(remainingRecipesItems, s -> true);        
+        
+        this.labelRecipeType = new Label("Suodata reseptin tyypin mukaan:");
+        this.recipeTypeComboBox = new ComboBox();
+        recipeTypeComboBox.getItems().addAll(
+            "kaikki",
+            "kala",
+            "kasvis",
+            "liha",
+            "makea"
+        ); 
+
+        recipeTypeComboBox.setOnAction(event -> {
+            String chosenType = recipeTypeComboBox.getValue().toString();
+            filteredRecipes.setPredicate(r -> r.getType().equals(chosenType));
+        });
+        
+        this.recipeTypeRow = new HBox(labelRecipeType, recipeTypeComboBox);
+        
+        this.remainingRecipesList = new ListView<>(filteredRecipes);       
         remainingRecipesList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);         
+        remainingRecipesList.setCellFactory(p -> new ListCell<Recipe>() {
+            @Override
+            protected void updateItem(Recipe recipe, boolean empty){
+            super.updateItem(recipe, empty);
+                if(empty || recipe == null || recipe.getName() == null){
+                    setText("");
+                }
+                else{
+                    setText(recipe.getName());
+                };
+            };
+        });
+        
         this.chosenRecipesList = new ListView<>(chosenRecipesItems);       
-        chosenRecipesList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);          
+        chosenRecipesList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);        
+        chosenRecipesList.setCellFactory(p -> new ListCell<Recipe>() {
+            @Override
+            protected void updateItem(Recipe recipe, boolean empty){
+            super.updateItem(recipe, empty);
+                if(empty || recipe == null || recipe.getName() == null){
+                    setText("");
+                }
+                else{
+                    setText(recipe.getName());
+                    //Change listener implemented.
+                    /*
+                    remainingRecipesList.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends Recipe> observable, Recipe oldValue, Recipe newValue) -> {
+                        if(remainingRecipesList.isFocused()){
+                            //textArea.setText(newValue.toString());
+                        }
+                    });  
+                    */
+                };
+            };
+        });        
         
         remainingRecipesList.setOnMouseClicked(event -> {
             chosenRecipesList.getSelectionModel().clearSelection();
-        });    
+            chosenRecipe = remainingRecipesList.getSelectionModel().getSelectedItem().getName();
+        });
+        
         
         chosenRecipesList.setOnMouseClicked(event -> {
             remainingRecipesList.getSelectionModel().clearSelection();
+            chosenRecipe = chosenRecipesList.getSelectionModel().getSelectedItem().getName();            
         });        
         
         this.shoppingListButtons = new HBox(addToShoppingList, removeFromShoppingList, generateShoppingList, cancelShoppingList);        
@@ -40,14 +107,8 @@ public class ShoppingListView {
         shoppingListBox.setPrefWidth(400);
         shoppingListBox.setPrefHeight(300);
         
-        Button goBackToChoosingRecipes = new Button("Palaa reseptien valintaan");
-        
-        this.shoppingListButtonsAlternative = new HBox(goBackToChoosingRecipes, cancelShoppingList);         
+        this.shoppingListButtonsAlternative = new HBox(goBackToRecipes, cancelShoppingList);         
                 
-        goBackToChoosingRecipes.setOnMouseClicked(event -> {
-            setRecipeChoosingView();
-        });
-        
         this.shoppingListSplitPane = new SplitPane(remainingRecipesList, chosenRecipesList);     
 
         return setRecipeChoosingView();
@@ -55,7 +116,7 @@ public class ShoppingListView {
     
     public BorderPane setShoppingListView(String shoppingList) {
         BorderPane pane = new BorderPane();
-        this.shoppingListBox.setText(shoppingList);
+        shoppingListBox.setText(shoppingList);
         pane.setCenter(shoppingListBox);
         pane.setBottom(shoppingListButtonsAlternative);
         return pane;
@@ -63,14 +124,20 @@ public class ShoppingListView {
     
     public BorderPane setRecipeChoosingView() {
         BorderPane pane = new BorderPane();
+        pane.setTop(recipeTypeRow);
         pane.setCenter(shoppingListSplitPane);
         pane.setBottom(shoppingListButtons);
         return pane;
     }
 
-    String getChosenRecipe() {
-        //remainingRecipesList.getSelectionModel().getSelectedItem();        
-        return "";
+    public String getChosenRecipe() {    
+        String chosen = chosenRecipe;
+        chosenRecipe = "";
+        return chosen;
+    }
+    
+    public void filterRemainingList(String recipeType) {
+        filteredRecipes.setPredicate(recipe -> recipe.getType().equals(recipeType));
     }
                    
 }

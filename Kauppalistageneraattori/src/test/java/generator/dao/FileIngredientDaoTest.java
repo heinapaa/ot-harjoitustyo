@@ -28,7 +28,7 @@ public class FileIngredientDaoTest {
     public void setUp() throws Exception {
         ingredientFile = testFolder.newFile("testfile_ingredients.txt");  
         this.recipeDao = new FakeRecipeDao();
-        recipeDao.create(new Recipe("testiresepti", 3, null));
+        recipeDao.create(new Recipe("testiresepti", 3, "kasvis", null));
         int indeksi = recipeDao.findByName("testiresepti").getId();
         
         try (FileWriter file = new FileWriter(ingredientFile.getAbsolutePath())) {

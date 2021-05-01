@@ -18,16 +18,17 @@ public class RecipeService {
         this.validator = validator;
     }    
     
-    public boolean createRecipe(String name, String portion, User user) {
+    public boolean createRecipe(String name, String portion, String type, User user) {
         String nm = name.strip();
         String pn = StringUtils.deleteWhitespace(portion);
-        if (!validator.isValidRecipePortion(pn)) {
+        String tp = type.strip();
+        if (!validator.isValidRecipePortion(pn) || !validator.isValidRecipeType(tp)) {
             return false;
         }
         if (recipeExists(nm)) {
             return false;
         }
-        Recipe newRecipe = new Recipe(nm, Integer.parseInt(pn), user);
+        Recipe newRecipe = new Recipe(nm, Integer.parseInt(pn), tp, user);
         try {
             recipeDao.create(newRecipe);   
         } catch (Exception e) {
@@ -51,21 +52,22 @@ public class RecipeService {
         return true;
     }
     
-    public boolean updateRecipe(String oldName, String newName, String newPortion) {
+    public boolean updateRecipe(String oldName, String newName, String newPortion, String newType) {
         String oldnm = oldName.strip();
         if (!recipeExists(oldnm)) {
             return false;
         }
         String newnm = newName.strip();
-        String pn = StringUtils.deleteWhitespace(newPortion); 
-        if (!validator.isValidRecipeName(newName) || !validator.isValidRecipePortion(pn)) {
+        String newpn = StringUtils.deleteWhitespace(newPortion); 
+        String newtp = newType.strip();
+        if (!validator.isValidRecipeName(newnm) || !validator.isValidRecipePortion(newpn) || !validator.isValidRecipeType(newtp)) {
             return false;
         }
         if (!oldnm.equals(newnm) && recipeExists(newnm)) {
             return false;
         }
         try {
-            recipeDao.update(newnm, Integer.parseInt(pn), getRecipe(oldnm));                   
+            recipeDao.update(newnm, Integer.parseInt(newpn), newtp, getRecipe(oldnm));                   
         } catch (Exception e) {
             return false;
         }

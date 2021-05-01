@@ -23,16 +23,16 @@ public class GeneratorUI extends Application {
     private IngredientService ingredientService;
     private ShoppingListService shoppingListService;
     private ObservableList<String> recipeListItems;
-    private ObservableList<String> ingredientListItems;   
+    private ObservableList<String> ingredientListItems;  
+    private ObservableList<Recipe> remainingRecipesItems;
+    private ObservableList<Recipe> chosenRecipesItems;    
+    
     
     private Button addRecipe;
     private Button newShoppingList;
     private Button changeUser;
     private ListView<String> recipeList;
     private ListView<String> ingredientList;
-  
-    private ObservableList<String> remainingRecipesItems;
-    private ObservableList<String> chosenRecipesItems;
 
     
     @Override
@@ -62,10 +62,13 @@ public class GeneratorUI extends Application {
     public void updateRecipeList() {
         recipeListItems.clear();
         List<Recipe> allRecipes = recipeService.getAllRecipes(userService.getLoggedIn());
-        for (Recipe recipe : allRecipes) {
-            recipeListItems.add(recipe.getName());
+        if (!allRecipes.isEmpty()) {
+            for (Recipe recipe : allRecipes) {
+                recipeListItems.add(recipe.getName());
+            }
+            Collections.sort(recipeListItems);            
         }
-        Collections.sort(recipeListItems);
+
     }
     
     public void updateIngredientList(String recipeName) {
@@ -80,7 +83,7 @@ public class GeneratorUI extends Application {
     public void updateRemainingList() {
         remainingRecipesItems.clear();
         for (String recipeName : recipeListItems) {
-            remainingRecipesItems.add(recipeName);
+            remainingRecipesItems.add(recipeService.getRecipe(recipeName));
         }        
     }
     
@@ -89,17 +92,17 @@ public class GeneratorUI extends Application {
     }      
     
     public void enableClicking(){
-        //recipeList.setMouseTransparent(false);
-        //addRecipe.setMouseTransparent(false);
-        //changeUser.setMouseTransparent(false);
-        //newShoppingList.setMouseTransparent(false);  
+        recipeList.setMouseTransparent(false);
+        addRecipe.setMouseTransparent(false);
+        changeUser.setMouseTransparent(false);
+        newShoppingList.setMouseTransparent(false);  
     }    
     
     public void disableClicking(){
-        //recipeList.setMouseTransparent(true);
-        //addRecipe.setMouseTransparent(true);
-        //changeUser.setMouseTransparent(true);
-        //newShoppingList.setMouseTransparent(true);  
+        recipeList.setMouseTransparent(true);
+        addRecipe.setMouseTransparent(true);
+        changeUser.setMouseTransparent(true);
+        newShoppingList.setMouseTransparent(true);  
     }   
 
     @Override
@@ -134,15 +137,14 @@ public class GeneratorUI extends Application {
         Button deleteRecipe = new Button("Poista resepti");
         
         Button commitAddIngredient = new Button("Tallenna ainesosa");
-        Button cancelAddIngredient = new Button("Peruuta");  
+        Button cancelAddIngredient = new Button("Lopeta");  
        
         Button addToShoppingList = new Button("Lisää ostoslistalle");
         Button removeFromShoppingList = new Button("Poista ostoslistalta");          
         Button generateShoppingList = new Button("Luo ostoslista");
-        Button cancelShoppingList = new Button("Sulje");
-        
-        
-        
+        Button goBackToRecipes = new Button("Palaa reseptien valintaan");        
+        Button cancelShoppingList = new Button("Sulje ikkuna");
+         
         LogInView logInView = new LogInView();
         RecipeListView recipeListView = new RecipeListView();
         IngredientView ingredientView = new IngredientView();
@@ -152,7 +154,7 @@ public class GeneratorUI extends Application {
         Scene recipeScene = new Scene(recipeListView.set(addRecipe, newShoppingList, changeUser, commitAddRecipe, recipeList, ingredientList));   
         Scene ingredientScene = new Scene(ingredientView.set(commitAddIngredient, cancelAddIngredient)); 
         Scene chooseRecipeScene = new Scene(shoppingListView.set(addToShoppingList, removeFromShoppingList, generateShoppingList, 
-                cancelShoppingList, remainingRecipesItems, chosenRecipesItems));
+                cancelShoppingList, goBackToRecipes, remainingRecipesItems, chosenRecipesItems));
         Scene shoppingListScene = new Scene(shoppingListView.setShoppingListView(""));
         
         Stage ingredientWindow = new Stage();
@@ -163,7 +165,7 @@ public class GeneratorUI extends Application {
         
         Stage shoppingListWindow = new Stage();
         shoppingListWindow.initModality(Modality.APPLICATION_MODAL);       
-        shoppingListWindow.setScene(shoppingListScene);
+        shoppingListWindow.setScene(chooseRecipeScene);
         shoppingListWindow.setWidth(500);  
         shoppingListWindow.setHeight(400); 
         shoppingListWindow.setTitle("Ostoslista");
@@ -191,18 +193,26 @@ public class GeneratorUI extends Application {
         // RECIPE VIEW BASIC LISTENERS
 
         recipeList.setOnMouseClicked(event -> {       
-            String recipeName = recipeList.getSelectionModel().getSelectedItem();            
-            Recipe recipe = recipeService.getRecipe(recipeName);
-            recipeListView.setInfoDisplay(recipe, editRecipe);   
-            updateIngredientList(recipeName);
+            if (recipeList.getSelectionModel().getSelectedItem() != null) {
+                String recipeName = recipeList.getSelectionModel().getSelectedItem();   
+                if (!recipeName.isEmpty()) {
+                    Recipe recipe = recipeService.getRecipe(recipeName);
+                    recipeListView.setInfoDisplay(recipe, editRecipe);   
+                    updateIngredientList(recipeName);                    
+                }                
+            }
         });          
         
         addRecipe.setOnMouseClicked(event -> {
             disableClicking();
+            ingredientListItems.clear();
             recipeListView.setAddDisplay(commitAddRecipe, cancelAddRecipe);
         });
         
         newShoppingList.setOnMouseClicked(event-> {
+            updateRemainingList();
+            updateChosenList();
+            shoppingListWindow.setScene(chooseRecipeScene);
             shoppingListWindow.show();
         });
         
@@ -226,19 +236,25 @@ public class GeneratorUI extends Application {
         commitAddRecipe.setOnMouseClicked(event -> {
             String recipeName = recipeListView.getInputRecipeName();
             String recipePortion = recipeListView.getInputRecipePortion();
-            if (recipeService.createRecipe(recipeName, recipePortion, userService.getLoggedIn())) {
+            String recipeType = recipeListView.getInputRecipeType();
+            if (recipeService.createRecipe(recipeName, recipePortion, recipeType, userService.getLoggedIn())) {
                 updateRecipeList();
                 Recipe recipe = recipeService.getRecipe(recipeName.strip());
                 recipeListView.setInfoDisplay(recipe, editRecipe);
+                recipeList.getSelectionModel().select(recipe.getName());
             } else {
                 recipeListView.createRecipeFailure();
             }
         });          
         
         cancelAddRecipe.setOnMouseClicked(event -> {
-            String recipeName = recipeList.getSelectionModel().getSelectedItem();            
-            Recipe recipe = recipeService.getRecipe(recipeName);
-            recipeListView.setInfoDisplay(recipe, editRecipe);
+            if (recipeList.getSelectionModel().getSelectedItem() != null) {
+                String recipeName = recipeList.getSelectionModel().getSelectedItem();            
+                Recipe recipe = recipeService.getRecipe(recipeName);
+                recipeListView.setInfoDisplay(recipe, editRecipe);                
+            } else {
+                recipeListView.setDefaultDisplay();
+            }
             enableClicking();
         });   
         
@@ -248,10 +264,12 @@ public class GeneratorUI extends Application {
             String oldRecipeName = recipeList.getSelectionModel().getSelectedItem();
             String newRecipeName = recipeListView.getInputRecipeName();
             String newRecipePortion = recipeListView.getInputRecipePortion();
-            if (recipeService.updateRecipe(oldRecipeName, newRecipeName, newRecipePortion)) {
-                updateRecipeList();
+            String newRecipeType = recipeListView.getInputRecipeType();
+            if (recipeService.updateRecipe(oldRecipeName, newRecipeName, newRecipePortion, newRecipeType)) {
                 Recipe recipe = recipeService.getRecipe(newRecipeName.strip());
                 recipeListView.setInfoDisplay(recipe, editRecipe);
+                updateRecipeList();
+                updateIngredientList(recipeListView.getInputRecipeName());
                 enableClicking();
             } else {
                 recipeListView.commitEditRecipeFailure();
@@ -282,6 +300,7 @@ public class GeneratorUI extends Application {
         deleteRecipe.setOnMouseClicked(event -> {   
             String recipeName = recipeList.getSelectionModel().getSelectedItem();            
             if (recipeService.removeRecipe(recipeName)) {
+                ingredientListItems.clear();
                 updateRecipeList();      
                 recipeListView.setDefaultDisplay();
                 enableClicking();
@@ -315,23 +334,28 @@ public class GeneratorUI extends Application {
         addToShoppingList.setOnMouseClicked(event -> {
             String chosenRecipe = shoppingListView.getChosenRecipe();             
             if (!chosenRecipe.isEmpty()) {
-                remainingRecipesItems.remove(chosenRecipe);
-                chosenRecipesItems.add(chosenRecipe);           
+                remainingRecipesItems.remove(recipeService.getRecipe(chosenRecipe));
+                chosenRecipesItems.add(recipeService.getRecipe(chosenRecipe));
             }
         });        
         
         removeFromShoppingList.setOnMouseClicked(event -> {
             String chosenRecipe = shoppingListView.getChosenRecipe();             
             if (!chosenRecipe.isEmpty()) {
-                chosenRecipesItems.remove(chosenRecipe);
-                remainingRecipesItems.add(chosenRecipe);              
+                chosenRecipesItems.remove(recipeService.getRecipe(chosenRecipe));
+                remainingRecipesItems.add(recipeService.getRecipe(chosenRecipe));              
             }
         });         
         
         generateShoppingList.setOnMouseClicked(event -> {
             String shoppingList = shoppingListService.createShoppingList(chosenRecipesItems);
             shoppingListWindow.setScene(new Scene(shoppingListView.setShoppingListView(shoppingList)));
-        });          
+        });  
+
+        goBackToRecipes.setOnMouseClicked(event -> { 
+            shoppingListWindow.setScene(new Scene(shoppingListView.setRecipeChoosingView()));
+        });
+                
         
         cancelShoppingList.setOnMouseClicked(event -> {
             shoppingListWindow.close();

@@ -25,9 +25,9 @@ public class ShoppingListServiceTest {
         this.ingredientDao = new FakeIngredientDao();    
         this.sls = new ShoppingListService(recipeDao, ingredientDao);
         
-        Recipe r1 = new Recipe(1, "r1", 1, null);
+        Recipe r1 = new Recipe(1, "r1", 1, null, null);
         recipeDao.create(r1);
-        Recipe r2 = new Recipe(2, "r2", 10, null);
+        Recipe r2 = new Recipe(2, "r2", 10, null, null);
         recipeDao.create(r2);
         
         Ingredient w1 = new Ingredient(1, "w", 100, "kg", r1);

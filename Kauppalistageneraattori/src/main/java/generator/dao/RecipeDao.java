@@ -7,12 +7,13 @@ import java.util.List;
 
 public interface RecipeDao {
     
-    void create(Recipe recipe);
+    boolean create(Recipe recipe);
+    Recipe findById(int id);    
     Recipe findByName(String name);
-    Recipe findById(int id);
+    List<Recipe> findByType(String type);
     List<Recipe> findByUser(User user);    
     List<Recipe> findAll();
-    boolean update(String newName, int newPortion, Recipe recipe);
-    void remove(Recipe recipe);    
+    boolean update(String newName, int newPortion, String newType, Recipe recipe);
+    boolean remove(Recipe recipe);    
     
 }

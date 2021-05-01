@@ -28,8 +28,8 @@ public class RecipeServiceTest {
         userDao.create(u1);
         userDao.create(u2);
         
-        Recipe r1 = new Recipe("resepti1", 2, u1);
-        Recipe r2 = new Recipe("resepti2", 4, u2);
+        Recipe r1 = new Recipe("resepti1", 2, null, u1);
+        Recipe r2 = new Recipe("resepti2", 4, null, u2);
         
         recipeDao.create(r1);
         recipeDao.create(r2);
@@ -68,7 +68,7 @@ public class RecipeServiceTest {
     @Test
     public void recipeCanBeAdded() {
         userService.login("testaaja1");
-        recipeService.createRecipe("resepti3", "2", userService.getLoggedIn());
+        recipeService.createRecipe("resepti3", "2", "kasvis", userService.getLoggedIn());
         assertTrue(recipeService.recipeExists("resepti3"));       
     }
     
@@ -81,7 +81,7 @@ public class RecipeServiceTest {
     
     @Test
     public void recipeCanBeUpdated() {
-        recipeService.updateRecipe("resepti1", "uusiNimi", "1");
+        recipeService.updateRecipe("resepti1", "uusiNimi", "1", "kasvis");
         assertTrue(recipeService.recipeExists("uusiNimi"));
     }
     

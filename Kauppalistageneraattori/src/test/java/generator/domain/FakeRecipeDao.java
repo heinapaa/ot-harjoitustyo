@@ -15,25 +15,11 @@ public class FakeRecipeDao implements RecipeDao {
     }
 
     @Override
-    public void create(Recipe recipe) {
+    public boolean create(Recipe recipe) {
         recipe.setId(id);
         id++;
         recipes.add(recipe);
-    }
-
-    @Override
-    public void remove(Recipe recipe) {
-        recipes.remove(recipe);
-    }
-
-    @Override
-    public Recipe findByName(String name) {
-        for (Recipe recipe : recipes) {
-            if (recipe.getName().equals(name)) {
-                return recipe;
-            }
-        }
-        return null;
+        return true;
     }
 
     @Override
@@ -45,6 +31,27 @@ public class FakeRecipeDao implements RecipeDao {
         }
         return null;
     }
+    
+    @Override
+    public Recipe findByName(String name) {
+        for (Recipe recipe : recipes) {
+            if (recipe.getName().equals(name)) {
+                return recipe;
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public List<Recipe> findByType(String type) {
+        List<Recipe> recipeList = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            if (recipe.getType().equals(type)) {
+                recipeList.add(recipe);
+            }
+        }
+        return recipeList;
+    }    
 
     @Override
     public List<Recipe> findByUser(User user) {
@@ -63,7 +70,7 @@ public class FakeRecipeDao implements RecipeDao {
     }
 
     @Override
-    public boolean update(String newName, int newPortion, Recipe recipe) {
+    public boolean update(String newName, int newPortion, String newType, Recipe recipe) {
         Recipe recipeToUpdate = null;
         for (Recipe r : recipes) {
             if (r.equals(recipe)) {
@@ -74,7 +81,14 @@ public class FakeRecipeDao implements RecipeDao {
         recipes.remove(recipeToUpdate);        
         recipeToUpdate.setName(newName);
         recipeToUpdate.setPortion(newPortion);
+        recipeToUpdate.setType(newType);
         recipes.add(recipeToUpdate);
+        return true;
+    }
+    
+    @Override
+    public boolean remove(Recipe recipe) {
+        recipes.remove(recipe);
         return true;
     }
     

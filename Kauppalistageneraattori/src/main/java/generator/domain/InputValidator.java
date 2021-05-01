@@ -57,6 +57,10 @@ public class InputValidator {
         return true;
     }
     
+    public boolean isValidRecipeType(String input) {
+        return true;
+    }
+    
     public boolean isValidIngredientName(String input) {  
         if (input.isBlank()
                 || input.isEmpty()

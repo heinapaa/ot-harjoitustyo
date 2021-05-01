@@ -29,7 +29,7 @@ public class FileRecipeDaoTest {
         userDao.create(new User("testaaja"));
         
         try (FileWriter file = new FileWriter(recipeFile.getAbsolutePath())) {
-            file.write("1;eka;4;testaaja\n");
+            file.write("1;eka;4;kasvis;testaaja\n");
         }
         
         recipeDao = new FileRecipeDao(recipeFile.getAbsolutePath(), userDao);          
@@ -48,7 +48,7 @@ public class FileRecipeDaoTest {
     
     @Test
     public void recipesAreCreatedCorrectly() {
-        recipeDao.create(new Recipe("toka", 10, userDao.findByUsername("testaaja")));
+        recipeDao.create(new Recipe("toka", 10, "kasvis", userDao.findByUsername("testaaja")));
         List<Recipe> recipes = recipeDao.findAll();
         assertEquals(2, recipes.size());
     }   
@@ -69,6 +69,13 @@ public class FileRecipeDaoTest {
     }
     
     @Test
+    public void recipesCanBeCorrectlySearchedByType() {
+        recipeDao.create(new Recipe("toka", 10, "kala", userDao.findByUsername("testaaja")));
+        List<Recipe> recipes = recipeDao.findByType("kasvis");
+        assertEquals(1, recipes.size());
+    }
+    
+    @Test
     public void recipesCanBeCorrectlySearchedByUser() {
         List<Recipe> testaajaRecipes = recipeDao.findByUser(userDao.findByUsername("testaaja"));
         assertEquals(1, testaajaRecipes.size());
@@ -81,12 +88,13 @@ public class FileRecipeDaoTest {
     
     @Test
     public void recipIsUpdatedCorrectly() {
-        recipeDao.update("uusiEka", 1, recipeDao.findByName("eka"));
+        recipeDao.update("uusiEka", 1, "kala", recipeDao.findByName("eka"));
         Recipe newRecipe = recipeDao.findByName("uusiEka");
         Recipe oldRecipe = recipeDao.findByName("eka");
         assertNotNull(newRecipe);
         assertNull(oldRecipe);  
         assertEquals(1, newRecipe.getPortion());
+        assertEquals("kala", newRecipe.getType());
     }     
     
     @After

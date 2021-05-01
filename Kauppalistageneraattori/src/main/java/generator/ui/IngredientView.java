@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class IngredientView {
 
@@ -16,38 +17,43 @@ public class IngredientView {
     private String inputIngredientName;
     private String inputIngredientAmount;
     private String inputIngredientUnit;
+    private Label errorLabel;
     
     public BorderPane set(Button commitAddIngredient, Button cancelAddIngredient) {  
         BorderPane pane = new BorderPane();
         
-        VBox addIngredientLabels = new VBox(new Label("Ainesosan nimi:"), new Label("Määrä:"), new Label("Yksikkö:"));
-        
         this.ingredientNameTextField = new TextField();
-        this.ingredientAmountTextField = new TextField();
-        this.ingredientUnitComboBox = new ComboBox();
+        HBox rowIngredientName = new HBox(new Label("Ainesosan nimi:"), ingredientNameTextField);
+        
         
         ingredientNameTextField.setOnKeyReleased(event -> {
-            this.inputIngredientName = ingredientNameTextField.getText();
-        }); 
+            inputIngredientName = ingredientNameTextField.getText();
+        });         
+        
+        this.ingredientAmountTextField = new TextField();
+        HBox rowIngredientAmount = new HBox(new Label("Määrä:"), ingredientAmountTextField);
 
         ingredientAmountTextField.setOnKeyReleased(event -> {
-            this.inputIngredientAmount = ingredientAmountTextField.getText();
-        });        
+            inputIngredientAmount = ingredientAmountTextField.getText();
+        });  
         
+        this.ingredientUnitComboBox = new ComboBox();
         ingredientUnitComboBox.getItems().addAll(
             "kg",
             "g",
             "l",
             "dl",
             "kpl"
-        ); 
+        );         
+        HBox rowIngredientUnit = new HBox(new Label("Yksikkö:"), ingredientUnitComboBox);      
         
-        VBox addIngredientInputs = new VBox(ingredientNameTextField, ingredientAmountTextField, ingredientUnitComboBox); 
-
-        HBox addIngredientViewLines = new HBox(addIngredientLabels, addIngredientInputs);       
+        this.errorLabel = new Label("");
+        errorLabel.setTextFill(Color.RED);        
+        
+        VBox addIngredientViewLines = new VBox(rowIngredientName, rowIngredientAmount, rowIngredientUnit, errorLabel);       
         HBox addIngredientViewButtons = new HBox(commitAddIngredient, cancelAddIngredient); 
         
-        pane.setRight(addIngredientViewLines);
+        pane.setCenter(addIngredientViewLines);
         pane.setBottom(addIngredientViewButtons);
          
         return pane;
@@ -67,12 +73,12 @@ public class IngredientView {
         return this.inputIngredientAmount;
     }
 
-    String getInputIngredientUnit() {
+    public String getInputIngredientUnit() {
         return ingredientUnitComboBox.getValue().toString();
     }
 
-    void commitCreateIngredientFailure() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void commitCreateIngredientFailure() {
+        errorLabel.setText("Virhe! Ainesosan " + inputIngredientName + " luonti ei onnistunut!");
     }
     
 }  

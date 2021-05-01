@@ -36,7 +36,7 @@ public class LogInView {
         logInBox.setSpacing(20); 
         
         userNameInput.setOnKeyReleased(event -> {
-            this.input = userNameInput.getText();
+            input = userNameInput.getText();
         });
               
         BorderPane pane = new BorderPane();
@@ -45,15 +45,15 @@ public class LogInView {
     }
     
     public String getUserNameInput() {
-        return this.input;
+        return input;
     }
     
     public void logInFailure() {
-        logInError.setText("Virhe! Käyttäjää " + this.input + " ei löydy.");
+        logInError.setText("Virhe! Käyttäjää " + input + " ei löydy.");
     }
     
     public void createUserFailure() {
-        logInError.setText("Virhe! Käyttäjää " + this.input + " ei voida rekisteröidä.");
+        logInError.setText("Virhe! Käyttäjää " + input + " ei voida rekisteröidä.");
     }    
 
 }

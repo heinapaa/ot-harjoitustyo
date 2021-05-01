@@ -12,7 +12,7 @@ public class RecipeTest {
     @Before
     public void setUp() {
         this.kayttaja = new User("testaaja");
-        this.resepti = new Recipe("TestiResepti", 2, kayttaja);
+        this.resepti = new Recipe("TestiResepti", 2, null, kayttaja);
     }
     
     @Test
@@ -27,21 +27,21 @@ public class RecipeTest {
     
     @Test
     public void eiEqualKunEriNimi() {
-        Recipe toinenResepti = new Recipe("ToinenResepti", 2, kayttaja);
+        Recipe toinenResepti = new Recipe("ToinenResepti", 2, "kasvis", kayttaja);
         assertFalse(resepti.equals(toinenResepti));
     }
     
     @Test
     public void eiEqualKunEriOmistaja() {
         User toinenKayttaja = new User("toinen");
-        Recipe toinenResepti = new Recipe("TestiResepti", 2, toinenKayttaja);
+        Recipe toinenResepti = new Recipe("TestiResepti", 2, "kasvis", toinenKayttaja);
         assertFalse(resepti.equals(toinenResepti));    
     }
     
     @Test
     public void eiEqualKunEriId() {
         resepti.setId(1);
-        Recipe toinenResepti = new Recipe(2, "TestiResepti", 2, kayttaja);
+        Recipe toinenResepti = new Recipe(2, "TestiResepti", 2, "kasvis", kayttaja);
         assertFalse(resepti.equals(toinenResepti));
     }
     

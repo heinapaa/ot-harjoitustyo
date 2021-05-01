@@ -21,7 +21,7 @@ public class ShoppingListService {
         this.ingredientDao = ingredientDao;
     }   
     
-    public String createShoppingList(List<String> recipes) {
+    public String createShoppingList(List<Recipe> recipes) {
         if (recipes.isEmpty() || recipes.size() == 0 || recipes == null) {
             return "";
         }
@@ -104,11 +104,10 @@ public class ShoppingListService {
         return printString;
     }
     
-    public List<Ingredient> getIngredientsForAllRecipes(List<String> recipes) {
+    public List<Ingredient> getIngredientsForAllRecipes(List<Recipe> recipes) {
         List<Ingredient> ingredientList = new LinkedList<>();
         
-        for (String reseptinNimi : recipes) {
-            Recipe recipe = recipeDao.findByName(reseptinNimi);
+        for (Recipe recipe : recipes) {
             List<Ingredient> ingredients = ingredientDao.findByRecipe(recipe);   
             for (Ingredient ingredient : ingredients) {
                 ingredientList.add(ingredient);

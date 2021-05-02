@@ -85,7 +85,7 @@ public class ShoppingListService {
     }    
     
     public String printShoppingList(Map<String, Double> uniqueIngredients) {
-        String printString = "Ostoslista:\n***********\n";
+        String printString = "";
         List<String> lines = new ArrayList<>();
         uniqueIngredients.keySet().stream()
                 .sorted()

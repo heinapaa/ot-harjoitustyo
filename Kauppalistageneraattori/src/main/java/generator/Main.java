@@ -1,10 +1,11 @@
 package generator;
 
-import generator.ui.GeneratorUI;
+//import generator.ui.GeneratorUI;
+import generator.ui.Router;
 
 public class Main {
     
     public static void main(String[] args) throws Exception {  
-        GeneratorUI.main(args);        
+        Router.main(args);        
     }
 }

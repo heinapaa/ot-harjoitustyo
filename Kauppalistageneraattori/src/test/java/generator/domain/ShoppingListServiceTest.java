@@ -138,8 +138,7 @@ public class ShoppingListServiceTest {
         Map<String, Double> summedList = sls.sumIngredients(testList);        
         
         differentUnitsNotSummed();
-        String s = "Ostoslista:\n***********\n" +
-                "w, 100.0 kpl\n" +
+        String s = "w, 100.0 kpl\n" +
                 "w, 100.0 l\n" +
                 "w, 100.0 kg\n";
         
@@ -155,8 +154,7 @@ public class ShoppingListServiceTest {
         Map<String, Double> summedList = sls.sumIngredients(testList);        
         
         differentUnitsNotSummed();
-        String s = "Ostoslista:\n***********\n" +
-                "b, 100.0 kg\n" +
+        String s = "b, 100.0 kg\n" +
                 "c, 100.0 kg\n" +
                 "w, 100.0 kg\n";
         
@@ -175,8 +173,7 @@ public class ShoppingListServiceTest {
         Map<String, Double> summedList = sls.sumIngredients(testList);        
         
         differentUnitsNotSummed();
-        String s = "Ostoslista:\n***********\n" +
-                "a, 200.0 kpl\n" +
+        String s = "a, 200.0 kpl\n" +
                 "v, 110.0 l\n" +
                 "w, 100.1 kg\n";
         

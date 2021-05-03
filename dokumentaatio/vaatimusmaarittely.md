@@ -17,23 +17,23 @@ Sovelluksen avulla käyttäjät voivat tallentaa reseptien ainesosaluetteloita j
 ### Toiminnallisuus kirjautumisen jälkeen
 
 * käyttäjä voi lisätä reseptin - tehty
-	* reseptillä tulee olla nimi, sekä lista vaadituista aineksista ja niiden määristä - tehty (reseptin lisääminen ilman aineksia on mahdollista, mutta käyttäjän näkökulmasta turhaa)
+	* reseptillä tulee olla nimi, sekä lista vaadituista aineksista ja niiden määristä - tehty (muutos alkuperäiseen -> reseptin lisäys ilman aineksia on mahdollista)
 * käyttäjä voi poistaa reseptin - tehty
 * käyttäjä näkee listan omista resepteistään - tehty
 * käyttäjä voi generoida kauppalistan - osittain tehty
 	* kauppalista perustuu käyttäjän valitsemiin resepteihin - tehty
-	* kauppalista luodaan suoraan tekstitiedostona
+	* kauppalista luodaan suoraan tekstitiedostona - tehty (muutos alkuperäiseen -> lista luodaan sovelluksessa, ja sen voi halutessaan tallentaa tiedostona)
 * käyttäjä voi kirjautua ulos - tehty
 
 ## Jatkokehitysideoita
 
 Kun perustoiminnallisuus on toteutettu toimivasti, sovellukseen voidaan lisätä esimerkiksi seuraavia toiminnallisuuksia:
 
-* reseptien luokittelu
+* reseptien luokittelu - tehty perusluokittelu jaotuksella liha/kala/kasvis/makea
 	* pääraaka-aineen mukaan (liha/kana/kala/kasvis jne.)
 	* tyypin mukaan (pääruoka/keitto/jälkiruoka jne.)
 	* sesongin mukaan
-* reseptien listaus luokittelun perusteella
+* reseptien listaus luokittelun perusteella - tehty (listaus tapahtuu kauppalistaa luotaessa)
 * reseptien haku
 	* luokittelun perusteella
 	* nimen perusteella
@@ -43,7 +43,7 @@ Kun perustoiminnallisuus on toteutettu toimivasti, sovellukseen voidaan lisätä
 * reseptin skaalaaminen sen mukaan, kuinka monelle henkilölle ruokaa ollaan tekemässä
 * reseptikohtainen laskuri (kuinka monta kertaa resepti on valittu kauppalistalle)
 * erillinen peruselintarvikkeet-lista, joka voidaan lisätä kauppalistalle
-* kauppalistan muokkaaminen ennen tallennusta tekstitiedostoksi
+* kauppalistan muokkaaminen ennen tallennusta tekstitiedostoksi - tehty
 * kauppalistan ryhmittely
 	* aakkosjärjestyksessä
 	* tuoteryhmittäin

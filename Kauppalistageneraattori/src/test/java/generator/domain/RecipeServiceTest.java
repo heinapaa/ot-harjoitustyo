@@ -50,12 +50,14 @@ public class RecipeServiceTest {
         InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao, recipeTypes);       
         this.userService = new UserService(userDao, validator);
         this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
+        
+        userService.logout();
     }
     
     @Test
     public void noRecipesWithoutLogin() {
         List<Recipe> recipes = recipeService.getAllRecipes(userService.getLoggedIn());
-        assertEquals(0, recipes.size());
+        assertEquals(null, recipes);
     }
     
     @Test

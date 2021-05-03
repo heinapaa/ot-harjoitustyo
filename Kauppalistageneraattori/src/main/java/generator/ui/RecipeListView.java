@@ -11,7 +11,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -52,12 +55,11 @@ public class RecipeListView implements View {
     private final IngredientService ingredientService;
     
     private final ObservableList<Recipe> recipeListItems;
-    private final ObservableList<String> ingredientListItems;
+    private final ObservableList<Ingredient> ingredientListItems;
     private final ListView<Recipe> recipeList;
-    private final ListView<String> ingredientList;    
+    private final ListView<Ingredient> ingredientList;    
     
-    public RecipeListView(Router router, UserService userService, RecipeService recipeService, 
-            IngredientService ingredientService) {
+    public RecipeListView(Router router, UserService userService, RecipeService recipeService, IngredientService ingredientService) {
         this.router = router;
         this.userService = userService;
         this.recipeService = recipeService;
@@ -88,7 +90,18 @@ public class RecipeListView implements View {
         
         this.ingredientListItems = FXCollections.observableArrayList();         
         this.ingredientList = new ListView<>(ingredientListItems);       
-        ingredientList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);          
+        ingredientList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);      
+        ingredientList.setCellFactory(p -> new ListCell<Ingredient>() {
+            @Override
+            protected void updateItem(Ingredient ingredient, boolean empty) {
+                super.updateItem(ingredient, empty);
+                    if (empty || ingredient == null || ingredient.getName() == null) {
+                        setText("");
+                    } else {
+                        setText(ingredient.getName() + ", " + String.valueOf(ingredient.getAmount()) + " " + ingredient.getUnit());                        
+                    }                  
+            }
+        });         
     }
     
 
@@ -108,7 +121,8 @@ public class RecipeListView implements View {
         topButtons.setPadding(new Insets(5, 5, 5, 5));        
         
         this.errorLabel = new Label("");
-        errorLabel.setTextFill(Color.RED);  
+        errorLabel.setTextFill(Color.RED); 
+        errorLabel.setPadding(new Insets(5, 5, 5, 5));
         
         SplitPane splitPane = new SplitPane(recipeList, ingredientList);       
 
@@ -156,7 +170,8 @@ public class RecipeListView implements View {
         pane.setBottom(errorLabel); 
         pane.setLeft(infoBox);            
         defaultMode();
-        updateRecipeList();     
+        updateRecipeList();  
+        updateIngredientList();
         return new Scene(pane);    
     }  
     
@@ -177,36 +192,44 @@ public class RecipeListView implements View {
         infoRecipeType.setText(recipe.getType());         
         setInfoRows();
         
+        errorLabel.setText("");
+        
         Button editRecipe = new Button("Muokkaa reseptiä");
         editRecipe.setOnMouseClicked(event -> editRecipeMode(recipe));
         recipeButtons.getChildren().clear();
         recipeButtons.getChildren().add(editRecipe);   
     }
     
-    public void addRecipeMode() {
-        setInputRows();
-        errorLabel.setText("");    
+    public void addRecipeMode() { 
         inputFieldRecipeName.setText("");
         inputFieldRecipePortion.setText("");
         recipeTypeComboBox.getSelectionModel().select(null);
+        setInputRows();
+        
+        errorLabel.setText("");           
         
         Button commitAddRecipe = new Button("Tallenna resepti");
         commitAddRecipe.setOnMouseClicked(event -> {
             String recipeName = inputFieldRecipeName.getText();
             String recipePortion = inputFieldRecipePortion.getText();
-            String recipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();
-            
-            if (recipeService.createRecipe(recipeName, recipePortion, recipeType, userService.getLoggedIn())) {
-                updateRecipeList();
-                Recipe recipe = recipeService.getRecipe(recipeName.strip());
-                recipeList.getSelectionModel().select(recipe);
-                editRecipeMode(recipe);                
+            if (!recipeTypeComboBox.getSelectionModel().isEmpty() && !recipeName.isBlank() && !recipePortion.isBlank()) {
+                String recipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();  
+                if (recipeService.createRecipe(recipeName, recipePortion, recipeType, userService.getLoggedIn())) {
+                    updateRecipeList();
+                    Recipe recipe = recipeService.getRecipe(recipeName.strip());
+                    recipeList.getSelectionModel().select(recipe);
+                    editRecipeMode(recipe);                
+                } else {
+                    errorLabel.setText("Virhe! Reseptin tallennus epäonnistui.");
+                }                
             } else {
-                errorLabel.setText("Virhe! Reseptin tallennus epäonnistui.");
+                errorLabel.setText("Virhe! Varmista, että kaikki kentät on täytetty.");
             }
         });        
+        
         Button cancelAddRecipe = new Button("Peruuta");
-        cancelAddRecipe.setOnMouseClicked(event -> defaultMode());      
+        cancelAddRecipe.setOnMouseClicked(event -> defaultMode()); 
+        
         recipeButtons.getChildren().clear();
         recipeButtons.getChildren().addAll(commitAddRecipe, cancelAddRecipe);
     }
@@ -216,21 +239,26 @@ public class RecipeListView implements View {
         inputFieldRecipePortion.setText(String.valueOf(recipe.getPortion()));
         recipeTypeComboBox.getSelectionModel().select(recipe.getType());
         setInputRows();
+        
+        errorLabel.setText("");
 
         Button commitEditRecipe = new Button("Tallenna muutokset");
         commitEditRecipe.setOnMouseClicked(event -> {
-            String oldRecipeName = recipe.getName();
             String newRecipeName = inputFieldRecipeName.getText();
             String newRecipePortion = inputFieldRecipePortion.getText();
-            String newRecipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();
-            if (recipeService.updateRecipe(oldRecipeName, newRecipeName, newRecipePortion, newRecipeType)) {  
-                Recipe newRecipe = recipeService.getRecipe(newRecipeName.strip());
-                updateRecipeList();
-                recipeList.getSelectionModel().select(newRecipe);                         
-                infoMode(newRecipe);               
+            if (!recipeTypeComboBox.getSelectionModel().isEmpty() && !newRecipeName.isBlank() && !newRecipePortion.isBlank()) {
+                String newRecipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();
+                if (recipeService.updateRecipe(recipe, newRecipeName, newRecipePortion, newRecipeType)) {  
+                    Recipe newRecipe = recipeService.getRecipe(newRecipeName.strip());
+                    updateRecipeList();
+                    recipeList.getSelectionModel().select(newRecipe);                         
+                    infoMode(newRecipe);               
+                } else {
+                    errorLabel.setText("Virhe! Muutosten tallennus epäonnistui.");
+                }                
             } else {
-                errorLabel.setText("Virhe! Muutosten tallennus epäonnistui.");
-            }            
+                errorLabel.setText("Virhe! Varmista, että kaikki kentät on täytetty.");
+            } 
         });
           
         Button cancelEditRecipe = new Button("Peruuta");
@@ -241,12 +269,16 @@ public class RecipeListView implements View {
         
         Button deleteIngredient = new Button("Poista ainesosa");
         deleteIngredient.setOnMouseClicked(event -> {
-            if (!ingredientList.getSelectionModel().getSelectedItem().isBlank()) {
-                String ingredientName = ingredientList.getSelectionModel().getSelectedItem().split(",")[0]; 
-                if (ingredientService.removeIngredient(recipe.getName(), ingredientName)) {
-                    updateIngredientList(recipe);                
-                } else {
-                    errorLabel.setText("Virhe! Ainesosan poistaminen epäonnistui.");
+            if (ingredientList.getSelectionModel().getSelectedItem() != null) {
+                Ingredient ingredient = ingredientList.getSelectionModel().getSelectedItem();                  
+                Alert alert = new Alert(AlertType.NONE, "Poistetaanko " + ingredient.getName() + "?\nVaroitus! Poistettua ainesosaa ei voida palauttaa.", ButtonType.YES, ButtonType.CANCEL);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.YES) {
+                    if (ingredientService.removeIngredient(recipe, ingredient)) {
+                        updateIngredientList(recipe);                
+                    } else {
+                        errorLabel.setText("Virhe! Ainesosan poistaminen epäonnistui.");
+                    }  
                 }                  
             } else {
                 errorLabel.setText("Virhe! Valitse poistettava ainesosa.");
@@ -254,14 +286,18 @@ public class RecipeListView implements View {
         });
         
         Button deleteRecipe = new Button("Poista resepti");
-        deleteRecipe.setOnMouseClicked(event -> {         
-            if (recipeService.removeRecipe(recipe.getName())) {
-                updateRecipeList();
-                updateIngredientList();
-                defaultMode();
-            } else {
-                errorLabel.setText("Virhe! Reseptin poistaminen epäonnistui.");
-            }            
+        deleteRecipe.setOnMouseClicked(event -> {
+            Alert alert = new Alert(AlertType.NONE, "Poistetaanko " + recipe.getName() + "?\nVaroitus! Poistettua reseptiä ei voida palauttaa.", ButtonType.YES, ButtonType.CANCEL);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.YES) {
+                if (recipeService.removeRecipe(recipe)) {
+                    updateRecipeList();
+                    updateIngredientList();
+                    defaultMode();
+                } else {
+                    errorLabel.setText("Virhe! Reseptin poistaminen epäonnistui.");
+                } 
+            }                   
         });
                  
         recipeButtons.getChildren().clear();      
@@ -287,9 +323,9 @@ public class RecipeListView implements View {
     
     public void updateIngredientList(Recipe recipe) {
         ingredientListItems.clear();
-        List<Ingredient> ingredients = ingredientService.getIngredients(recipe.getName());
+        List<Ingredient> ingredients = ingredientService.getIngredients(recipe);
         for (Ingredient ingredient : ingredients) {
-            ingredientListItems.add(ingredient.toString());
+            ingredientListItems.add(ingredient);
         }
         Collections.sort(ingredientListItems);
     }    

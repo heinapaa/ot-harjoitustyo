@@ -9,5 +9,6 @@
     <suppress files="generator.ui.LogInView" checks="[a-zA-Z0-9]*"/>
     <suppress files="generator.ui.RecipeListView" checks="[a-zA-Z0-9]*"/>
     <suppress files="generator.ui.IngredientView" checks="[a-zA-Z0-9]*"/>
-    <suppress files="generator.ui.ShoppingListView" checks="[a-zA-Z0-9]*"/>                
+    <suppress files="generator.ui.ShoppingListView" checks="[a-zA-Z0-9]*"/>     
+    <suppress files="generator.ui.Router" checks="[a-zA-Z0-9]*"/>                
 </suppressions>

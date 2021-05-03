@@ -75,13 +75,13 @@ public class RecipeServiceTest {
     @Test
     public void recipeCanBeRemoved() {
         userService.login("testaaja1");
-        recipeService.removeRecipe("resepti1");
+        recipeService.removeRecipe(recipeDao.findByName("resepti1"));
         assertFalse(recipeService.recipeExists("resepti1"));
     }
     
     @Test
     public void recipeCanBeUpdated() {
-        recipeService.updateRecipe("resepti1", "uusiNimi", "1", "kasvis");
+        recipeService.updateRecipe(recipeDao.findByName("resepti1"), "uusiNimi", "1", "kasvis");
         assertTrue(recipeService.recipeExists("uusiNimi"));
     }
     

@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import org.apache.commons.lang3.StringUtils;
 
 public class LogInView implements View {
     
@@ -41,7 +42,13 @@ public class LogInView implements View {
             if (userService.login(userNameInput.getText())) {
                 router.setRecipeListView();
             } else {
-                logInError.setText("Virhe!");
+                if (StringUtils.deleteWhitespace(userNameInput.getText()).isEmpty()) {
+                    logInError.setText("Virhe! Syötä käyttäjätunnus.");
+                } else if (StringUtils.deleteWhitespace(userNameInput.getText()).length() < 3) {
+                    logInError.setText("Virhe! Käyttäjätunnuksen minimipituus on 3 merkkiä.");
+                } else {
+                    logInError.setText("Virhe! Käyttäjää " + StringUtils.deleteWhitespace(userNameInput.getText()) + " ei löydy.");
+                } 
             }
         });
                 
@@ -50,7 +57,13 @@ public class LogInView implements View {
             if (userService.addNewUser(userNameInput.getText())) {
                 router.setRecipeListView();
             } else {
-                logInError.setText("Virhe!");
+                if (StringUtils.deleteWhitespace(userNameInput.getText()).isEmpty()) {
+                    logInError.setText("Virhe! Syötä haluttu käyttäjätunnus.");
+                } else if (StringUtils.deleteWhitespace(userNameInput.getText()).length() < 3) {
+                    logInError.setText("Virhe! Käyttäjätunnuksen minimipituus on 3 merkkiä.");
+                } else {
+                    logInError.setText("Virhe! Käyttäjää " + StringUtils.deleteWhitespace(userNameInput.getText()) + " ei voida lisätä.");
+                }                
             }            
         });
         

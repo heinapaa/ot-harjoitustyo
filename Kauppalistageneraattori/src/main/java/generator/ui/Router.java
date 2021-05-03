@@ -12,7 +12,6 @@ import generator.domain.Recipe;
 import generator.domain.RecipeService;
 import generator.domain.ShoppingListService;
 import generator.domain.UserService;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 import javafx.application.Application;
@@ -38,22 +37,14 @@ public class Router extends Application {
     
     @Override
     public void init() throws Exception {
-        
         Properties properties = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();        
-        try(InputStream stream = loader.getResourceAsStream("config.properties")) {
+        try (InputStream stream = loader.getResourceAsStream("config.properties")) {
             properties.load(stream); 
         }; 
-
         String userFile = properties.getProperty("userFile");
         String recipeFile = properties.getProperty("recipeFile");     
-        String ingredientFile = properties.getProperty("ingredientFile");         
-        
-        /*
-        String userFile = "users.txt";
-        String recipeFile = "recipes.txt";
-        String ingredientFile = "ingredients.txt";
-        */
+        String ingredientFile = properties.getProperty("ingredientFile");
 
         UserDao userDao = new FileUserDao(userFile);
         RecipeDao recipeDao = new FileRecipeDao(recipeFile, userDao);
@@ -63,8 +54,7 @@ public class Router extends Application {
         this.userService = new UserService(userDao, validator);
         this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
         this.ingredientService = new IngredientService(recipeDao, ingredientDao, validator);
-        this.shoppingListService = new ShoppingListService(recipeDao, ingredientDao);
-            
+        this.shoppingListService = new ShoppingListService(recipeDao, ingredientDao);  
         this.logInView = new LogInView(this, userService);
         this.recipeListView = new RecipeListView(this, userService, recipeService, ingredientService);
         this.ingredientView = new IngredientView(this, ingredientService);
@@ -90,8 +80,7 @@ public class Router extends Application {
         addIngredientStage.setTitle("Syötä ainesosa");      
         
         setLogInView();
-        mainStage.show();        
-        
+        mainStage.show();         
     }
     
     public void setLogInView() {

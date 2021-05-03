@@ -30,13 +30,14 @@ public class InputValidatorTest {
     
     @Test
     public void invalidUserNameIsInvalid() {
+        assertFalse(validator.isValidUserName(null));        
         assertFalse(validator.isValidUserName("hh"));
         assertFalse(validator.isValidUserName(""));
         assertFalse(validator.isValidUserName("   "));
         assertFalse(validator.isValidUserName("  h  h     "));
         assertFalse(validator.isValidUserName(" h h h "));     
         assertFalse(validator.isValidUserName("Teuvo Testaaja"));   
-        assertFalse(validator.isValidUserName("test;aaja"));
+        assertFalse(validator.isValidUserName("test;;aaja"));
     }
     
     @Test
@@ -49,10 +50,11 @@ public class InputValidatorTest {
     
     @Test
     public void invalidRecipeNameIsInvalid() {
+        assertFalse(validator.isValidRecipeName(null));        
         assertFalse(validator.isValidRecipeName(""));
         assertFalse(validator.isValidRecipeName("   "));
         assertFalse(validator.isValidRecipeName(" r r r "));   
-        assertFalse(validator.isValidRecipeName("rese;pti"));
+        assertFalse(validator.isValidRecipeName("rese;;pti"));      
     }
     
     @Test
@@ -63,13 +65,36 @@ public class InputValidatorTest {
     
     @Test
     public void invalidRecipePortionIsInvalid() {
+        assertFalse(validator.isValidRecipePortion(null));        
         assertFalse(validator.isValidRecipePortion("annos"));
         assertFalse(validator.isValidRecipePortion(""));
         assertFalse(validator.isValidRecipePortion("  "));  
         assertFalse(validator.isValidRecipePortion("2.0"));
         assertFalse(validator.isValidRecipePortion("  8   3 ")); 
-        assertFalse(validator.isValidRecipePortion(" 3 "));        
-    }    
+        assertFalse(validator.isValidRecipePortion(" 3 ")); 
+        assertFalse(validator.isValidRecipePortion("2;;"));        
+    } 
+    
+    @Test
+    public void validRecipeTypeIsValid() {
+        assertTrue(validator.isValidRecipeType("liha")); 
+        assertTrue(validator.isValidRecipeType("kala")); 
+        assertTrue(validator.isValidRecipeType("kasvis")); 
+        assertTrue(validator.isValidRecipeType("makea"));         
+    }
+    
+    @Test
+    public void invalidRecipeTypeIsInvalid() {
+        assertFalse(validator.isValidRecipeType(null));        
+        assertFalse(validator.isValidRecipeType(";;"));
+        assertFalse(validator.isValidRecipeType("kala;;"));        
+        assertFalse(validator.isValidRecipeType(""));
+        assertFalse(validator.isValidRecipeType("  "));  
+        assertFalse(validator.isValidRecipeType("2"));
+        assertFalse(validator.isValidRecipeType("juusto")); 
+        assertFalse(validator.isValidRecipeType("/liha"));
+        assertFalse(validator.isValidRecipeType(" liha"));         
+    }     
 
     @Test
     public void validIngredientNameIsValid() {
@@ -81,10 +106,11 @@ public class InputValidatorTest {
     
     @Test
     public void invalidIngredientNameIsInvalid() {
+        assertFalse(validator.isValidIngredientName(null));        
         assertFalse(validator.isValidIngredientName(""));
         assertFalse(validator.isValidIngredientName("   "));
         assertFalse(validator.isValidIngredientName(" a a "));  
-        assertFalse(validator.isValidIngredientName("aines;osa"));
+        assertFalse(validator.isValidIngredientName("aines;;osa"));
     }
     
     @Test
@@ -96,10 +122,12 @@ public class InputValidatorTest {
     
     @Test
     public void invalidIngredientAmountIsInvalid() {
+        assertFalse(validator.isValidIngredientAmount(null));        
         assertFalse(validator.isValidIngredientAmount("määrä"));
         assertFalse(validator.isValidIngredientAmount(""));
         assertFalse(validator.isValidIngredientAmount("  "));  
         assertFalse(validator.isValidIngredientAmount(" 3 "));
+         assertFalse(validator.isValidIngredientAmount("3;;"));       
         assertFalse(validator.isValidIngredientAmount("  8   . 8"));         
         assertFalse(validator.isValidIngredientAmount("  8   3 "));    
         assertFalse(validator.isValidIngredientAmount("14,7"));         
@@ -115,7 +143,9 @@ public class InputValidatorTest {
     }
     
     public void invalidIngredientUnitIsInvalid() {
+        assertFalse(validator.isValidIngredientUnit(null));        
         assertFalse(validator.isValidIngredientUnit("kappale"));
+        assertFalse(validator.isValidIngredientUnit("kpl;;"));        
         assertFalse(validator.isValidIngredientUnit(""));      
         assertFalse(validator.isValidIngredientUnit(" "));    
         assertFalse(validator.isValidIngredientUnit(" g"));        

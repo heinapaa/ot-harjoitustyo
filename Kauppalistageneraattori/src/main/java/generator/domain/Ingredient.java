@@ -1,5 +1,9 @@
 package generator.domain;
 
+/**
+ * Yksittäistä ainesosaa vastaava luokka 
+ */
+
 public class Ingredient implements Comparable<Ingredient> {
     
     private int id;
@@ -8,6 +12,15 @@ public class Ingredient implements Comparable<Ingredient> {
     private String unit;
     private Recipe recipe;
     
+    /**
+     * Konstruktori, kun ainesosan tunniste ja resepti ovat tiedossa. 
+     * @param   id      Ohjelman luoma tunniste
+     * @param   name    Käyttäjän antama nimi
+     * @param   amount  Käyttäjän antama määrä
+     * @param   unit    Käyttäjän antama yksikkö
+     * @param   recipe  Resepti, johon ainesosa liittyy
+     */    
+    
     public Ingredient(int id, String name, double amount, String unit, Recipe recipe) {
         this.id = id;
         this.name = name;
@@ -15,6 +28,13 @@ public class Ingredient implements Comparable<Ingredient> {
         this.unit = unit;
         this.recipe = recipe;
     }    
+
+    /**
+     * Konstruktori, kun ainesosan id ja resepti eivät ole tiedossa. 
+     * @param   name    Käyttäjän antama nimi
+     * @param   amount  Käyttäjän antama määrä
+     * @param   unit    Käyttäjän antama yksikkö
+     */     
     
     public Ingredient(String name, double amount, String unit) {
         this.name = name;
@@ -81,7 +101,4 @@ public class Ingredient implements Comparable<Ingredient> {
     public int compareTo(Ingredient otherIngredient) {
         return this.name.compareTo(otherIngredient.getName());
     }
-    
-    
-  
 }

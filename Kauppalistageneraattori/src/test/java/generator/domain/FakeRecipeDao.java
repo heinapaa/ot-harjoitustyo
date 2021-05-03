@@ -33,9 +33,9 @@ public class FakeRecipeDao implements RecipeDao {
     }
     
     @Override
-    public Recipe findByName(String name) {
+    public Recipe findByNameAndUser(String name, User user) {
         for (Recipe recipe : recipes) {
-            if (recipe.getName().equals(name)) {
+            if (recipe.getName().equals(name) && recipe.getOwner().equals(user)) {
                 return recipe;
             }
         }

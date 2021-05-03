@@ -1,5 +1,10 @@
 package generator.dao;
 
+/**
+ * Reseptejä tekstitiedostoon tallentava luokka.
+ */
+
+
 import generator.domain.Recipe;
 import generator.domain.User;
 import java.io.File;
@@ -57,9 +62,9 @@ public class FileRecipeDao implements RecipeDao {
     }    
     
     @Override
-    public Recipe findByName(String name) {
+    public Recipe findByNameAndUser(String name, User user) {
         for (Recipe recipe : recipes) {
-            if (recipe.getName().equals(name)) {
+            if (recipe.getName().equals(name) && recipe.getOwner().equals(user)) {
                 return recipe;
             }
         }  
@@ -95,8 +100,8 @@ public class FileRecipeDao implements RecipeDao {
     
     @Override
     public boolean update(String newName, int newPortion, String newType, Recipe recipe) {
-        Recipe recipeToUpdate = findByName(recipe.getName());
-        recipes.remove(recipeToUpdate);
+        Recipe recipeToUpdate = recipe;
+        recipes.remove(recipe);
         recipeToUpdate.setName(newName);
         recipeToUpdate.setPortion(newPortion);
         recipeToUpdate.setType(newType);

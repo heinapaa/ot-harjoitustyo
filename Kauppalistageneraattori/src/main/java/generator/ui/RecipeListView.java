@@ -58,12 +58,14 @@ public class RecipeListView implements View {
     private final ObservableList<Ingredient> ingredientListItems;
     private final ListView<Recipe> recipeList;
     private final ListView<Ingredient> ingredientList;    
+    private List<String> acceptableTypes;
     
-    public RecipeListView(Router router, UserService userService, RecipeService recipeService, IngredientService ingredientService) {
+    public RecipeListView(Router router, UserService userService, RecipeService recipeService, IngredientService ingredientService, List<String> acceptableTypes) {
         this.router = router;
         this.userService = userService;
         this.recipeService = recipeService;
         this.ingredientService = ingredientService; 
+        this.acceptableTypes = acceptableTypes;
         
         this.recipeListItems = FXCollections.observableArrayList();
         this.recipeList = new ListView<>(recipeListItems);    
@@ -140,12 +142,10 @@ public class RecipeListView implements View {
         this.labelRecipeType = new Label("Tyyppi:");
         this.infoRecipeType = new Label();   
         this.recipeTypeComboBox = new ComboBox();
-        recipeTypeComboBox.getItems().addAll(
-            "kala",
-            "kasvis",
-            "liha",
-            "makea"
-        );           
+        
+        for (String type : acceptableTypes) {
+            recipeTypeComboBox.getItems().add(type);
+        }          
         
         this.recipeNameRow = new HBox(labelRecipeName, infoRecipeName);
         recipeNameRow.setSpacing(20);     
@@ -216,7 +216,7 @@ public class RecipeListView implements View {
                 String recipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();  
                 if (recipeService.createRecipe(recipeName, recipePortion, recipeType, userService.getLoggedIn())) {
                     updateRecipeList();
-                    Recipe recipe = recipeService.getRecipe(recipeName.strip());
+                    Recipe recipe = recipeService.getRecipe(recipeName.strip(), userService.getLoggedIn());
                     recipeList.getSelectionModel().select(recipe);
                     editRecipeMode(recipe);                
                 } else {
@@ -248,8 +248,8 @@ public class RecipeListView implements View {
             String newRecipePortion = inputFieldRecipePortion.getText();
             if (!recipeTypeComboBox.getSelectionModel().isEmpty() && !newRecipeName.isBlank() && !newRecipePortion.isBlank()) {
                 String newRecipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();
-                if (recipeService.updateRecipe(recipe, newRecipeName, newRecipePortion, newRecipeType)) {  
-                    Recipe newRecipe = recipeService.getRecipe(newRecipeName.strip());
+                if (recipeService.updateRecipe(recipe, newRecipeName, newRecipePortion, newRecipeType, userService.getLoggedIn())) {  
+                    Recipe newRecipe = recipeService.getRecipe(newRecipeName.strip(), userService.getLoggedIn());
                     updateRecipeList();
                     recipeList.getSelectionModel().select(newRecipe);                         
                     infoMode(newRecipe);               
@@ -290,7 +290,7 @@ public class RecipeListView implements View {
             Alert alert = new Alert(AlertType.NONE, "Poistetaanko " + recipe.getName() + "?\nVaroitus! Poistettua reseptiä ei voida palauttaa.", ButtonType.YES, ButtonType.CANCEL);
             alert.showAndWait();
             if (alert.getResult() == ButtonType.YES) {
-                if (recipeService.removeRecipe(recipe)) {
+                if (recipeService.removeRecipe(recipe, userService.getLoggedIn())) {
                     updateRecipeList();
                     updateIngredientList();
                     defaultMode();
@@ -309,7 +309,7 @@ public class RecipeListView implements View {
     public void updateRecipeList() {
         recipeListItems.clear();
         List<Recipe> allRecipes = recipeService.getAllRecipes(userService.getLoggedIn());
-        if (!allRecipes.isEmpty()) {
+        if (allRecipes != null) {
             for (Recipe recipe : allRecipes) {
                 recipeListItems.add(recipe);
             }

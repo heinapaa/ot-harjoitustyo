@@ -8,21 +8,36 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+
+/**
+ * Kauppalistojen luomiseen liittyvästä sovelluslogiikasta vastaava luokka.
+ */
+
 
 public class ShoppingListService {
  
-    private RecipeDao recipeDao;
-    private IngredientDao ingredientDao;
+    private final RecipeDao recipeDao;
+    private final IngredientDao ingredientDao;
     
     public ShoppingListService(RecipeDao recipeDao, IngredientDao ingredientDao) {
         this.recipeDao = recipeDao;
         this.ingredientDao = ingredientDao;
-    }   
+    } 
+    
+    /**
+     * Palauttaa Recipe-luokan olioita sisältävän List-rakenteen perusteella String-muotoisen kauppalistan, jossa reseptien sisältämät ainesosat on mahdollisuuksien mukaan summattu yhteen.
+     * 
+     * @param recipes   List-luokan olio, joka sisältää kauppalistalle valitut reseptit Recipe-luokan olioina
+     * 
+     * @see             #getIngredientsForAllRecipes(java.util.List) 
+     * @see             #sumIngredients(java.util.List) 
+     * @see             #printShoppingList(java.util.Map) 
+     * 
+     * @return String-muotoinen kauppalista, jossa jokainen ainesosa määrineen on omalla rivillään.
+     */
     
     public String createShoppingList(List<Recipe> recipes) {
-        if (recipes.isEmpty() || recipes.size() == 0 || recipes == null) {
+        if (recipes == null || recipes.isEmpty()) {
             return "";
         }
         List<Ingredient> longList = getIngredientsForAllRecipes(recipes);
@@ -106,14 +121,12 @@ public class ShoppingListService {
     
     public List<Ingredient> getIngredientsForAllRecipes(List<Recipe> recipes) {
         List<Ingredient> ingredientList = new LinkedList<>();
-        
         for (Recipe recipe : recipes) {
             List<Ingredient> ingredients = ingredientDao.findByRecipe(recipe);   
             for (Ingredient ingredient : ingredients) {
                 ingredientList.add(ingredient);
             }
         }
-        
         return ingredientList;        
     }
     
@@ -130,5 +143,4 @@ public class ShoppingListService {
         }
         return false;
     }  
-    
 }

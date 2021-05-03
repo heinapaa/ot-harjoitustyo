@@ -3,6 +3,8 @@ package generator.domain;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import generator.dao.UserDao;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -12,11 +14,18 @@ public class InputValidatorTest {
     private InputValidator validator;
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         UserDao userDao = new FakeUserDao();
         RecipeDao recipeDao = new FakeRecipeDao();
-        IngredientDao ingredientDao = new FakeIngredientDao();
-        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao);
+        IngredientDao ingredientDao = new FakeIngredientDao();  
+      
+        List<String> recipeTypes = new ArrayList<>();          
+        recipeTypes.add("kala");
+        recipeTypes.add("liha");
+        recipeTypes.add("kasvis");
+        recipeTypes.add("makea");                   
+
+        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao, recipeTypes);  
         this.validator = validator;
     }
     

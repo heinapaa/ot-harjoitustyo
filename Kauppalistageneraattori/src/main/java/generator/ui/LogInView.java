@@ -55,6 +55,7 @@ public class LogInView implements View {
         Button createUser = new Button("Luo uusi käyttäjä"); 
         createUser.setOnMouseClicked(event -> {
             if (userService.addNewUser(userNameInput.getText())) {
+                userService.login(StringUtils.deleteWhitespace(userNameInput.getText()));
                 router.setRecipeListView();
             } else {
                 if (StringUtils.deleteWhitespace(userNameInput.getText()).isEmpty()) {

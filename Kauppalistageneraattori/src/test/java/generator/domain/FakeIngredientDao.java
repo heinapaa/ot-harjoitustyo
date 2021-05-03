@@ -15,14 +15,15 @@ public class FakeIngredientDao implements IngredientDao {
     }
 
     @Override
-    public void create(Ingredient ingredient) {
+    public boolean create(Ingredient ingredient) {
         ingredient.setId(id);
         id++;
         ingredients.add(ingredient);
+        return true;
     }
 
     @Override
-    public void removeByRecipe(Recipe recipe) {
+    public boolean removeByRecipe(Recipe recipe) {
         List<Ingredient> deleteList = new ArrayList<>();
         
         for (Ingredient ingredient : ingredients) {
@@ -34,6 +35,8 @@ public class FakeIngredientDao implements IngredientDao {
         for (Ingredient ingredient : deleteList) {
             ingredients.remove(ingredient);
         }
+        
+        return true;
     }
 
     @Override
@@ -65,8 +68,9 @@ public class FakeIngredientDao implements IngredientDao {
     }
 
     @Override
-    public void remove(Ingredient ingredient) {
+    public boolean remove(Ingredient ingredient) {
         ingredients.remove(ingredient);
+        return true;
     }
     
 }

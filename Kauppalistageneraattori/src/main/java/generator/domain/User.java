@@ -1,6 +1,8 @@
 package generator.domain;
 
-import java.util.Objects;
+/**
+ * Yksittäistä käyttäjää vastaava luokka. 
+ */
 
 public class User {
     

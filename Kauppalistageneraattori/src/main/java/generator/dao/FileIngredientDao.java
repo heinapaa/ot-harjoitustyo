@@ -3,17 +3,17 @@ package generator.dao;
 import generator.domain.Ingredient;
 import generator.domain.Recipe;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.Scanner;
+
+
+/**
+ * Ainesosia tekstitiedostoon tallentava luokka.
+ */
 
 public class FileIngredientDao implements IngredientDao {
     
@@ -27,7 +27,6 @@ public class FileIngredientDao implements IngredientDao {
         this.latestId = 1;
         
         File ingredientList = new File(file);
-        
         if (ingredientList.exists()) {
             try (Scanner tiedostonLukija = new Scanner(Paths.get(file))) {
                 while (tiedostonLukija.hasNextLine()) {
@@ -50,7 +49,7 @@ public class FileIngredientDao implements IngredientDao {
         }                          
     }   
     
-    private void save() {
+    private boolean save() {
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (Ingredient ingredient : ingredients) {
                 int ingredientId = ingredient.getId();
@@ -61,46 +60,68 @@ public class FileIngredientDao implements IngredientDao {
                 kirjoittaja.write(ingredientId + ";" + ingredientName + ";" + ingredientAmount + ";" + ingredientUnit + ";" + recipeId + "\n");
             }
         } catch (Exception e) {
-            
+            return false;
         }
+        return true;
     }    
     
     private int generateId() {
         latestId++;
         return latestId - 1;
-    }    
+    }  
+    
+    /**
+     * Tallentaa ainesosan
+     * @param ingredient    tallennettava ainesosa Ingredient-oliona
+     * @return true jos tallennus onnistuu, muuten false
+     */
 
     @Override
-    public void create(Ingredient ingredient) {
+    public boolean create(Ingredient ingredient) {
         Ingredient newIngredient = ingredient;
         newIngredient.setId(generateId());
         ingredients.add(newIngredient);
-        save();
+        return save();
     }
     
+    /**
+     * Poistaa ainesosan.
+     * @param ingredient    poistettavaan ainesosaan viittaava Ingredient-olio
+     * @return true jos poistaminen onnistuu, muuten false
+     */
+    
     @Override
-    public void remove(Ingredient ingredient) {
+    public boolean remove(Ingredient ingredient) {
         ingredients.remove(ingredient);
-        save();
+        return save();
     }
+    
+    /**
+     * Poistaa kaikki tiettyyn reseptiin liittyvt ainesosat.
+     * @param recipe    valittuun reseptiin viittaava Recipe-olio
+     * @return true jos poistaminen onnistuu, muuten false
+     */
     
     
     @Override
-    public void removeByRecipe(Recipe recipe) {
+    public boolean removeByRecipe(Recipe recipe) {
         List<Ingredient> deleteList = new ArrayList<>();
-        
         for (Ingredient ingredient : ingredients) {
             if (ingredient.getRecipe().getId() == recipe.getId()) {
                 deleteList.add(ingredient);
             }
         }
-        
         for (Ingredient ingredient : deleteList) {
             ingredients.remove(ingredient);
         }
-        
-        save();
+        return save();
     }   
+    
+    /**
+     * Hakee kaikki tiettyyn reseptiin liityvät ainesosat ja palauttaa ne listana
+     * @param recipe    haluttuun reseptiin viittaava Recipe-olio
+     * @return          List-rakenne, joka sisältää halutut ainesosat Ingredient-olioina
+     */
 
     @Override
     public List<Ingredient> findByRecipe(Recipe recipe) {
@@ -110,9 +131,7 @@ public class FileIngredientDao implements IngredientDao {
                 ingredientList.add(ingredient);
             }
         }
-        
         Collections.sort(ingredientList);
-        
         return ingredientList;
     }    
     
@@ -126,10 +145,14 @@ public class FileIngredientDao implements IngredientDao {
         
         return null;
     }
+    
+    /**
+     * Hakee kaikki reseptit ja palauttaa ne listana
+     * @return List-rakenne, joka sisältää kaikki tallennetut ainesosat Ingredient-olioina 
+     */
 
     @Override
     public List<Ingredient> findAll() {
         return ingredients;
-    }
-    
+    }  
 }

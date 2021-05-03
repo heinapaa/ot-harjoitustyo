@@ -11,9 +11,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public class IngredientService {
     
-    private RecipeDao recipeDao;
-    private IngredientDao ingredientDao;
-    private InputValidator validator;    
+    private final RecipeDao recipeDao;
+    private final IngredientDao ingredientDao;
+    private final InputValidator validator;    
+
     
     public IngredientService(RecipeDao recipeDao, IngredientDao ingredientDao, InputValidator validator) {
         this.recipeDao = recipeDao;
@@ -22,18 +23,20 @@ public class IngredientService {
     }    
     
     /**
-     * Metodi luo syötteiden perusteella uuden ainesosan.
+     * Luo annettujen syötteiden perusteella uuden ainesosan.
      * 
-     * @param recipe    Resepti, johon uusi ainesosa liitetään
-     * @param ingredientName    Käyttäjän antama nimi
-     * @param ingredientUnit    Käyttäjän antama yksikkö 
-     * @param ingredientAmount  Käyttäjän antama määrä
+     * @param recipe            Resepti, johon uusi ainesosa liitetään
+     * @param ingredientName    Syötteenä annettu nimi
+     * @param ingredientUnit    Syötteenä annettu yksikkö 
+     * @param ingredientAmount  Syötteenä annettu määrä
      * 
-     * @see generator.domain.InputValidator#isValidIngredientName(java.lang.String) 
-     * @see generator.domain.InputValidator#isValidIngredientUnit(java.lang.String)
-     * @see generator.domain.InputValidator#isValidIngredientAmount(java.lang.String)
+     * @see                     generator.domain.InputValidator#isValidIngredientName(java.lang.String) 
+     * @see                     generator.domain.InputValidator#isValidIngredientUnit(java.lang.String)
+     * @see                     generator.domain.InputValidator#isValidIngredientAmount(java.lang.String)
+     * @see                     #ingredientExists(generator.domain.Recipe, java.lang.String) 
+     * @see                     generator.dao.IngredientDao#create(generator.domain.Ingredient) 
      * 
-     * @return true jos ainesosan luonti onnistuu, false jos ainesosan luonti epäonnistuu
+     * @return                  true jos ainesosan luonti onnistuu, false jos ainesosan luonti epäonnistuu
      */
     
     public boolean addIngredient(Recipe recipe, String ingredientName, String ingredientUnit, String ingredientAmount) {
@@ -48,17 +51,20 @@ public class IngredientService {
         }
         Ingredient newIngredient = new Ingredient(nm, Double.parseDouble(amount), unit);
         newIngredient.setRecipe(recipe);
-        ingredientDao.create(newIngredient);
-        return true;
+        return ingredientDao.create(newIngredient);
     }    
     
     /**
-     * Metodi poistaa valittuun reseptiin liittyvän valitun ainesosan.
+     * Poistaa valitun ainesosan.
      * 
-     * @param recipe    Resepti, johon liittyvä ainesosa halutaan poistaa
+     * @param recipe        Resepti, johon poistettava ainesosa liittyy
      * @param ingredient    Poistettavan ainesosa
      * 
-     * @return true jos ainesosan poistaminen onnistuu, false jos ainesosan poistaminen epäonnistuu
+     * @see                 #ingredientExists(generator.domain.Recipe, java.lang.String) 
+     * @see                 generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
+     * @see                 generator.dao.IngredientDao#remove(generator.domain.Ingredient) 
+     * 
+     * @return              true jos ainesosan poistaminen onnistuu, false jos ainesosan poistaminen epäonnistuu
      */
     
     public boolean removeIngredient(Recipe recipe, Ingredient ingredient) {
@@ -68,20 +74,21 @@ public class IngredientService {
         List<Ingredient> ingredientList = ingredientDao.findByRecipe(recipe);
         for (Ingredient listIngredient : ingredientList) {
             if (listIngredient.equals(ingredient)) {
-                ingredientDao.remove(ingredient);
-                return true;
+                return ingredientDao.remove(ingredient);
             }
         }
         return false;
     }     
     
     /**
-     * Metodi tarkistaa syötteenä annetun reseptin ja ainesosan nimen perusteella, onko tietty ainesosa olemassa.
+     * Tarkistaa valitun reseptin ja syötteenä annetun ainesosan nimen perusteella, liittyykö kyseiseen reseptiin sen niminen ainesosa.
      * 
-     * @param recipe    Resepti, johon ainesosa liittyy
-     * @param ingredientName    Ainesosan nimi
+     * @param recipe            Resepti, johon ainesosa liittyy
+     * @param ingredientName    Syötteenä annettu ainesosan nimi
      * 
-     * @return true jos ainesosa on olemassa, false jos ainesosaa ei ole olemassa
+     * @see                     generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
+     * 
+     * @return                  true jos ainesosa on olemassa, false jos ainesosaa ei ole olemassa
      */
     
     public boolean ingredientExists(Recipe recipe, String ingredientName) {
@@ -102,37 +109,13 @@ public class IngredientService {
     }    
     
     /**
-     * Metodi palauttaa ainesosan syötteenä annetun nimen perusteella.
+     * Hakee kaikki tiettyyn reseptiin liittyvät ainesosat
      * 
-     * @param recipe    Resepti, johon ainesosa liittyy
-     * @param ingredientName    Ainesosan nimi 
+     * @param recipe    Resepti, johon ainesosat liittyvät
      * 
-     * @return ainesosa mikäli kyseiseen reseptiin liittyy kyseinen ainesosa, muuten null
-     */
-    /*
-    public Ingredient getIngredient(Recipe recipe, String ingredientName) {
-        String nm = ingredientName.strip();
-        if (!validator.isValidIngredientName(nm)) {
-            return null;
-        }
-        if (!ingredientExists(recipe, nm)) {
-            return null;
-        }
-        List<Ingredient> ingredientsInRecipe = ingredientDao.findByRecipe(recipe);
-        for (Ingredient ingredient : ingredientsInRecipe) {
-            if (nm.equals(ingredient.getName())) {
-                return ingredient;
-            }
-        }
-        return null;
-    }   */
-    
-    /**
-     * Metodi palauttaa kaikki tiettyyn reseptiin liittyvät ainesosat
+     * @see             generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
      * 
-     * @param recipe    Resepti, johon liittyvät ainesosat halutaan
-     * 
-     * @return  Lista reseptiin liittyvistä ainesosista, null jos ainesosia ei ole
+     * @return          List-rakenne joka sisältää reseptiin liittyvät ainesosat Ingredient-luokan olioina, null jos ainesosia ei ole
      */
     
     public List<Ingredient> getIngredients(Recipe recipe) {

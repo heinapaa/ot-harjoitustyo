@@ -63,9 +63,10 @@ public class FileRecipeDaoTest {
     }   
     
     @Test
-    public void recipesCanBeCorrectlySearchedByName() {
-        assertNotNull(recipeDao.findByName("eka"));
-        assertNull(recipeDao.findByName("feikkiresepti"));
+    public void recipesCanBeCorrectlySearchedByNameAndUser() {
+        assertNotNull(recipeDao.findByNameAndUser("eka", userDao.findByUsername("testaaja")));
+        assertNull(recipeDao.findByNameAndUser("feikkiresepti", userDao.findByUsername("testaaja")));
+        assertNull(recipeDao.findByNameAndUser("eka", null));        
     }
     
     @Test
@@ -88,9 +89,9 @@ public class FileRecipeDaoTest {
     
     @Test
     public void recipIsUpdatedCorrectly() {
-        recipeDao.update("uusiEka", 1, "kala", recipeDao.findByName("eka"));
-        Recipe newRecipe = recipeDao.findByName("uusiEka");
-        Recipe oldRecipe = recipeDao.findByName("eka");
+        recipeDao.update("uusiEka", 1, "kala", recipeDao.findByNameAndUser("eka", userDao.findByUsername("testaaja")));
+        Recipe newRecipe = recipeDao.findByNameAndUser("uusiEka", userDao.findByUsername("testaaja"));
+        Recipe oldRecipe = recipeDao.findByNameAndUser("eka", userDao.findByUsername("testaaja"));
         assertNotNull(newRecipe);
         assertNull(oldRecipe);  
         assertEquals(1, newRecipe.getPortion());

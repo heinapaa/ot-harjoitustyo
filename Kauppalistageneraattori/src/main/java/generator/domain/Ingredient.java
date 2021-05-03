@@ -1,7 +1,7 @@
 package generator.domain;
 
 /**
- * Yksittäistä ainesosaa vastaava luokka 
+ * Yksittäistä ainesosaa vastaava luokka. 
  */
 
 public class Ingredient implements Comparable<Ingredient> {

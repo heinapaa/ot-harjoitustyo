@@ -1,5 +1,9 @@
 package generator.domain;
 
+/**
+ * Yksittäistä reseptiä vastaava luokka.
+ */
+
 public class Recipe implements Comparable<Recipe> {
     
     private int id;
@@ -8,6 +12,15 @@ public class Recipe implements Comparable<Recipe> {
     private String type;
     private User owner;
     
+    /**
+     * Konstruktori, kun reseptin yksilöivä id on tiedossa.
+     * @param id        Reseptin yksilöivä tunnus
+     * @param name      Reseptin nimi
+     * @param portion   Reseptin annoskoko
+     * @param type      Reseptin tyyppi
+     * @param user      Käyttäjä, jolle resepti kuuluu
+     */
+    
     public Recipe(int id, String name, int portion, String type, User user) {
         this.id = id;
         this.name = name;
@@ -15,6 +28,14 @@ public class Recipe implements Comparable<Recipe> {
         this.type = type;
         this.owner = user;
     }   
+    
+    /**
+     * Konstruktori, kun reseptin yksilöivä id ei ole tiedossa.
+     * @param name      Reseptin nimi
+     * @param portion   Reseptin annoskoko
+     * @param type      Reseptin tyyppi
+     * @param owner     Käyttäjä, jolle resepti kuuluu
+     */
     
     public Recipe(String name, int portion, String type, User owner) {
         this.name = name;

@@ -1,17 +1,15 @@
 package generator.dao;
 
-import generator.domain.Ingredient;
-import generator.domain.Recipe;
+/**
+ * Käyttäjiä tekstitiedostoon tallentava luokka.
+ */
+
 import generator.domain.User;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Scanner;
 
 public class FileUserDao implements UserDao {
@@ -35,20 +33,21 @@ public class FileUserDao implements UserDao {
         }                          
     }
     
-    private void save() {
+    private boolean save() {
         try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
             for (User user : users) {
                 kirjoittaja.write(user.getUsername() + "\n");
             }
         } catch (Exception e) {
-            
-        }       
+            return false;
+        }  
+        return true;
     }
 
     @Override
-    public void create(User user) {
+    public boolean create(User user) {
         users.add(user);
-        save();
+        return save();
     }
 
     @Override

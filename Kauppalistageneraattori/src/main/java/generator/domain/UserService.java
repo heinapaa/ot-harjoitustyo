@@ -9,9 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 
 public class UserService {
     
-    private UserDao userDao;
+    private final UserDao userDao;
+    private final InputValidator validator;    
     private User loggedIn;
-    private InputValidator validator;
     
     public UserService(UserDao userDao, InputValidator validator) {
         this.userDao = userDao;
@@ -23,11 +23,11 @@ public class UserService {
      * 
      * @param name  Käyttäjän syöttämä merkkijono
      * 
-     * @see generator.domain.InputValidator#isValidUserName(java.lang.String) 
-     * @see generator.dao.UserDao#isUser(java.lang.String)
-     * @see generator.dao.UserDao#findByUsername(java.lang.String) 
+     * @see         generator.domain.InputValidator#isValidUserName(java.lang.String) 
+     * @see         generator.dao.UserDao#isUser(java.lang.String)
+     * @see         generator.dao.UserDao#findByUsername(java.lang.String) 
      * 
-     * @return true jos käyttäjä on olemassa, false jos käyttäjää ei ole olemassa
+     * @return      true jos käyttäjä on olemassa, false jos käyttäjää ei ole olemassa
      */
           
     public boolean login(String name) {
@@ -53,7 +53,7 @@ public class UserService {
      * 
      * @param name  Käyttäjän syöttämä merkkijono
      * 
-     * @return true jos uuden käyttäjän luominen onnistuu, muuten false
+     * @return      true jos uuden käyttäjän luominen onnistuu, muuten false
      */
     
     public boolean addNewUser(String name) {
@@ -62,9 +62,8 @@ public class UserService {
             return false;
         } else if (userDao.isUser(nm)) {
             return false;
-        }
-        userDao.create(new User(nm));
-        return true;
+        } 
+        return userDao.create(new User(nm));
     }
     
     /**

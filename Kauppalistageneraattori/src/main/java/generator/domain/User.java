@@ -8,6 +8,11 @@ public class User {
     
     private String username;
     
+    /**
+     * Konstruktori
+     * @param username Syötteenä annettu käyttäjänimi
+     */
+    
     public User(String username) {
         this.username = username;
     }
@@ -15,6 +20,12 @@ public class User {
     public String getUsername() {
         return username;
     }
+    
+    /**
+     * Metodi tarkistaa, ovatko kaksi oliota sama käyttäjä.
+     * @param object    Olio, johon käyttäjää halutaan verrata.
+     * @return true jos käyttäjä on sama, muuten false
+     */
     
     @Override
     public boolean equals(Object object) {

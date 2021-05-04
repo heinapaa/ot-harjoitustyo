@@ -58,7 +58,6 @@ public class Ingredient implements Comparable<Ingredient> {
         return amount;
     }
 
-
     public String getUnit() {
         return unit;
     }
@@ -70,11 +69,22 @@ public class Ingredient implements Comparable<Ingredient> {
     public void setRecipe(Recipe recipe) {
         this.recipe = recipe;
     }
+    
+    /**
+     * Metodi muodostaa ja palauttaa merkkijonon muotoa "(ainesosan nimi), (määrä) (yksikkö)", esim. "porkkana, 1 kg".
+     * @return ainesosan ominaisuuksien perusteella muodostetu merkkijono muotoa "(ainesosan nimi), (määrä) (yksikkö)"
+     */
 
     @Override
     public String toString() {
         return name + ", " + amount + " " + unit;
     }
+    
+    /**
+     * Metodi tarkastaa, ovatko kaksi oliota sama ainesosa.
+     * @param object    olio, johon ainesosaa halutaan verrata
+     * @return true jos olio on sama kuin resepti, muuten false
+     */
     
     @Override
     public boolean equals(Object object) {
@@ -96,6 +106,13 @@ public class Ingredient implements Comparable<Ingredient> {
         }
         return true;
     }   
+    
+    /**
+     * Metodi vertaa kahta ainesosaa toisiinsa, perustaen vertauksen niiden nimiin.
+     * @param otherIngredient   toinen ainesosa, johon ainesosaa halutaan verrata
+     * @see String#compareTo(java.lang.String) 
+     * @return 0 jos nimet ovat samat, muuten positiivinen tai negatiivinen luku riippuen siitä miten nimet vertautuvat toisiinsa 
+     */
 
     @Override
     public int compareTo(Ingredient otherIngredient) {

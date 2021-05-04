@@ -13,11 +13,11 @@ public class Recipe implements Comparable<Recipe> {
     private User owner;
     
     /**
-     * Konstruktori, kun reseptin yksilöivä id on tiedossa.
+     * Konstruktori, kun reseptin yksilöivä tunnus (id) on tiedossa.
      * @param id        Reseptin yksilöivä tunnus
-     * @param name      Reseptin nimi
-     * @param portion   Reseptin annoskoko
-     * @param type      Reseptin tyyppi
+     * @param name      Käyttäjän antama nimi
+     * @param portion   Käyttäjän antama annoskoko
+     * @param type      Käyttäjän antama tyyppi
      * @param user      Käyttäjä, jolle resepti kuuluu
      */
     
@@ -30,7 +30,7 @@ public class Recipe implements Comparable<Recipe> {
     }   
     
     /**
-     * Konstruktori, kun reseptin yksilöivä id ei ole tiedossa.
+     * Konstruktori, kun reseptin yksilöivä tunnus (id) ei ole tiedossa.
      * @param name      Reseptin nimi
      * @param portion   Reseptin annoskoko
      * @param type      Reseptin tyyppi
@@ -81,6 +81,12 @@ public class Recipe implements Comparable<Recipe> {
         return this.owner;
     }
     
+    /**
+     * Metodi tarkistaa ovatko kaksi oliota sama resepti.
+     * @param object    olio, johon reseptiä halutaan verrata
+     * @return          true jos reseptit ovat samat, muuten false
+     */
+    
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -101,6 +107,13 @@ public class Recipe implements Comparable<Recipe> {
         }
         return true;
     }  
+    
+    /**
+     * Metodi vertaa kahta reseptiä toisiinsa, perustuen niiden nimiin.
+     * @param otherRecipe   toinen resepti, johon reseptiä halutaan verrata
+     * @see String#compareTo(java.lang.String) 
+     * @return 0 jos nimet ovat samat, muuten positiivinen tai negatiivinen luku riippuen siitä miten nimet vertautuvat toisiinsa
+     */
     
     public int compareTo(Recipe otherRecipe) {
         return this.name.compareTo(otherRecipe.getName());

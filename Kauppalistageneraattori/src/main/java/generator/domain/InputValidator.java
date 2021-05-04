@@ -18,6 +18,14 @@ public class InputValidator {
     private final IngredientDao ingredientDao;
     private List<String> acceptableTypes;
     
+    /**
+     * Konstruktori
+     * @param userDao           UserDao-rajapinnan toteuttava olio, joka vastaa käyttäjien tallentamisesta
+     * @param recipeDao         RecipeDao-rajapinnan toteuttava olio, joka vastaa reseptien tallentamisesta
+     * @param ingredientDao     IngredientDao-rajapinnan toteuttava olio, joka vastaa ainesosien tallentamisesta
+     * @param acceptableTypes   List-rakenne, joka sisältää merkkijonoina hyväksyttävät reseptityypit
+     */
+    
     public InputValidator(UserDao userDao, RecipeDao recipeDao, IngredientDao ingredientDao, List<String> acceptableTypes) {
         this.userDao = userDao;
         this.recipeDao = recipeDao;

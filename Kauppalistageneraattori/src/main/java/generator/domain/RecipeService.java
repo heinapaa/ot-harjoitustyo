@@ -16,7 +16,14 @@ public class RecipeService {
     
     private final RecipeDao recipeDao;
     private final IngredientDao ingredientDao;
-    private final InputValidator validator;    
+    private final InputValidator validator;  
+    
+    /**
+     * Konstruktori
+     * @param recipeDao     RecipeDao-rajapinnan toteuttava olio, joka vastaa reseptien tallentamisesta.
+     * @param ingredientDao IngredientDao-rajapinnan toteuttava olio, joka vastaa ainesosien tallentamisesta.
+     * @param validator     InputValidator-olio, joka vastaa syötteiden validoinnista.
+     */
     
     public RecipeService(RecipeDao recipeDao, IngredientDao ingredientDao, InputValidator validator) {
         this.recipeDao = recipeDao;
@@ -25,7 +32,7 @@ public class RecipeService {
     }    
     
     /**
-     * Luo annettujen syötteiden perusteella uuden reseptin.
+     * Metodi luo annettujen syötteiden perusteella uuden reseptin.
      * 
      * @param name      Syötteenä annettu nimi
      * @param portion   Syötteenä annettu annoskoko
@@ -58,7 +65,7 @@ public class RecipeService {
     }
     
     /**
-     * Poistaa halutun reseptin.
+     * Metodi poistaa halutun reseptin.
      * 
      * @param recipe    poistettava resepti
      * @param user      käyttäjä, johon poistettava resepti liittyy
@@ -82,7 +89,7 @@ public class RecipeService {
     }
     
     /**
-     * Päivittää annettujen syötteiden perusteella reseptin tietoja.
+     * Metodi päivittää annettujen syötteiden perusteella halutun reseptin tietoja.
      * 
      * @param recipe        Päivitettävä resepti
      * @param newName       Syötteenä annettu uusi nimi
@@ -115,7 +122,7 @@ public class RecipeService {
     }
     
     /**
-     * Palauttaa kaikki tiettyyn käyttäjään liittyvät reseptit.
+     * Metodi palauttaa kaikki tiettyyn käyttäjään liittyvät reseptit.
      * 
      * @param user  Käyttäjä, johon reseptit liittyvät
      * 
@@ -140,7 +147,7 @@ public class RecipeService {
     }
     
     /**
-     * Hakee reseptin tietyn käyttäjän ja syötteenä annetun nimen perusteella.
+     * Metodi hakee reseptin tietyn käyttäjän ja syötteenä annetun nimen perusteella.
      * 
      * @param name  Haetun reseptin nimi
      * @param user  Käyttäjä, johon resepti liittyy
@@ -156,7 +163,7 @@ public class RecipeService {
     }
     
     /**
-     * Tarkistaa tietyn käyttäjän ja syötteenä annetun reseptin nimen perusteella, liittyykö kyseiseen käyttäjään sen niminen resepti.
+     * Metodi tarkistaa tietyn käyttäjän ja syötteenä annetun reseptin nimen perusteella, liittyykö kyseiseen käyttäjään sen niminen resepti.
      * 
      * @param name  Syötteenä annettu reseptin nimi
      * @param user  Käyttäjä, johon resepti liittyy

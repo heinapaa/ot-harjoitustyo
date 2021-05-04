@@ -13,7 +13,14 @@ public class IngredientService {
     
     private final RecipeDao recipeDao;
     private final IngredientDao ingredientDao;
-    private final InputValidator validator;    
+    private final InputValidator validator;   
+    
+    /**
+     * Konstruktori
+     * @param recipeDao         RecipeDao-rajapinnan toteuttava olio, joka vastaa reseptien tallentamisesta
+     * @param ingredientDao     IngredientDao-rajapinnan toteuttava olio, joka vastaa ainesosien tallentamisesta
+     * @param validator         InputValidator-olio, joka validoi syötteitä
+     */
 
     
     public IngredientService(RecipeDao recipeDao, IngredientDao ingredientDao, InputValidator validator) {
@@ -23,7 +30,7 @@ public class IngredientService {
     }    
     
     /**
-     * Luo annettujen syötteiden perusteella uuden ainesosan.
+     * Metodi luo annettujen syötteiden perusteella uuden ainesosan.
      * 
      * @param recipe            Resepti, johon uusi ainesosa liitetään
      * @param ingredientName    Syötteenä annettu nimi
@@ -55,7 +62,7 @@ public class IngredientService {
     }    
     
     /**
-     * Poistaa valitun ainesosan.
+     * Metodi poistaa valitun ainesosan.
      * 
      * @param recipe        Resepti, johon poistettava ainesosa liittyy
      * @param ingredient    Poistettavan ainesosa
@@ -81,7 +88,7 @@ public class IngredientService {
     }     
     
     /**
-     * Tarkistaa valitun reseptin ja syötteenä annetun ainesosan nimen perusteella, liittyykö kyseiseen reseptiin sen niminen ainesosa.
+     * Metodi tarkistaa valitun reseptin ja syötteenä annetun ainesosan nimen perusteella, liittyykö kyseiseen reseptiin sen niminen ainesosa.
      * 
      * @param recipe            Resepti, johon ainesosa liittyy
      * @param ingredientName    Syötteenä annettu ainesosan nimi
@@ -109,7 +116,7 @@ public class IngredientService {
     }    
     
     /**
-     * Hakee kaikki tiettyyn reseptiin liittyvät ainesosat
+     * Metodi hakee kaikki tiettyyn reseptiin liittyvät ainesosat
      * 
      * @param recipe    Resepti, johon ainesosat liittyvät
      * 

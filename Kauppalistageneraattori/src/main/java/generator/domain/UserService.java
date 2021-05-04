@@ -13,6 +13,12 @@ public class UserService {
     private final InputValidator validator;    
     private User loggedIn;
     
+    /**
+     * Konstruktori
+     * @param userDao   UserDao-rajapinnan oteuttava olio, joka vastaa käyttäjien tallentamisesta
+     * @param validator InputValidator-olio, joka vastaa syötteiden validoimisesta
+     */
+    
     public UserService(UserDao userDao, InputValidator validator) {
         this.userDao = userDao;
         this.validator = validator;

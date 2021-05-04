@@ -8,10 +8,14 @@ Sovellus on luotu Helsingin yliopiston Tietojenkäsittelytieteen kurssin *Ohjelm
 
 [Arkkitehtuurikuvaus](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/arkkitehtuuri.md)
 
+[Käyttöohje](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/kayttoohje.md)
+
 [Tuntikirjanpito](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/tuntikirjanpito.md)
 
 ## Releaset
-[Viikko 5](https://github.com/heinapaa/ot-harjoitustyo)
+[Viikko 5](https://github.com/heinapaa/ot-harjoitustyo/releases/tag/viikko5)
+
+[Viikko 6](https://github.com/heinapaa/ot-harjoitustyo/releases/tag/viikko6)
 
 ## Komentorivitoiminnot
 
@@ -37,6 +41,13 @@ Suoritettava jar-tiedosto generoidaan komennolla
 mvn package
 ```
 Generoinnin jälkeen tiedosto löytyy hakemistosta *target* nimellä *Kauppalistageneraattori-1.0-SNAPSHOT.jar*
+
+### JavaDoc
+JavaDoc generoidaan komennolla
+```
+mvn javadoc:javadoc
+```
+JavaDocia voi tarkastella avaamalla selaimella tiedosto target/site/apidocs/index.html
 
 ### Checkstyle
 Tiedoston [checkstyle.xml](https://github.com/heinapaa/ot-harjoitustyo/blob/main/Kauppalistageneraattori/checkstyle.xml) määrittelemät tarkistukset suoritetaan komennolla

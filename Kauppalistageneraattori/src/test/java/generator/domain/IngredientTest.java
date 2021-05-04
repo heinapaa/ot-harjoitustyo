@@ -7,19 +7,24 @@ import static org.junit.Assert.*;
 public class IngredientTest {
     
     @Test
-    public void eiEqualKunEriId() {
-        Ingredient ainesosa1 = new Ingredient(1, null, 1, null, null);
-        Ingredient ainesosa2 = new Ingredient(2, null, 1, null, null);  
-        assertFalse(ainesosa1.equals(ainesosa2));
+    public void notEqualWhenSameButDifferentId() {
+        User u1 = new User("u1");
+        User u2 = new User("u2");
+        Recipe r1 = new Recipe("r1", 1, "kala", u1);
+        Ingredient i1 = new Ingredient(1, "aines", 1, "kpl", r1);
+        Ingredient i2 = new Ingredient(2, "aines", 1, "kpl", r1);  
+        assertFalse(i1.equals(i2));
     }
     
     @Test
-    public void eiEqualKunEriResepti() {
-        Recipe resepti1 = new Recipe("Resepti1", 2, null, null);
-        Recipe resepti2 = new Recipe("Resepti2", 6, null, null);
-        Ingredient ainesosa1 = new Ingredient(1, null, 1, null, resepti1);
-        Ingredient ainesosa2 = new Ingredient(2, null, 1, null, resepti2);  
-        assertFalse(ainesosa1.equals(ainesosa2));        
+    public void notEqualWhenSameButDifferentRecipe() {
+        User u1 = new User("u1");
+        User u2 = new User("u2");        
+        Recipe r1 = new Recipe("r1", 1, "kala", u1);
+        Recipe r2 = new Recipe("r2", 6, "kasvis", u2);
+        Ingredient i1 = new Ingredient(1, "aines", 1, "kpl", r1);
+        Ingredient i2 = new Ingredient(1, "aines", 1, "kpl", r2);  
+        assertFalse(i1.equals(i2));        
     }    
     
 }

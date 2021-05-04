@@ -1,13 +1,14 @@
 package generator.dao;
 
-/**
- * Reseptien tallennukseen liittyvä rajapinta.
- */
-
 import generator.domain.Ingredient;
 import generator.domain.Recipe;
 import generator.domain.User;
 import java.util.List;
+
+/**
+ * Reseptien tallennukseen liittyvien luokkien rajapinta.
+ */
+
 
 public interface RecipeDao {
     

@@ -82,6 +82,28 @@ public class RecipeServiceTest {
     }
     
     @Test
+    public void trueWhenRecipeIsAdded() {
+        userService.login("testaaja1");
+        assertTrue(recipeService.createRecipe("resepti3", "2", "kasvis", userService.getLoggedIn()));
+    }
+    
+    @Test
+    public void recipeCantBeAddedWithBadInputs() {
+        userService.login("testaaja1");
+        recipeService.createRecipe(";;", "1", "kasvis", userService.getLoggedIn());
+        recipeService.createRecipe("nimi", "2,0", "kasvis", userService.getLoggedIn());
+        recipeService.createRecipe("nimi", "1", "hyvä ruoka", userService.getLoggedIn());        
+        assertFalse(recipeService.recipeExists(";;", userService.getLoggedIn()));  
+        assertFalse(recipeService.recipeExists("nimi", userService.getLoggedIn()));         
+    }    
+    
+    @Test
+    public void falseWhenRecipeIsntAdded() {
+        userService.login("testaaja1");
+        assertFalse(recipeService.createRecipe(";;", "1", "kasvis", userService.getLoggedIn()));
+    }    
+    
+    @Test
     public void recipeCanBeRemoved() {
         userService.login("testaaja1");
         recipeService.removeRecipe(recipeDao.findByNameAndUser("resepti1", userService.getLoggedIn()), userService.getLoggedIn());

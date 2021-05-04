@@ -1,12 +1,12 @@
 package generator.dao;
 
-/**
- * Käyttäjien tallennukseen liittyvä rajapinta.
- */
-
 import generator.domain.Recipe;
 import generator.domain.User;
 import java.util.List;
+
+/**
+ * Käyttäjien tallennukseen liittyvien luokkien rajapinta.
+ */
 
 public interface UserDao {
     

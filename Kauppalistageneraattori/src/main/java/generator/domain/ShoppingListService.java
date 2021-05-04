@@ -2,6 +2,7 @@ package generator.domain;
 
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -143,4 +144,8 @@ public class ShoppingListService {
         }
         return false;
     }  
+    
+    public boolean saveToFile(String shoppingList, File file) {
+        return true;
+    }
 }

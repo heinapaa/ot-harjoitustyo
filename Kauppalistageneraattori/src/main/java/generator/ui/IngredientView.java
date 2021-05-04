@@ -88,6 +88,7 @@ public class IngredientView implements View {
                 String ingredientUnit = ingredientUnitComboBox.getSelectionModel().getSelectedItem().toString();         
                 if (ingredientService.addIngredient(recipe, ingredientName, ingredientUnit, ingredientAmount)) {
                     clearInputFields(); 
+                    errorLabel.setText("");
                     newIngredientsListItems.add(ingredientName + ", " + ingredientAmount + " " + ingredientUnit);
                 } else {
                     errorLabel.setText("Virhe! Ainesosan tallennus epäonnistui!");

@@ -1,9 +1,5 @@
 package generator.dao;
 
-/**
- * Käyttäjiä tekstitiedostoon tallentava luokka.
- */
-
 import generator.domain.User;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,6 +7,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+/**
+ * Käyttäjiä tekstitiedostoon tallentava luokka, joka toteuttaa UserDao-rajapinnan.
+ */
 
 public class FileUserDao implements UserDao {
     

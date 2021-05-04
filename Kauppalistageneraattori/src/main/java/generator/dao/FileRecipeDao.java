@@ -1,10 +1,5 @@
 package generator.dao;
 
-/**
- * Reseptejä tekstitiedostoon tallentava luokka.
- */
-
-
 import generator.domain.Recipe;
 import generator.domain.User;
 import java.io.File;
@@ -13,6 +8,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+/**
+ * Reseptejä tekstitiedostoon tallentava luokka, joka toteuttaa RecipeDao-rajapinnan.
+ */
 
 public class FileRecipeDao implements RecipeDao {
     

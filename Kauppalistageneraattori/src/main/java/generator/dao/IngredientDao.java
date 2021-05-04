@@ -5,7 +5,7 @@ import generator.domain.Recipe;
 import java.util.List;
 
 /**
- * Ainesosien tallennukseen liittyvä rajapinta.
+ * Ainesosien tallennukseen liittyvien luokkien rajapinta.
  */
 
 public interface IngredientDao {

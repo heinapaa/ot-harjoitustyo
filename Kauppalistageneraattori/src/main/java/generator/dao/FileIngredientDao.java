@@ -10,10 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-
 /**
- * Ainesosia tekstitiedostoon tallentava luokka.
+ * Ainesosia tekstitiedostoon tallentava luokka, joka toteuttaa IngredientDao-rajapinnan.
  */
+
 
 public class FileIngredientDao implements IngredientDao {
     

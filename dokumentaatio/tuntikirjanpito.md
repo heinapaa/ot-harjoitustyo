@@ -22,6 +22,7 @@ päivä | h | log
 30.4. | 3.0 | käyttöliittymä
 1.5.  | 4.0 | reseptien rajaus tyypin perusteella + tähän liittyvä käyttöliittymä
 2.5.  | 5.0 | käyttöliittymä, rakenteen siivoilua, konfiguraatiotiedosto
-3.5.  | 2.0 | testausta, pikkukorjauksia (syötteet, errorviestit jne.)
+3.5.  | 3.0 | testausta, pikkukorjauksia (syötteet, errorviestit jne.), javadoc
+4.5.  | 3.0 | javadoc, testailua + pikkukorjauksia
 
-Yhteensä 64h
+Yhteensä 67h

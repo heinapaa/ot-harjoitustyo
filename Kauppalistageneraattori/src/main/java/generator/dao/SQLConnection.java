@@ -17,7 +17,7 @@ public class SQLConnection {
     private String url;
     
     public SQLConnection(String fileName) {
-        this.url = "jdbc:sqlite:./database.db";
+        this.url = "jdbc:sqlite:database.db";
 
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
@@ -29,7 +29,7 @@ public class SQLConnection {
     }
     
     private Connection connect() {
-        String url = "jdbc:sqlite:C://sqlite/db/test.db";
+        String url = "jdbc:sqlite:test.db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);

@@ -1,5 +1,7 @@
 package generator.domain;
 
+import java.util.Objects;
+
 /**
  * Yksittäistä käyttäjää vastaava luokka. 
  */
@@ -42,5 +44,12 @@ public class User {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.username);
+        return hash;
     }
 }

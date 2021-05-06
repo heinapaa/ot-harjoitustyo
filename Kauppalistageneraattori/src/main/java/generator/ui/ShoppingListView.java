@@ -3,7 +3,6 @@ package generator.ui;
 import generator.domain.Recipe;
 import generator.domain.ShoppingListService;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

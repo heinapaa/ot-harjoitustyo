@@ -1,54 +1,48 @@
 package generator.dao;
 
 import generator.domain.User;
-import java.io.File;
-import java.io.FileWriter;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
- * Käyttäjiä tekstitiedostoon tallentava luokka, joka toteuttaa UserDao-rajapinnan.
+ * Käyttäjiä tekstitiedostoon tallentava luokka, joka laajentaa TextFileSaver-luokkaa ja toteuttaa UserDao-rajapinnan.
  */
 
-public class FileUserDao implements UserDao {
+public class FileUserDao extends FileDao implements UserDao {
     
     private List<User> users;
-    private String file;
     
-    public FileUserDao(String file) throws Exception {
-        this.file = file;         
+    /**
+     * Konstruktori
+     * @param file  Tiedoston nimi, johon käyttäjät halutaan tallentaa
+     */
+    
+    public FileUserDao(String file) {
+        super(file);       
         this.users = new ArrayList<>();   
         
-        File userList = new File(file);
-        if (userList.exists()) {
-            try (Scanner tiedostonLukija = new Scanner(Paths.get(file))) {
-                while (tiedostonLukija.hasNextLine()) {
-                    users.add(new User(tiedostonLukija.nextLine()));
-                }
-            }             
-        } else {
-            userList.createNewFile();
+        for (String line : super.lines) {
+            users.add(new User(line));
         }                          
     }
     
-    private boolean save() {
-        try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
-            for (User user : users) {
-                kirjoittaja.write(user.getUsername() + "\n");
-            }
-        } catch (Exception e) {
-            return false;
-        }  
-        return true;
-    }
+    /**
+     * Metodi tallentaa käyttäjän.
+     * @param user  Tallennettava käyttäjä
+     * @return  true jos tallennus onnistuu, muuten false
+     */
 
     @Override
     public boolean create(User user) {
         users.add(user);
         return save();
     }
+    
+    /**
+     * Metodi hakee käyttäjän käyttäjänimen perusteella.
+     * @param name  syötteenä annettu käyttäjänimi
+     * @return käyttäjä jos nimeä vastaava olio löytyy, muuten null
+     */
 
     @Override
     public User findByUsername(String name) {
@@ -62,20 +56,22 @@ public class FileUserDao implements UserDao {
         }
         return null;
     }
+    
+    /**
+     * Metodi palauttaa kaikki käyttäjät.
+     * @return List-rakenne, joka sisältää kaikki rekisteröityneet käyttäjät. 
+     */
 
     @Override
     public List<User> findAll() {
         return users;
     }
-    
-    @Override
-    public boolean isUser(String name) {
+       
+    private boolean save() {
+        super.lines = new ArrayList<>();
         for (User user : users) {
-            if (user.getUsername().equals(name)) {
-                return true;
-            }
+            lines.add(user.getUsername() + "\n");
         }
-        return false;
+        return super.writeToFile();
     }
-
 }

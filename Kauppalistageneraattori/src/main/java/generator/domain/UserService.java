@@ -30,7 +30,6 @@ public class UserService {
      * @param name  Käyttäjän syöttämä merkkijono
      * 
      * @see         generator.domain.InputValidator#isValidUserName(java.lang.String) 
-     * @see         generator.dao.UserDao#isUser(java.lang.String)
      * @see         generator.dao.UserDao#findByUsername(java.lang.String) 
      * 
      * @return      true jos käyttäjä on olemassa, false jos käyttäjää ei ole olemassa
@@ -40,10 +39,12 @@ public class UserService {
         String nm = StringUtils.deleteWhitespace(name);
         if (!validator.isValidUserName(nm)) {
             return false;
-        } else if (!userDao.isUser(nm)) {
+        }
+        User user = userDao.findByUsername(nm);
+        if (user == null) {
             return false;
         }
-        this.loggedIn = userDao.findByUsername(nm);
+        this.loggedIn = user;
         return true;         
     }
     
@@ -66,7 +67,7 @@ public class UserService {
         String nm = StringUtils.deleteWhitespace(name); 
         if (!validator.isValidUserName(nm)) {
             return false;
-        } else if (userDao.isUser(nm)) {
+        } else if (userDao.findByUsername(nm) != null) {
             return false;
         } 
         return userDao.create(new User(nm));

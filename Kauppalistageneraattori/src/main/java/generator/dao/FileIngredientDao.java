@@ -2,90 +2,52 @@ package generator.dao;
 
 import generator.domain.Ingredient;
 import generator.domain.Recipe;
-import java.io.File;
-import java.io.FileWriter;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 /**
- * Ainesosia tekstitiedostoon tallentava luokka, joka toteuttaa IngredientDao-rajapinnan.
+ * Ainesosia tekstitiedostoon tallentava luokka, joka laajentaa TextFileSaver-luokkaa ja toteuttaa IngredientDao-rajapinnan.
  */
 
-
-public class FileIngredientDao implements IngredientDao {
+public class FileIngredientDao extends FileDao implements IngredientDao {
     
     private List<Ingredient> ingredients;
-    private String file;
-    private int latestId;
-    
-    public FileIngredientDao(String file, RecipeDao recipes) throws Exception {
-        this.ingredients = new ArrayList<>();
-        this.file = file;     
-        this.latestId = 1;
-        
-        File ingredientList = new File(file);
-        if (ingredientList.exists()) {
-            try (Scanner tiedostonLukija = new Scanner(Paths.get(file))) {
-                while (tiedostonLukija.hasNextLine()) {
-                    String rivi = tiedostonLukija.nextLine();
-                    String[] palat = rivi.split(";");    
-                    int ingredientId = Integer.valueOf(palat[0]);
-                    String ingredientName = palat[1];
-                    Double ingredientAmount = Double.valueOf(palat[2]);
-                    String ingredientUnit = palat[3];
-                    int recipeId = Integer.valueOf(palat[4]);
-                    Recipe recipe = recipes.findById(recipeId);
-                    ingredients.add(new Ingredient(ingredientId, ingredientName, ingredientAmount, ingredientUnit, recipe));
-                    if (ingredientId > latestId) {
-                        latestId = ingredientId;
-                    }
-                }
-            }             
-        } else {
-            ingredientList.createNewFile();
-        }                          
-    }   
-    
-    private boolean save() {
-        try (FileWriter kirjoittaja = new FileWriter(new File(file))) {
-            for (Ingredient ingredient : ingredients) {
-                int ingredientId = ingredient.getId();
-                String ingredientName = ingredient.getName();
-                Double ingredientAmount = ingredient.getAmount();
-                String ingredientUnit = ingredient.getUnit();
-                int recipeId = ingredient.getRecipe().getId();
-                kirjoittaja.write(ingredientId + ";" + ingredientName + ";" + ingredientAmount + ";" + ingredientUnit + ";" + recipeId + "\n");
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }    
-    
-    private int generateId() {
-        latestId++;
-        return latestId - 1;
-    }  
     
     /**
-     * Tallentaa ainesosan
+     * Konstruktori
+     * @param file  Tiedoston nimi, johon ainesosat halutaan tallentaa
+     * @param recipes   RecipeDao-rajapinnan toteuttava olio
+     */
+    
+    public FileIngredientDao(String file, RecipeDao recipes) {
+        super(file);
+        this.ingredients = new ArrayList<>();    
+        for (String line : super.lines) {
+            String[] palat = line.split(";;");    
+            String ingredientName = palat[0];
+            Double ingredientAmount = Double.valueOf(palat[1]);
+            String ingredientUnit = palat[2];
+            int recipeId = Integer.valueOf(palat[3]);
+            //Recipe recipe = recipes.findById(recipeId);
+            //ingredients.add(new Ingredient(ingredientName, ingredientAmount, ingredientUnit, recipe));
+        }                         
+    }      
+
+    /**
+     * Metodi tallentaa ainesosan.
      * @param ingredient    tallennettava ainesosa Ingredient-oliona
      * @return true jos tallennus onnistuu, muuten false
      */
 
     @Override
     public boolean create(Ingredient ingredient) {
-        Ingredient newIngredient = ingredient;
-        newIngredient.setId(generateId());
-        ingredients.add(newIngredient);
+        ingredients.add(ingredient);
         return save();
     }
     
     /**
-     * Poistaa ainesosan.
+     * Metodi poistaa ainesosan.
      * @param ingredient    poistettavaan ainesosaan viittaava Ingredient-olio
      * @return true jos poistaminen onnistuu, muuten false
      */
@@ -97,20 +59,14 @@ public class FileIngredientDao implements IngredientDao {
     }
     
     /**
-     * Poistaa kaikki tiettyyn reseptiin liittyvt ainesosat.
+     * Metodi poistaa kaikki tiettyyn reseptiin liittyvt ainesosat.
      * @param recipe    valittuun reseptiin viittaava Recipe-olio
      * @return true jos poistaminen onnistuu, muuten false
      */
     
-    
     @Override
     public boolean removeByRecipe(Recipe recipe) {
-        List<Ingredient> deleteList = new ArrayList<>();
-        for (Ingredient ingredient : ingredients) {
-            if (ingredient.getRecipe().getId() == recipe.getId()) {
-                deleteList.add(ingredient);
-            }
-        }
+        List<Ingredient> deleteList = findByRecipe(recipe);
         for (Ingredient ingredient : deleteList) {
             ingredients.remove(ingredient);
         }
@@ -118,7 +74,7 @@ public class FileIngredientDao implements IngredientDao {
     }   
     
     /**
-     * Hakee kaikki tiettyyn reseptiin liityvät ainesosat ja palauttaa ne listana
+     * Metodi hakee kaikki tiettyyn reseptiin liityvät ainesosat ja palauttaa ne listana
      * @param recipe    haluttuun reseptiin viittaava Recipe-olio
      * @return          List-rakenne, joka sisältää halutut ainesosat Ingredient-olioina
      */
@@ -127,7 +83,7 @@ public class FileIngredientDao implements IngredientDao {
     public List<Ingredient> findByRecipe(Recipe recipe) {
         List<Ingredient> ingredientList = new ArrayList<>();
         for (Ingredient ingredient : ingredients) {
-            if (ingredient.getRecipe().getId() == recipe.getId()) {
+            if (ingredient.getRecipe().equals(recipe)) {
                 ingredientList.add(ingredient);
             }
         }
@@ -135,19 +91,27 @@ public class FileIngredientDao implements IngredientDao {
         return ingredientList;
     }    
     
+    /**
+     * Metodi hakee syötteenä annetun nimen perusteella tiettyyn reseptiin liittyvän ainesosan.
+     * 
+     * @param name      haetun ainesosan nimi
+     * @param recipe    resepti, johon haettu ainesosa liittyy
+     * @return haettu ainesosa jos se löytyy, muuten null
+     */
+    
     @Override
-    public Ingredient findById(int id) {
+    public Ingredient findByNameAndRecipe(String name, Recipe recipe) {
         for (Ingredient ingredient : ingredients) {
-            if (ingredient.getId() == id) {
+            if (ingredient.getName().equals(name) && ingredient.getRecipe().equals(recipe)) {
                 return ingredient;
             }
         }
-        
         return null;
     }
     
+
     /**
-     * Hakee kaikki reseptit ja palauttaa ne listana
+     * Metodi hakee kaikki ainesosat ja palauttaa ne listana
      * @return List-rakenne, joka sisältää kaikki tallennetut ainesosat Ingredient-olioina 
      */
 
@@ -155,4 +119,16 @@ public class FileIngredientDao implements IngredientDao {
     public List<Ingredient> findAll() {
         return ingredients;
     }  
+        
+    private boolean save() {
+        super.lines = new ArrayList<>();
+        for (Ingredient ingredient : ingredients) {
+            String ingredientName = ingredient.getName();
+            Double ingredientAmount = ingredient.getAmount();
+            String ingredientUnit = ingredient.getUnit().toString();
+            //int recipeId = ingredient.getRecipe().getId();
+            //super.lines.add(ingredientName + ";;" + ingredientAmount + ";;" + ingredientUnit + ";;" + recipeId + "\n");
+        }
+        return super.writeToFile();
+    }     
 }

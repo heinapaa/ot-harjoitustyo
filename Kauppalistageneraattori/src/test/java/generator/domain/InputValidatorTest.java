@@ -14,7 +14,7 @@ public class InputValidatorTest {
     private InputValidator validator;
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         UserDao userDao = new FakeUserDao();
         RecipeDao recipeDao = new FakeRecipeDao();
         IngredientDao ingredientDao = new FakeIngredientDao();  
@@ -25,7 +25,7 @@ public class InputValidatorTest {
         recipeTypes.add("kasvis");
         recipeTypes.add("makea");                   
 
-        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao, recipeTypes);  
+        InputValidator validator = new InputValidator(recipeTypes);  
         this.validator = validator;
     }
     

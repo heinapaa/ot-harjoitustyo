@@ -1,5 +1,7 @@
 package generator.domain;
 
+import java.util.Objects;
+
 /**
  * Yksittäistä reseptiä vastaava luokka.
  */
@@ -12,6 +14,7 @@ public class Recipe implements Comparable<Recipe> {
     private String type;
     private User owner;
     
+  
     /**
      * Konstruktori, kun reseptin yksilöivä tunnus (id) on tiedossa.
      * @param id        Reseptin yksilöivä tunnus
@@ -28,7 +31,7 @@ public class Recipe implements Comparable<Recipe> {
         this.type = type;
         this.owner = user;
     }   
-    
+
     /**
      * Konstruktori, kun reseptin yksilöivä tunnus (id) ei ole tiedossa.
      * @param name      Reseptin nimi
@@ -97,8 +100,7 @@ public class Recipe implements Comparable<Recipe> {
             return false;
         } else {
             Recipe resepti = (Recipe) object;
-            if (resepti.getId() != this.id
-                    || !resepti.getName().equals(this.name)
+            if (!resepti.getName().equals(this.name)
                     || resepti.getPortion() != this.portion
                     || !resepti.getType().equals(this.type)
                     || !resepti.getOwner().equals(this.owner)) {
@@ -107,6 +109,16 @@ public class Recipe implements Comparable<Recipe> {
         }
         return true;
     }  
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.name);
+        hash = 37 * hash + this.portion;
+        hash = 37 * hash + Objects.hashCode(this.type);
+        hash = 37 * hash + Objects.hashCode(this.owner);
+        return hash;
+    }
     
     /**
      * Metodi vertaa kahta reseptiä toisiinsa, perustuen niiden nimiin.

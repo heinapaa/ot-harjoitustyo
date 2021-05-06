@@ -21,7 +21,7 @@ public class IngredientServiceTest {
     private Recipe r2;
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.userDao = new FakeUserDao();
         this.recipeDao = new FakeRecipeDao();
         this.ingredientDao = new FakeIngredientDao();
@@ -36,7 +36,7 @@ public class IngredientServiceTest {
         recipeDao.create(r1);
         recipeDao.create(r2);
         
-        Ingredient i1 = new Ingredient(0, "ingredient1", 1, "kg", r1);
+        Ingredient i1 = new Ingredient("ingredient1", 1, "kg", r1);
         ingredientDao.create(i1);
         
         List<String> recipeTypes = new ArrayList<>();          
@@ -45,8 +45,8 @@ public class IngredientServiceTest {
         recipeTypes.add("kasvis");
         recipeTypes.add("makea");        
 
-        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao, recipeTypes);
-        this.ingredientService = new IngredientService(recipeDao, ingredientDao, validator);
+        InputValidator validator = new InputValidator(recipeTypes);
+        this.ingredientService = new IngredientService(ingredientDao, validator);
     }
     
     @Test
@@ -87,10 +87,10 @@ public class IngredientServiceTest {
         List<Ingredient> ingredients = ingredientService.getIngredients(r1);
         assertEquals(2, ingredients.size());
         assertTrue(ingredients.get(0).getName().equals("ingredient1"));
-        assertTrue(ingredients.get(0).getUnit().equals("kg"));
+        assertTrue(ingredients.get(0).getUnit() == Unit.KG);
         assertTrue(ingredients.get(0).getAmount() == 1);
         assertTrue(ingredients.get(1).getName().equals("ingredient2"));
-        assertTrue(ingredients.get(1).getUnit().equals("kpl"));
+        assertTrue(ingredients.get(1).getUnit().equals(Unit.KPL));
         assertTrue(ingredients.get(1).getAmount() == 3);        
     }
 }

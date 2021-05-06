@@ -18,7 +18,7 @@ public class RecipeServiceTest {
     private RecipeService recipeService;
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.userDao = new FakeUserDao();
         this.recipeDao = new FakeRecipeDao();
         this.ingredientDao = new FakeIngredientDao();
@@ -35,8 +35,8 @@ public class RecipeServiceTest {
         recipeDao.create(r1);
         recipeDao.create(r2);
         
-        Ingredient i1 = new Ingredient(0, "aines1", 1, "kg", r1);
-        Ingredient i2 = new Ingredient(0, "aines2", 4, "dl", r2);
+        Ingredient i1 = new Ingredient("aines1", 1, "kg", r1);
+        Ingredient i2 = new Ingredient("aines2", 4, "dl", r2);
         
         ingredientDao.create(i1);
         ingredientDao.create(i2);
@@ -47,7 +47,7 @@ public class RecipeServiceTest {
         recipeTypes.add("kasvis");
         recipeTypes.add("makea");                    
 
-        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao, recipeTypes);       
+        InputValidator validator = new InputValidator(recipeTypes);       
         this.userService = new UserService(userDao, validator);
         this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
         
@@ -70,15 +70,15 @@ public class RecipeServiceTest {
     @Test
     public void existQueryWorksForOwner() {
         userService.login("testaaja1");
-        assertTrue(recipeService.recipeExists("resepti1", userService.getLoggedIn()));
-        assertFalse(recipeService.recipeExists("fakeNews", userService.getLoggedIn()));
+        assertTrue(recipeService.getRecipe("resepti1", userService.getLoggedIn()) != null);
+        assertFalse(recipeService.getRecipe("fakeNews", userService.getLoggedIn()) != null);
     }
 
     @Test
     public void recipeCanBeAdded() {
         userService.login("testaaja1");
         recipeService.createRecipe("resepti3", "2", "kasvis", userService.getLoggedIn());
-        assertTrue(recipeService.recipeExists("resepti3", userService.getLoggedIn()));       
+        assertTrue(recipeService.getRecipe("resepti3", userService.getLoggedIn()) != null);       
     }
     
     @Test
@@ -93,8 +93,8 @@ public class RecipeServiceTest {
         recipeService.createRecipe(";;", "1", "kasvis", userService.getLoggedIn());
         recipeService.createRecipe("nimi", "2,0", "kasvis", userService.getLoggedIn());
         recipeService.createRecipe("nimi", "1", "hyvä ruoka", userService.getLoggedIn());        
-        assertFalse(recipeService.recipeExists(";;", userService.getLoggedIn()));  
-        assertFalse(recipeService.recipeExists("nimi", userService.getLoggedIn()));         
+        assertFalse(recipeService.getRecipe(";;", userService.getLoggedIn()) != null);  
+        assertFalse(recipeService.getRecipe("nimi", userService.getLoggedIn()) != null);         
     }    
     
     @Test
@@ -107,14 +107,14 @@ public class RecipeServiceTest {
     public void recipeCanBeRemoved() {
         userService.login("testaaja1");
         recipeService.removeRecipe(recipeDao.findByNameAndUser("resepti1", userService.getLoggedIn()), userService.getLoggedIn());
-        assertFalse(recipeService.recipeExists("resepti1", userService.getLoggedIn()));
+        assertFalse(recipeService.getRecipe("resepti1", userService.getLoggedIn()) != null);
     }
     
     @Test
     public void recipeCanBeUpdated() {
         userService.login("testaaja1");
         recipeService.updateRecipe(recipeDao.findByNameAndUser("resepti1", userService.getLoggedIn()), "uusiNimi", "1", "kasvis", userService.getLoggedIn());
-        assertTrue(recipeService.recipeExists("uusiNimi", userService.getLoggedIn()));
+        assertTrue(recipeService.getRecipe("uusiNimi", userService.getLoggedIn()) != null);
     }
     
 }

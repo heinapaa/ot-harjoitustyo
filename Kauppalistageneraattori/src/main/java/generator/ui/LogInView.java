@@ -42,11 +42,7 @@ public class LogInView implements View {
             if (userService.login(userNameInput.getText())) {
                 router.setRecipeListView();
             } else {
-                if (StringUtils.deleteWhitespace(userNameInput.getText()).isEmpty()) {
-                    logInError.setText("Virhe! Syötä käyttäjätunnus.");
-                } else if (StringUtils.deleteWhitespace(userNameInput.getText()).length() < 3) {
-                    logInError.setText("Virhe! Käyttäjätunnuksen minimipituus on 3 merkkiä.");
-                } else {
+                if (validInput(userNameInput.getText())) {
                     logInError.setText("Virhe! Käyttäjää " + StringUtils.deleteWhitespace(userNameInput.getText()) + " ei löydy.");
                 } 
             }
@@ -58,11 +54,7 @@ public class LogInView implements View {
                 userService.login(StringUtils.deleteWhitespace(userNameInput.getText()));
                 router.setRecipeListView();
             } else {
-                if (StringUtils.deleteWhitespace(userNameInput.getText()).isEmpty()) {
-                    logInError.setText("Virhe! Syötä haluttu käyttäjätunnus.");
-                } else if (StringUtils.deleteWhitespace(userNameInput.getText()).length() < 3) {
-                    logInError.setText("Virhe! Käyttäjätunnuksen minimipituus on 3 merkkiä.");
-                } else {
+                if (validInput(userNameInput.getText())) {
                     logInError.setText("Virhe! Käyttäjää " + StringUtils.deleteWhitespace(userNameInput.getText()) + " ei voida lisätä.");
                 }                
             }            
@@ -83,5 +75,16 @@ public class LogInView implements View {
         
         Scene scene = new Scene(pane);
         return scene;
+    }
+    
+    private boolean validInput(String userNameInput) {
+        if (StringUtils.deleteWhitespace(userNameInput).isEmpty()) {
+            logInError.setText("Virhe! Syötä haluttu käyttäjätunnus.");
+            return false;
+        } else if (StringUtils.deleteWhitespace(userNameInput).length() < 3) {
+            logInError.setText("Virhe! Käyttäjätunnuksen minimipituus on 3 merkkiä.");
+            return false;
+        }       
+        return true;
     }
 }

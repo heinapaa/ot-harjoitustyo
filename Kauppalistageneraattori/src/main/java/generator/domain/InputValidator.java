@@ -1,8 +1,5 @@
 package generator.domain;
 
-import generator.dao.IngredientDao;
-import generator.dao.RecipeDao;
-import generator.dao.UserDao;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,23 +10,14 @@ import org.apache.commons.lang3.StringUtils;
 
 public class InputValidator {
 
-    private final UserDao userDao;
-    private final RecipeDao recipeDao;
-    private final IngredientDao ingredientDao;
     private List<String> acceptableTypes;
     
     /**
      * Konstruktori
-     * @param userDao           UserDao-rajapinnan toteuttava olio, joka vastaa käyttäjien tallentamisesta
-     * @param recipeDao         RecipeDao-rajapinnan toteuttava olio, joka vastaa reseptien tallentamisesta
-     * @param ingredientDao     IngredientDao-rajapinnan toteuttava olio, joka vastaa ainesosien tallentamisesta
      * @param acceptableTypes   List-rakenne, joka sisältää merkkijonoina hyväksyttävät reseptityypit
      */
     
-    public InputValidator(UserDao userDao, RecipeDao recipeDao, IngredientDao ingredientDao, List<String> acceptableTypes) {
-        this.userDao = userDao;
-        this.recipeDao = recipeDao;
-        this.ingredientDao = ingredientDao;
+    public InputValidator(List<String> acceptableTypes) {
         this.acceptableTypes = acceptableTypes;
     }
     
@@ -71,7 +59,7 @@ public class InputValidator {
             return false;
         }
         try {
-            int serving = Integer.parseInt(input);
+            Integer.parseInt(input);
         } catch (NumberFormatException nfe) {
             return false;
         }
@@ -118,7 +106,7 @@ public class InputValidator {
             return false;
         }
         try {
-            double serving = Double.parseDouble(input);
+            Double.parseDouble(input);
         } catch (NumberFormatException nfe) {
             return false;
         }            

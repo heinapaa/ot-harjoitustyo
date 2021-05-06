@@ -1,25 +1,60 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package generator.domain;
 
+import generator.dao.UserDao;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author heinapaa
- */
 public class UserServiceTest {
     
-    public UserServiceTest() {
-    }
+    private UserDao userDao;
+    private UserService userService;
+    private User user;
     
     @Before
     public void setUp() {
+        this.user = new User("tester");        
+        this.userDao = new FakeUserDao();
+        userDao.create(user);
+        this.userService = new UserService(userDao, new InputValidator(new ArrayList<String>()));
     }
     
+    @Test
+    public void existingUsercanLogIn() {
+        assertTrue(userService.login("tester"));
+        assertEquals(user, userService.getLoggedIn());
+    }
+    
+    @Test
+    public void nonExistingUsercantLogIn() {
+        assertFalse(userService.login("fakeTester"));
+    }
+    
+    @Test
+    public void canLogOut() {
+        userService.login("tester");
+        userService.logout();
+        assertEquals(null, userService.getLoggedIn());
+    }
+    
+    @Test
+    public void canAddNewUser() {
+        assertTrue(userService.addNewUser("newTester"));
+        User newUser = userDao.findByUsername("newTester");
+        assertTrue(newUser != null);
+    }
+    
+    @Test
+    public void cantAddExistingUser() {
+        assertFalse(userService.addNewUser("tester"));
+    }
+    
+    @Test
+    public void cantChooseBadUsername() {
+        assertFalse(userService.addNewUser("tes;;ter"));
+        assertFalse(userService.addNewUser(""));
+        assertFalse(userService.addNewUser("   "));     
+    }
 }

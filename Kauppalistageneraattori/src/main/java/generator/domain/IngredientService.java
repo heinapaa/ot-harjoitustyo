@@ -1,7 +1,6 @@
 package generator.domain;
 
 import generator.dao.IngredientDao;
-import generator.dao.RecipeDao;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,20 +10,16 @@ import org.apache.commons.lang3.StringUtils;
 
 public class IngredientService {
     
-    private final RecipeDao recipeDao;
     private final IngredientDao ingredientDao;
     private final InputValidator validator;   
     
     /**
      * Konstruktori
-     * @param recipeDao         RecipeDao-rajapinnan toteuttava olio, joka vastaa reseptien tallentamisesta
      * @param ingredientDao     IngredientDao-rajapinnan toteuttava olio, joka vastaa ainesosien tallentamisesta
      * @param validator         InputValidator-olio, joka validoi syötteitä
      */
 
-    
-    public IngredientService(RecipeDao recipeDao, IngredientDao ingredientDao, InputValidator validator) {
-        this.recipeDao = recipeDao;
+    public IngredientService(IngredientDao ingredientDao, InputValidator validator) {
         this.ingredientDao = ingredientDao;
         this.validator = validator;
     }    
@@ -56,8 +51,7 @@ public class IngredientService {
         if (ingredientExists(recipe, nm)) {
             return false;
         }
-        Ingredient newIngredient = new Ingredient(nm, Double.parseDouble(amount), unit);
-        newIngredient.setRecipe(recipe);
+        Ingredient newIngredient = new Ingredient(nm, Double.parseDouble(amount), unit, recipe);
         return ingredientDao.create(newIngredient);
     }    
     
@@ -99,16 +93,15 @@ public class IngredientService {
      */
     
     public boolean ingredientExists(Recipe recipe, String ingredientName) {
-        String inm = ingredientName.strip();
         if (recipe == null) {
             return false;
-        }        
+        }           
         List<Ingredient> existingIngredients = ingredientDao.findByRecipe(recipe);
         if (existingIngredients.isEmpty()) {
             return false;
-        }
+        }        
         for (Ingredient ingredient : existingIngredients) {
-            if (ingredient.getName().equals(inm)) {
+            if (ingredient.nameEquals(ingredientName)) {
                 return true;
             }
         }

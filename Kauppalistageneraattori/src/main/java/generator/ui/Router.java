@@ -5,6 +5,10 @@ import generator.dao.FileRecipeDao;
 import generator.dao.FileUserDao;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
+import generator.dao.SQLConnection;
+import generator.dao.SQLIngredientDao;
+import generator.dao.SQLRecipeDao;
+import generator.dao.SQLUserDao;
 import generator.dao.UserDao;
 import generator.domain.IngredientService;
 import generator.domain.InputValidator;
@@ -12,6 +16,7 @@ import generator.domain.Recipe;
 import generator.domain.RecipeService;
 import generator.domain.ShoppingListService;
 import generator.domain.UserService;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +43,7 @@ public class Router extends Application {
     private ShoppingListView shoppingListView;
     
     @Override
-    public void init() throws Exception {
+    public void init() {
         String userFile = "users.txt";
         String recipeFile = "recipes.txt";
         String ingredientFile = "ingredients.txt";
@@ -53,11 +58,13 @@ public class Router extends Application {
                 ingredientFile = properties.getProperty("ingredientFile");                
                 try {
                     stream.close();
-                } catch (Exception e) {
-                    System.out.println("Kustomoitujen tiedostosijaintien asetus epäonnistui.");
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
                 }
             }            
-        }    
+        } catch (Exception e) {
+            System.out.println("Kustomoitujen tiedostosijaintien asetus epäonnistui. Virhe: " + e.getMessage());
+        }
 
         List<String> recipeTypes = new ArrayList<>();          
         try (InputStream stream = loader.getResourceAsStream("recipeTypes.properties")) {
@@ -68,28 +75,31 @@ public class Router extends Application {
                 }
                 try {
                     stream.close();
-                } catch (Exception e) {
-                    System.out.println("Kustomoitujen reseptityyppien asettaminen epäonnistui.");
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
                 }
             }            
+        } catch (Exception e) {
+            System.out.println("Kustomoitujen reseptityyppien asettaminen epäonnistui. Virhe: " + e.getMessage());
         }
         
-        if (recipeTypes.size() == 0) {
+        if (recipeTypes.isEmpty()) {
             recipeTypes.add("kala");
             recipeTypes.add("liha");
             recipeTypes.add("kasvis");
             recipeTypes.add("makea");            
         }
         
-        UserDao userDao = new FileUserDao(userFile);
-        RecipeDao recipeDao = new FileRecipeDao(recipeFile, userDao);
-        IngredientDao ingredientDao = new FileIngredientDao(ingredientFile, recipeDao);
-        InputValidator validator = new InputValidator(userDao, recipeDao, ingredientDao, recipeTypes);
+        SQLConnection conn = new SQLConnection("test.db");         
+        UserDao userDao = new SQLUserDao(conn);
+        RecipeDao recipeDao = new SQLRecipeDao(conn);
+        IngredientDao ingredientDao = new SQLIngredientDao(conn);
+        InputValidator validator = new InputValidator(recipeTypes);
         
         this.userService = new UserService(userDao, validator);
         this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
-        this.ingredientService = new IngredientService(recipeDao, ingredientDao, validator);
-        this.shoppingListService = new ShoppingListService(recipeDao, ingredientDao);  
+        this.ingredientService = new IngredientService(ingredientDao, validator);
+        this.shoppingListService = new ShoppingListService(ingredientDao);  
         this.logInView = new LogInView(this, userService);
         this.recipeListView = new RecipeListView(this, userService, recipeService, ingredientService, recipeTypes);
         this.ingredientView = new IngredientView(this, ingredientService);
@@ -97,7 +107,7 @@ public class Router extends Application {
     }
     
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         this.mainStage = stage;
         mainStage.setWidth(900);
         mainStage.setHeight(600);

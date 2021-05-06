@@ -42,9 +42,7 @@ public class RecipeListView implements View {
     private Label labelRecipeName;
     private Label labelRecipePortion;
     private Label labelRecipeType;      
-    private Label errorLabel;
-    private String inputRecipeName;
-    private String inputRecipePortion;    
+    private Label errorLabel;   
     private TextField inputFieldRecipeName;
     private TextField inputFieldRecipePortion;
     private VBox recipeButtons;

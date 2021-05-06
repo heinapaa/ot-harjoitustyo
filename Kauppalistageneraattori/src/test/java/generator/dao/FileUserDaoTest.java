@@ -3,7 +3,6 @@ package generator.dao;
 import generator.domain.User;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;

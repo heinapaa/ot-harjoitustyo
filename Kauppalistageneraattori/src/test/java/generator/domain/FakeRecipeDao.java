@@ -14,14 +14,16 @@ public class FakeRecipeDao implements RecipeDao {
         this.id = 1;
     }
 
+    
     @Override
     public boolean create(Recipe recipe) {
-        recipe.setId(id);
+        //recipe.setId(id);
         id++;
         recipes.add(recipe);
         return true;
     }
 
+    /*
     @Override
     public Recipe findById(int id) {
         for (Recipe recipe : recipes) {
@@ -31,6 +33,7 @@ public class FakeRecipeDao implements RecipeDao {
         }
         return null;
     }
+    */
     
     @Override
     public Recipe findByNameAndUser(String name, User user) {

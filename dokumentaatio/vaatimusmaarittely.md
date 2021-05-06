@@ -2,51 +2,52 @@
 
 ## Sovelluksen tarkoitus
 
-Sovelluksen avulla käyttäjät voivat tallentaa reseptien ainesosaluetteloita ja generoida kauppalistoja näiden pohjalta. Sovelluksen käyttäminen vaatii rekisteröitymisen, ja tallennetut ainesosalistat ovat käyttäjäkohtaisia.
+Sovelluksen avulla käyttäjät voivat tallentaa reseptien ainesosaluetteloita ja generoida kauppalistoja näiden pohjalta. Sovelluksen käyttäminen vaatii rekisteröitymisen, ja tallennetut reseptit ainesosalistoineen ovat käyttäjäkohtaisia.
 
 ## Sovelluksen perustoiminnallisuus
 
 ### Toiminnallisuus ennen kirjautumista
 
-* käyttäjä voi luoda käyttäjätunnuksen - tehty
-	* käyttäjätunnuksen täytyy olla uniikki ja vähintään kolme merkkiä - tehty
-* käyttäjä voi kirjautua sisään - tehty
-	* kirjautuminen onnistuu, kun käyttäjä syöttää olemassaolevan käyttäjätunnuksen kirjautumislomakkeeseen - tehty
-	* mikäli käyttäjätunnusta ei ole olemassa, käyttäjälle näytetään tästä ilmoitus - tehty
+* käyttäjä voi luoda käyttäjätunnuksen
+	* käyttäjätunnuksen täytyy olla uniikki ja vähintään kolme merkkiä
+	* mikäli käyttäjätunnus on jo olemassa tai syötetty merkkijono ei kelpaa tunnukseksi, käyttäjälle näytetään tästä ilmoitus
+* käyttäjä voi kirjautua sisään
+	* kirjautuminen onnistuu, kun käyttäjä syöttää olemassaolevan käyttäjätunnuksen kirjautumislomakkeeseen
+	* mikäli käyttäjätunnusta ei ole olemassa, käyttäjälle näytetään tästä ilmoitus
 
 ### Toiminnallisuus kirjautumisen jälkeen
 
-* käyttäjä voi lisätä reseptin - tehty
-	* reseptillä tulee olla nimi, sekä lista vaadituista aineksista ja niiden määristä - tehty (muutos alkuperäiseen -> reseptin lisäys ilman aineksia on mahdollista)
-* käyttäjä voi poistaa reseptin - tehty
-* käyttäjä näkee listan omista resepteistään - tehty
-* käyttäjä voi generoida kauppalistan - osittain tehty
-	* kauppalista perustuu käyttäjän valitsemiin resepteihin - tehty
-	* kauppalista luodaan suoraan tekstitiedostona - tehty (muutos alkuperäiseen -> lista luodaan sovelluksessa, ja sen voi halutessaan tallentaa tiedostona)
-* käyttäjä voi kirjautua ulos - tehty
+* käyttäjä voi lisätä reseptin
+	* reseptillä tulee olla nimi, annoskoko ja tyyppi (oletusarvona liha/kala/kasvis/makea)
+	* reseptin tyyppiluokittelua voidaan määritellä konfiguraatiotiedoston kautta
+* käyttäjä voi poistaa reseptin
+* käyttäjä näkee listan omista resepteistään
+* käyttäjä voi lisätä resepteihin ainesosia
+	* ainesosalla tulee olla nimi, määrä ja yksikkö (kg/g, l/dl tai kpl)
+* käyttäjä voi poista resepteistä ainesosia
+* käyttäjä voi muokata reseptien tietoja
+* käyttäjä voi generoida kauppalistan
+	* kauppalista perustuu käyttäjän valitsemiin resepteihin
+	* reseptejä valittaessa niitä voidaan "filtteröidä" tyypin perusteella
+	* kauppalistan voi tallentaa
+		* kauppalistaan voi tehdä manuaalisesti muutoksia ennen tallennusta
+* käyttäjä voi kirjautua ulos
 
 ## Jatkokehitysideoita
 
-Kun perustoiminnallisuus on toteutettu toimivasti, sovellukseen voidaan lisätä esimerkiksi seuraavia toiminnallisuuksia:
+Sovellukseen voitaisiin jatkossa lisätä esimerkiksi seuraavia toiminnallisuuksia:
 
-* reseptien luokittelu - tehty perusluokittelu jaotuksella liha/kala/kasvis/makea
-	* pääraaka-aineen mukaan (liha/kana/kala/kasvis jne.)
-	* tyypin mukaan (pääruoka/keitto/jälkiruoka jne.)
-	* sesongin mukaan
-* reseptien listaus luokittelun perusteella - tehty (listaus tapahtuu kauppalistaa luotaessa)
 * reseptien haku
-	* luokittelun perusteella
 	* nimen perusteella
 	* tietyn ainesosan perusteella
 * reseptien arvostelu
-* tallennettujen reseptien muokkaaminen - tehty
 * reseptin skaalaaminen sen mukaan, kuinka monelle henkilölle ruokaa ollaan tekemässä
 * reseptikohtainen laskuri (kuinka monta kertaa resepti on valittu kauppalistalle)
 * erillinen peruselintarvikkeet-lista, joka voidaan lisätä kauppalistalle
-* kauppalistan muokkaaminen ennen tallennusta tekstitiedostoksi - tehty
 * kauppalistan ryhmittely
 	* aakkosjärjestyksessä
 	* tuoteryhmittäin
 * käyttäjäryhmät (jakavat reseptit, soveltuu esim. kotitalouksille)
 * käyttäjäkohtainen salasana, joka vaaditaan kijrautumiseen
 * käyttäjätunnuksen ja siihen liittyvien reseptien poistaminen
+* vapaavalinteisten "tagien" lisäys resepteihin

@@ -10,4 +10,8 @@
 /Kauppalistageneraattori/recipes.txt
 /Kauppalistageneraattori/ingredients.txt
 /Kauppalistageneraattori/todo.txt
+<<<<<<< HEAD
 /kauppalistageneraattori/database.db
+=======
+/Kauppalistageneraattori/database.db
+>>>>>>> d221d2da232a07eaef96e5402e2b06710a6ad72b

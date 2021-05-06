@@ -17,7 +17,7 @@ public class SQLConnection {
     private String url;
     
     public SQLConnection(String fileName) {
-        this.url = "jdbc:sqlite:database.db";
+        this.url = "jdbc:sqlite:./database.db";
 
         try (Connection conn = DriverManager.getConnection(url)) {
             if (conn != null) {
@@ -27,6 +27,17 @@ public class SQLConnection {
             System.out.println(e.getMessage());
         }   
     }
+    
+    private Connection connect() {
+        String url = "jdbc:sqlite:C://sqlite/db/test.db";
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return conn;
+    }    
     
     public void createUserTable() {
         String sql = "CREATE TABLE IF NOT EXISTS users (\n"

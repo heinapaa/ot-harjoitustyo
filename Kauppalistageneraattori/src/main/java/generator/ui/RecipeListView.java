@@ -306,7 +306,7 @@ public class RecipeListView implements View {
     
     public void updateRecipeList() {
         recipeListItems.clear();
-        List<Recipe> allRecipes = recipeService.getAllRecipes(userService.getLoggedIn());
+        List<Recipe> allRecipes = recipeService.getAllRecipesByUser(userService.getLoggedIn());
         if (allRecipes != null) {
             for (Recipe recipe : allRecipes) {
                 recipeListItems.add(recipe);

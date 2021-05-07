@@ -1,8 +1,5 @@
 package generator.ui;
 
-import generator.dao.FileIngredientDao;
-import generator.dao.FileRecipeDao;
-import generator.dao.FileUserDao;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import generator.dao.SQLConnection;

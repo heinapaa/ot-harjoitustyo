@@ -18,28 +18,20 @@ public class SQLRecipeDao implements RecipeDao {
         return connection.insertRecipe(recipe.getName(), recipe.getPortion(), recipe.getType(), recipe.getOwner().getUsername());
     }
     
-    /*
     @Override
     public Recipe findById(int id) {
         return connection.selectOneRecipeById(id);
     }
-    */
 
     @Override
     public Recipe findByNameAndUser(String name, User user) {
         Recipe recipe = connection.selectOneRecipeByNameAndUser(name, user.getUsername());
-        if (recipe != null) {
-            System.out.println("Resepti " + name + " haettu");            
-        } else {
-            System.out.println("Reseptiä " + name + " ei ole olemassa");
-        }
-
         return recipe;
     }
 
     @Override
-    public List<Recipe> findByType(String type) {
-        return connection.selectAllRecipesByType(type);
+    public List<Recipe> findByTypeAndUser(String type, User user) {
+        return connection.selectAllRecipesByTypeAndUser(type, user.getUsername());
     }
 
     @Override

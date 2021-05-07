@@ -113,18 +113,12 @@ public class RecipeService {
      * @return      List-rakenne joka sisältää käyttäjään liittyvät reseptit Recipe-luokan olioina, null jos reseptejä ei ole
      */
     
-    public List<Recipe> getAllRecipes(User user) {
-        List<Recipe> allRecipes = recipeDao.findAll();
-        List<Recipe> returnRecipes = new ArrayList<>();
-        for (Recipe recipe : allRecipes) {
-            if (recipe.getOwner().equals(user)) {
-                returnRecipes.add(recipe);
-            }
-        }
-        if (returnRecipes.size() == 0) {
+    public List<Recipe> getAllRecipesByUser(User user) {
+        List<Recipe> recipes = recipeDao.findByUser(user);
+        if (recipes.size() == 0) {
             return null;
         } else {
-            return returnRecipes;
+            return recipes;
         } 
     }
     

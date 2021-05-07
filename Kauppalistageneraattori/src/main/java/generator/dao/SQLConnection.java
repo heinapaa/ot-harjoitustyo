@@ -225,15 +225,16 @@ public class SQLConnection {
         return recipes;
     } 
     
-    public List<Recipe> selectAllRecipesByType(String type){
+    public List<Recipe> selectAllRecipesByTypeAndUser(String type, String user){
         List<Recipe> recipes = new ArrayList<>();        
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
-            String sql = "SELECT * FROM Recipes WHERE type = ?";      
+            String sql = "SELECT * FROM Recipes WHERE type = ? AND user = ?";      
             conn = connect();
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, type);
+            pstmt.setString(2, user);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 recipes.add(rs.getInt("id"), new Recipe(rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
@@ -409,14 +410,16 @@ public class SQLConnection {
         Connection conn = null;     
         PreparedStatement pstmt = null;
         try {
-            String sql = "SELECT * FROM Ingredients WHERE recipe_id = ?";    
+            String sql = "SELECT * FROM Ingredients WHERE recipe_id = ? JOIN Recipes "
+                    +   "ON Ingredients.recipe_id = Recipe.id";    
             conn = connect();
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, recipeId);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                ingredients.add(new Ingredient(rs.getString("name"), (double) rs.getFloat("amount"), rs.getString("unit"), selectOneRecipeById(rs.getInt("recipe_id"))));
-                System.out.println(rs.getString("name"));             
+                User user = new User(rs.getString("Recipes.user"));
+                Recipe recipe = new Recipe(rs.getInt("Recipes.id"), rs.getString("Recipes.name"), rs.getInt("Recipes.portion"), rs.getString("Recipes.type"), user);
+                ingredients.add(new Ingredient(rs.getString("Ingredients.name"), rs.getDouble("Ingredients.amount"), rs.getString("Ingredients.unit"), recipe));            
             }
             rs.close();
             pstmt.close(); 

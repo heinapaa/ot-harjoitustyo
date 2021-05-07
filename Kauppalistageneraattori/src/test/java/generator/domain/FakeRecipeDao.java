@@ -17,13 +17,12 @@ public class FakeRecipeDao implements RecipeDao {
     
     @Override
     public boolean create(Recipe recipe) {
-        //recipe.setId(id);
+        recipe.setId(id);
         id++;
         recipes.add(recipe);
         return true;
     }
 
-    /*
     @Override
     public Recipe findById(int id) {
         for (Recipe recipe : recipes) {
@@ -33,7 +32,6 @@ public class FakeRecipeDao implements RecipeDao {
         }
         return null;
     }
-    */
     
     @Override
     public Recipe findByNameAndUser(String name, User user) {
@@ -46,10 +44,10 @@ public class FakeRecipeDao implements RecipeDao {
     }
     
     @Override
-    public List<Recipe> findByType(String type) {
+    public List<Recipe> findByTypeAndUser(String type, User user) {
         List<Recipe> recipeList = new ArrayList<>();
         for (Recipe recipe : recipes) {
-            if (recipe.getType().equals(type)) {
+            if (recipe.getType().equals(type) && recipe.getOwner().equals(user)) {
                 recipeList.add(recipe);
             }
         }

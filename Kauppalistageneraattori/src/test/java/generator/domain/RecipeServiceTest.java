@@ -56,14 +56,14 @@ public class RecipeServiceTest {
     
     @Test
     public void noRecipesWithoutLogin() {
-        List<Recipe> recipes = recipeService.getAllRecipes(userService.getLoggedIn());
+        List<Recipe> recipes = recipeService.getAllRecipesByUser(userService.getLoggedIn());
         assertEquals(null, recipes);
     }
     
     @Test
     public void listConstainsRecipesAfterLogin() {
         userService.login("testaaja1");
-        List<Recipe> recipes = recipeService.getAllRecipes(userService.getLoggedIn());
+        List<Recipe> recipes = recipeService.getAllRecipesByUser(userService.getLoggedIn());
         assertEquals(1, recipes.size());        
     }
     

@@ -22,7 +22,7 @@ public class SQLUserDao implements UserDao{
         User user = connection.selectOneUser(name);
         return user;
     }
-
+    
     @Override
     public List<User> findAll() {
         return connection.selectAllUsers();

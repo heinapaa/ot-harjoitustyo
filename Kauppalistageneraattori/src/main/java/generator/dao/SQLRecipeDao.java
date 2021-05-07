@@ -59,7 +59,10 @@ public class SQLRecipeDao implements RecipeDao {
 
     @Override
     public boolean remove(Recipe recipe) {
-        return connection.deleteRecipe(recipe.getId());
+        if (!connection.deleteAllIngredientsByRecipe(recipe.getId()) || !connection.deleteRecipe(recipe.getId())) {
+            return true;
+        }
+        return false;
     }
     
 }

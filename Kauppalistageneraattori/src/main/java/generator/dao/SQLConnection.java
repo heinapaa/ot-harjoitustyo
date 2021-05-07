@@ -3,42 +3,27 @@ package generator.dao;
 import generator.domain.Ingredient;
 import generator.domain.Recipe;
 import generator.domain.User;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLConnection {
     
     private String url;
-    
-    static final String JDBC_DRIVER = "org.h2.Driver";   
-    static final String DB_URL = "jdbc:h2:./database";    
-    static final String USER = "sa"; 
-    static final String PASS = "";     
+    private String driver = "org.h2.Driver";   
+    private String user = "sa"; 
+    private String pw = "";     
     
     public SQLConnection(String fileName) {
-        this.url = "jdbc:sqlite:database.db";
+        this.url = "jdbc:h2:./database";
     } 
     
     private Connection connect() {
         Connection conn = null; 
-        System.out.println("1");
         try {
-            // STEP 1: Register JDBC driver 
-            System.out.println("2");
-            Class.forName(JDBC_DRIVER); 
-            System.out.println("3");
-            //STEP 2: Open a connection 
-            System.out.println("Connecting to database..."); 
-            conn = DriverManager.getConnection(DB_URL,USER,PASS); 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
+            Class.forName(driver); 
+            conn = DriverManager.getConnection(url,user,pw); 
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return conn;
@@ -47,57 +32,57 @@ public class SQLConnection {
     
     public void createUserTable() {
         Connection conn = null; 
-        Statement stmt = null;         
-        String sql = "CREATE TABLE IF NOT EXISTS users (\n"
-                + "	name text PRIMARY KEY"
-                + ");";
-        
-        sql =  "CREATE TABLE   users " + 
-            "(name VARCHAR(255) not NULL, " + 
-            " PRIMARY KEY ( name ))";          
+        Statement stmt = null;              
         try {
+            String sql = "CREATE TABLE IF NOT EXISTS Users " + 
+                "(name VARCHAR(255) not NULL)";                 
+            System.out.println("Yhdistetään käyttäjätaulukkoa...");
             conn = connect();
             stmt = conn.createStatement();           
-            stmt.execute(sql);
-            System.out.println("Käyttäjätaulukko yhdistetty");
+            stmt.executeUpdate(sql);
+            System.out.println("Käyttäjätaulukko yhdistetty!\n");
             stmt.close(); 
             conn.close();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Käyttäjätaulukon luominen epäonnistui -> " + e.getMessage());
         }
     }
     
     public boolean insertUser(String name) {
         Connection conn = null; 
         PreparedStatement pstmt = null;            
-        String sql = "INSERT INTO users(name) VALUES(?)";
         try {
+            String sql = "INSERT INTO Users VALUES(?)";            
             conn = connect();
             pstmt = conn.prepareStatement(sql);           
             pstmt.setString(1, name);
             pstmt.executeUpdate();
-            System.out.println("Käyttäjä " + name + " luotu!");
+            System.out.println("Käyttäjä " + name + " luotu");
             pstmt.close(); 
             conn.close();           
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Käyttäjän " + name + " luonti epäonnistui -> " + e.getMessage());
             return false;
         }
     }   
     
     public User selectOneUser(String username){
-        String sql = "SELECT name FROM users WHERE name='" + username + "'";
         User user = null;   
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
         try {
             conn = connect();
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);         
-            user = new User(rs.getString("name"));
-            System.out.println("Löytynyt käyttäjä: " + rs.getString("name"));
-            stmt.close(); 
+            String sql = "SELECT * FROM Users WHERE name = ?"; 
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();    
+            while (rs.next()) {
+                user = new User(rs.getString("name"));
+                System.out.println("Löytynyt käyttäjä: " + rs.getString("name"));                
+            }
+            rs.close();
+            pstmt.close(); 
             conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -106,14 +91,20 @@ public class SQLConnection {
     }      
     
     public List<User> selectAllUsers(){
-        String sql = "SELECT name FROM users";
-        List<User> users = new ArrayList<>();        
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        List<User> users = new ArrayList<>();    
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = connect();
+            String sql = "SELECT * FROM Users";   
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 users.add(new User(rs.getString("name")));
                 System.out.println(rs.getString("name"));
             }
-            stmt.close(); 
+            rs.close();
+            pstmt.close(); 
             conn.close();            
         } catch (SQLException e) {            
             System.out.println(e.getMessage());
@@ -123,29 +114,33 @@ public class SQLConnection {
     
     public void createRecipeTable() {
         Connection conn = null; 
-        Statement stmt = null;          
-        String sql = "CREATE TABLE IF NOT EXISTS recipes (\n"
-                + "	id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                + "	name TEXT NOT NULL,\n"
-                + "	portion INTEGER NOT NULL,\n"
-                + "	type TEXT NOT NULL, \n"
-                + "	user TEXT NOT NULL"
-                + ");";
+        Statement stmt = null;   
         try {
+            String sql =  "CREATE TABLE IF NOT EXISTS Recipes " + 
+                        "(id IDENTITY NOT NULL PRIMARY KEY, " + 
+                        " name VARCHAR(255) not NULL, " +  
+                        " portion INTEGER not NULL, " +  
+                        " type VARCHAR(255) not NULL, " +  
+                        " user VARCHAR(255) not NULL)";                  
+            System.out.println("Yhdistetään reseptitaulukkoa...");            
             conn = connect();
-            stmt = conn.createStatement();        
-            stmt.execute(sql);
-            System.out.println("Reseptitaulukko yhdistetty");
+            stmt = conn.createStatement();   
+            stmt.executeUpdate(sql);
+            System.out.println("Reseptitaulukko yhdistetty!\n");
             stmt.close(); 
             conn.close();            
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Reseptitaulukon yhdistäminen epäonnistui -> " + e.getMessage());
         }
     }    
     
     public boolean insertRecipe(String name, int portion, String type, String owner) {
-        String sql = "INSERT INTO recipes(name, portion, type, user) VALUES(?,?,?,?)";
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "INSERT INTO Recipes (name, portion, type, user) VALUES(?,?,?,?)";    
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.setInt(2, portion);
             pstmt.setString(3, type);
@@ -156,32 +151,51 @@ public class SQLConnection {
             conn.close();            
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Reseptin " + name + " luonti epäonnistui!");
             return false;
         }
-    }   
+    }     
     
     public Recipe selectOneRecipeById(int id){
-        String sql = "SELECT id, name, portion, type, user FROM recipes WHERE id ='" + id + "'";
         Recipe recipe = null;   
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            recipe = new Recipe(id, rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user")));
-            System.out.println("Löytynyt resepti: " + rs.getString("name"));
-            stmt.close(); 
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Recipes WHERE id = ?";      
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                recipe = new Recipe(id, rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user")));   
+                System.out.println("Löytynyt resepti: " + rs.getString("name"));
+            }
+            rs.close();
+            pstmt.close(); 
             conn.close();            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return recipe;
-    } 
+    }    
     
     public Recipe selectOneRecipeByNameAndUser(String name, String username){
-        String sql = "SELECT id, name, portion, type, user FROM recipes WHERE name ='" + name + "' AND user = '" + username + "'";
         Recipe recipe = null;   
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            recipe = new Recipe(rs.getInt("id"), name, rs.getInt("portion"), rs.getString("type"), new User(username));
-            System.out.println("Löytynyt resepti: " + rs.getString("name"));
-            stmt.close(); 
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Recipes WHERE name = ? AND user = ?";            
+            conn = connect();
+            pstmt = conn.prepareStatement(sql); 
+            pstmt.setString(1, name);
+            pstmt.setString(2, username);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                recipe = new Recipe(rs.getInt("id"), name, rs.getInt("portion"), rs.getString("type"), new User(username));
+                System.out.println("Löytynyt resepti: " + rs.getString("name"));                
+            }
+            rs.close();
+            pstmt.close(); 
             conn.close();            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -190,14 +204,20 @@ public class SQLConnection {
     }     
     
     public List<Recipe> selectAllRecipes(){
-        String sql = "SELECT id, name, portion, type, user FROM recipes";
-        List<Recipe> recipes = new ArrayList<>();        
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        List<Recipe> recipes = new ArrayList<>();   
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Recipes";
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 recipes.add(new Recipe(rs.getInt("id"), rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
                 System.out.println(rs.getString("name"));              
             }
-            stmt.close(); 
+            rs.close();
+            pstmt.close(); 
             conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -206,14 +226,21 @@ public class SQLConnection {
     } 
     
     public List<Recipe> selectAllRecipesByType(String type){
-        String sql = "SELECT id, name, portion, type, user FROM recipes WHERE type = '" + type + "'";
         List<Recipe> recipes = new ArrayList<>();        
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Recipes WHERE type = ?";      
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, type);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 recipes.add(rs.getInt("id"), new Recipe(rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
                 System.out.println(rs.getString("name"));
             }
-            stmt.close(); 
+            rs.close();
+            pstmt.close(); 
             conn.close();            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -222,14 +249,21 @@ public class SQLConnection {
     }   
     
     public List<Recipe> selectAllRecipesByUser(String username){
-        String sql = "SELECT id, name, portion, type, user FROM recipes WHERE user = '" + username + "'";
-        List<Recipe> recipes = new ArrayList<>();        
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        List<Recipe> recipes = new ArrayList<>();  
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Recipes WHERE user = ?";
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 recipes.add(new Recipe(rs.getInt("id"), rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
                 System.out.println(rs.getString("name"));
             }
-            stmt.close(); 
+            rs.close();
+            pstmt.close(); 
             conn.close();          
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -238,64 +272,77 @@ public class SQLConnection {
     }   
     
     public boolean updateRecipe(String newName, int newPortion, String newType, int recipeId) {
-        String sql = "UPDATE recipes SET name = ? , "
-                + "portion = ? ,"
-                + "type = ? "                
-                + "WHERE id = ?";
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "UPDATE Recipes SET name = ? , "
+                    + "portion = ? ,"
+                    + "type = ? "                
+                    + "WHERE id = ?";
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, newName);
             pstmt.setInt(2, newPortion);
             pstmt.setString(3, newType);
             pstmt.setInt(4, recipeId);
             pstmt.executeUpdate();
             pstmt.close(); 
-            conn.close();            
+            conn.close();  
+            System.out.println("Reseptin päivitys onnistui!");
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Reseptin päivitys epäonnistui!");
             return false;
         }
     }    
     
     public boolean deleteRecipe(int id) {
-        String sql = "DELETE FROM recipes WHERE id = ?";
-
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "DELETE FROM Recipes WHERE id = ?";  
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
             pstmt.close(); 
-            conn.close();            
+            conn.close();    
+            System.out.println("Resepti poistettu!");
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Reseptin poistaminen epäonnistui -> " + e.getMessage());
             return false;
         }
     }
 
     public void createIngredientTable() {
-        Connection conn = null;
-        Statement stmt = null;
-        String sql = "CREATE TABLE IF NOT EXISTS ingredients (\n"
-                + "	name TEXT NOT NULL,\n"
-                + "	amount REAL NOT NULL,\n"
-                + "	unit TEXT NOT NULL, \n"
-                + "	recipe_id INTEGER NOT NULL"
-                + ");";
+        Connection conn = null; 
+        Statement stmt = null;          
         try {
+            String sql =  "CREATE TABLE IF NOT EXISTS Ingredients " + 
+                        "(name VARCHAR(255) not NULL, " +  
+                        " amount DOUBLE not NULL, " +  
+                        " unit VARCHAR(255) not NULL, " +  
+                        " recipe_id INTEGER not NULL)";              
+            System.out.println("Yhdistetään ainesosataulukkoa...");            
             conn = connect();
-            stmt = conn.createStatement();             
+            stmt = conn.createStatement();   
             stmt.execute(sql);
-            System.out.println("Ainesosataulukko yhdistetty");
+            System.out.println("Ainesosataulukko yhdistetty!\n");
             stmt.close(); 
-            conn.close();          
+            conn.close();            
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+            System.out.println("Ainesosataulukon yhdistäminen epäonnistui -> " + e.getMessage());
+        }        
     }    
     
     public boolean insertIngredient(String name, double amount, String unit, int recipeId) {
-        String sql = "INSERT INTO ingredients(name, amount, unit, recipe_id) VALUES(?,?,?,?)";
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "INSERT INTO Ingredients(name, amount, unit, recipe_id) VALUES(?,?,?,?)";  
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.setFloat(2, (float) amount);
             pstmt.setString(3, unit);
@@ -306,18 +353,28 @@ public class SQLConnection {
             conn.close();           
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Ainesosan luominen epäonnistui -> " + e.getMessage());
             return false;
         }
     } 
     
     public Ingredient selectOneIngredientByNameAndRecipe(String name, int recipeId){
-        String sql = "SELECT name, amount, unit, recipe_id FROM ingredients WHERE name ='" + name + "' AND recipe_id = '" + recipeId + "'";
         Ingredient ingredient = null;   
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            ingredient = new Ingredient(name, (double) rs.getFloat("amount"), rs.getString("unit"), null);
-            System.out.println("Löytynyt ainesosa: " + rs.getString("name"));
-            stmt.close(); 
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Ingredients WHERE name = ? AND recipe_id = ?"; 
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
+            pstmt.setInt(2, recipeId);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                ingredient = new Ingredient(name, (double) rs.getFloat("amount"), rs.getString("unit"), null);     
+                System.out.println("Löytynyt ainesosa: " + rs.getString("name"));                
+            }
+            rs.close();
+            pstmt.close(); 
             conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -326,14 +383,20 @@ public class SQLConnection {
     }     
     
     public List<Ingredient> selectAllIngredients(){
-        String sql = "SELECT name, amount, unit, recipe_id FROM ingredients";
-        List<Ingredient> ingredients = new ArrayList<>();        
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        Connection conn = null;     
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Ingredients";    
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 ingredients.add(new Ingredient(rs.getString("name"), (double) rs.getFloat("amount"), rs.getString("unit"), selectOneRecipeById(rs.getInt("recipe_id"))));
                 System.out.println(rs.getString("name"));             
             }
-            stmt.close(); 
+            rs.close();
+            pstmt.close(); 
             conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -342,15 +405,21 @@ public class SQLConnection {
     }  
     
     public List<Ingredient> selectAllIngredientsByRecipe(int recipeId){
-        String sql = "SELECT name, amount, unit, recipe_id FROM ingredients WHERE recipe_id = '" + recipeId + "'";
-        List<Ingredient> ingredients = new ArrayList<>();   
-        Recipe recipe = selectOneRecipeById(recipeId);
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        Connection conn = null;     
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "SELECT * FROM Ingredients WHERE recipe_id = ?";    
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, recipeId);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                ingredients.add(new Ingredient(rs.getString("name"), (double) rs.getFloat("amount"), rs.getString("unit"), recipe));
-                System.out.println(rs.getString("name"));
+                ingredients.add(new Ingredient(rs.getString("name"), (double) rs.getFloat("amount"), rs.getString("unit"), selectOneRecipeById(rs.getInt("recipe_id"))));
+                System.out.println(rs.getString("name"));             
             }
-            stmt.close(); 
+            rs.close();
+            pstmt.close(); 
             conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -359,30 +428,41 @@ public class SQLConnection {
     }    
     
     public boolean deleteIngredient(String name, int recipeId) {
-        String sql = "DELETE FROM ingredients WHERE name = ? AND recipe_id = ?";
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "DELETE FROM Ingredients WHERE name = ? AND recipe_id = ?";
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, name);
             pstmt.setInt(2, recipeId);
             pstmt.executeUpdate();
             pstmt.close(); 
-            conn.close();;            
+            conn.close();;   
+            System.out.println("Ainesosa poistettu");
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Ainesosan poistaminen epäonnistui -> " + e.getMessage());
             return false;
         }
     }  
     
     public boolean deleteAllIngredientsByRecipe(int recipeId) {
-        String sql = "DELETE FROM ingredients WHERE recipe_id = ?";
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            String sql = "DELETE FROM Ingredients WHERE recipe_id = ?";
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, recipeId);
             pstmt.executeUpdate();
             pstmt.close(); 
-            conn.close();           
+            conn.close();  
+            System.out.println("Resepti poistettu");
             return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Reseptin poistaminen epäonnistui -> " + e.getMessage());
             return false;
         }
     }     

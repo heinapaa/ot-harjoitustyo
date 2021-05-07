@@ -56,16 +56,6 @@ public class FileUserDao extends FileDao implements UserDao {
         }
         return null;
     }
-    
-    /**
-     * Metodi palauttaa kaikki käyttäjät.
-     * @return List-rakenne, joka sisältää kaikki rekisteröityneet käyttäjät. 
-     */
-
-    @Override
-    public List<User> findAll() {
-        return users;
-    }
        
     private boolean save() {
         super.lines = new ArrayList<>();
@@ -73,5 +63,10 @@ public class FileUserDao extends FileDao implements UserDao {
             lines.add(user.getUsername() + "\n");
         }
         return super.writeToFile();
+    }
+
+    @Override
+    public List<User> findAll() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

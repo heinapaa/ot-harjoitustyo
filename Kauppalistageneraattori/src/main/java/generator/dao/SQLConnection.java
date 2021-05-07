@@ -16,18 +16,29 @@ public class SQLConnection {
     
     private String url;
     
+    static final String JDBC_DRIVER = "org.h2.Driver";   
+    static final String DB_URL = "jdbc:h2:./database";    
+    static final String USER = "sa"; 
+    static final String PASS = "";     
+    
     public SQLConnection(String fileName) {
         this.url = "jdbc:sqlite:database.db";
-
-  
     } 
     
     private Connection connect() {
-
-        Connection conn = null;
+        Connection conn = null; 
+        System.out.println("1");
         try {
-            conn = DriverManager.getConnection(url);
+            // STEP 1: Register JDBC driver 
+            System.out.println("2");
+            Class.forName(JDBC_DRIVER); 
+            System.out.println("3");
+            //STEP 2: Open a connection 
+            System.out.println("Connecting to database..."); 
+            conn = DriverManager.getConnection(DB_URL,USER,PASS); 
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return conn;
@@ -35,12 +46,21 @@ public class SQLConnection {
     
     
     public void createUserTable() {
+        Connection conn = null; 
+        Statement stmt = null;         
         String sql = "CREATE TABLE IF NOT EXISTS users (\n"
                 + "	name text PRIMARY KEY"
                 + ");";
-        try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
+        
+        sql =  "CREATE TABLE   users " + 
+            "(name VARCHAR(255) not NULL, " + 
+            " PRIMARY KEY ( name ))";          
+        try {
+            conn = connect();
+            stmt = conn.createStatement();           
             stmt.execute(sql);
             System.out.println("Käyttäjätaulukko yhdistetty");
+            stmt.close(); 
             conn.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -48,12 +68,17 @@ public class SQLConnection {
     }
     
     public boolean insertUser(String name) {
+        Connection conn = null; 
+        PreparedStatement pstmt = null;            
         String sql = "INSERT INTO users(name) VALUES(?)";
-        try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = connect();
+            pstmt = conn.prepareStatement(sql);           
             pstmt.setString(1, name);
             pstmt.executeUpdate();
             System.out.println("Käyttäjä " + name + " luotu!");
-            conn.close();            
+            pstmt.close(); 
+            conn.close();           
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -64,10 +89,16 @@ public class SQLConnection {
     public User selectOneUser(String username){
         String sql = "SELECT name FROM users WHERE name='" + username + "'";
         User user = null;   
-        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = connect();
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);         
             user = new User(rs.getString("name"));
             System.out.println("Löytynyt käyttäjä: " + rs.getString("name"));
-            conn.close();            
+            stmt.close(); 
+            conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -82,6 +113,7 @@ public class SQLConnection {
                 users.add(new User(rs.getString("name")));
                 System.out.println(rs.getString("name"));
             }
+            stmt.close(); 
             conn.close();            
         } catch (SQLException e) {            
             System.out.println(e.getMessage());
@@ -90,6 +122,8 @@ public class SQLConnection {
     }   
     
     public void createRecipeTable() {
+        Connection conn = null; 
+        Statement stmt = null;          
         String sql = "CREATE TABLE IF NOT EXISTS recipes (\n"
                 + "	id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
                 + "	name TEXT NOT NULL,\n"
@@ -97,9 +131,12 @@ public class SQLConnection {
                 + "	type TEXT NOT NULL, \n"
                 + "	user TEXT NOT NULL"
                 + ");";
-        try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
+        try {
+            conn = connect();
+            stmt = conn.createStatement();        
             stmt.execute(sql);
             System.out.println("Reseptitaulukko yhdistetty");
+            stmt.close(); 
             conn.close();            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -115,6 +152,7 @@ public class SQLConnection {
             pstmt.setString(4, owner);
             pstmt.executeUpdate();
             System.out.println("Resepti " + name + " luotu!");
+            pstmt.close(); 
             conn.close();            
             return true;
         } catch (SQLException e) {
@@ -129,6 +167,7 @@ public class SQLConnection {
         try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             recipe = new Recipe(id, rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user")));
             System.out.println("Löytynyt resepti: " + rs.getString("name"));
+            stmt.close(); 
             conn.close();            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -142,6 +181,7 @@ public class SQLConnection {
         try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             recipe = new Recipe(rs.getInt("id"), name, rs.getInt("portion"), rs.getString("type"), new User(username));
             System.out.println("Löytynyt resepti: " + rs.getString("name"));
+            stmt.close(); 
             conn.close();            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -157,7 +197,8 @@ public class SQLConnection {
                 recipes.add(new Recipe(rs.getInt("id"), rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
                 System.out.println(rs.getString("name"));              
             }
-            conn.close();            
+            stmt.close(); 
+            conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -172,6 +213,7 @@ public class SQLConnection {
                 recipes.add(rs.getInt("id"), new Recipe(rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
                 System.out.println(rs.getString("name"));
             }
+            stmt.close(); 
             conn.close();            
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -187,7 +229,8 @@ public class SQLConnection {
                 recipes.add(new Recipe(rs.getInt("id"), rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
                 System.out.println(rs.getString("name"));
             }
-            conn.close();            
+            stmt.close(); 
+            conn.close();          
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -205,6 +248,7 @@ public class SQLConnection {
             pstmt.setString(3, newType);
             pstmt.setInt(4, recipeId);
             pstmt.executeUpdate();
+            pstmt.close(); 
             conn.close();            
             return true;
         } catch (SQLException e) {
@@ -219,6 +263,7 @@ public class SQLConnection {
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
+            pstmt.close(); 
             conn.close();            
             return true;
         } catch (SQLException e) {
@@ -228,16 +273,21 @@ public class SQLConnection {
     }
 
     public void createIngredientTable() {
+        Connection conn = null;
+        Statement stmt = null;
         String sql = "CREATE TABLE IF NOT EXISTS ingredients (\n"
                 + "	name TEXT NOT NULL,\n"
                 + "	amount REAL NOT NULL,\n"
                 + "	unit TEXT NOT NULL, \n"
                 + "	recipe_id INTEGER NOT NULL"
                 + ");";
-        try (Connection conn = connect(); Statement stmt = conn.createStatement()) {
+        try {
+            conn = connect();
+            stmt = conn.createStatement();             
             stmt.execute(sql);
             System.out.println("Ainesosataulukko yhdistetty");
-            conn.close();            
+            stmt.close(); 
+            conn.close();          
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -252,7 +302,8 @@ public class SQLConnection {
             pstmt.setInt(4, recipeId);
             pstmt.executeUpdate();
             System.out.println("Ainesosa " + name + " luotu!");
-            conn.close();            
+            pstmt.close(); 
+            conn.close();           
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -266,7 +317,8 @@ public class SQLConnection {
         try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             ingredient = new Ingredient(name, (double) rs.getFloat("amount"), rs.getString("unit"), null);
             System.out.println("Löytynyt ainesosa: " + rs.getString("name"));
-            conn.close();            
+            stmt.close(); 
+            conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -281,7 +333,8 @@ public class SQLConnection {
                 ingredients.add(new Ingredient(rs.getString("name"), (double) rs.getFloat("amount"), rs.getString("unit"), selectOneRecipeById(rs.getInt("recipe_id"))));
                 System.out.println(rs.getString("name"));             
             }
-            conn.close();            
+            stmt.close(); 
+            conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -297,7 +350,8 @@ public class SQLConnection {
                 ingredients.add(new Ingredient(rs.getString("name"), (double) rs.getFloat("amount"), rs.getString("unit"), recipe));
                 System.out.println(rs.getString("name"));
             }
-            conn.close();            
+            stmt.close(); 
+            conn.close();           
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -310,7 +364,8 @@ public class SQLConnection {
             pstmt.setString(1, name);
             pstmt.setInt(2, recipeId);
             pstmt.executeUpdate();
-            conn.close();            
+            pstmt.close(); 
+            conn.close();;            
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -323,7 +378,8 @@ public class SQLConnection {
         try (Connection conn = connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, recipeId);
             pstmt.executeUpdate();
-            conn.close();            
+            pstmt.close(); 
+            conn.close();           
             return true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());

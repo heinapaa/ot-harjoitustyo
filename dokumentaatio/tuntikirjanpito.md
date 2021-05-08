@@ -24,5 +24,9 @@ päivä | h | log
 2.5.  | 5.0 | käyttöliittymä, rakenteen siivoilua, konfiguraatiotiedosto
 3.5.  | 3.0 | testausta, pikkukorjauksia (syötteet, errorviestit jne.), javadoc
 4.5.  | 3.0 | javadoc, testailua + pikkukorjauksia
+5.5   | 3.0 | tietokantatallennus
+6.5.  | 5.0 | tietokantatallennus, dokumentaatiota
+7.5.  | 5.0 | javadoc, koodin siivoamista
+8.5.  | 6.0 | tietokantatallennuksen testailua, rakennekorjauksia
 
-Yhteensä 67h
+Yhteensä 86h

@@ -5,8 +5,10 @@ import generator.dao.file.*;
 import generator.dao.sql.*;
 import generator.services.*;
 import generator.models.Recipe;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -127,8 +129,35 @@ public class Router extends Application {
     
     public static void main(String[] args) {
         launch(Router.class);
-    }    
+    }   
     
+    private InputStream getFileFromResourceAsStream(String fileName) {
+
+        // The class loader that loaded the class
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+
+        // the stream holding the file content
+        if (inputStream == null) {
+            throw new IllegalArgumentException("file not found! " + fileName);
+        } else {
+            return inputStream;
+        }
+
+    }    
+
+    private Properties loadProperties() {
+        Properties properties = new Properties();     
+        try (InputStream stream = getFileFromResourceAsStream("config.properties")) {
+            properties.load(stream);
+            stream.close();
+            return properties;
+        } catch (IOException e) {
+            return properties;
+        }       
+    }
+    
+    /*
     private Properties loadProperties() {
         Properties properties = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();        
@@ -139,14 +168,21 @@ public class Router extends Application {
             return properties;
         }       
     }
+    */
     
     private List<String> loadRecipeTypes() {
         List<String> recipeTypes = new ArrayList<>();
-        try (Scanner tiedostonLukija = new Scanner(Paths.get("recipeTypes.txt"))) {
-            while (tiedostonLukija.hasNextLine()) {
-                String rivi = tiedostonLukija.nextLine();
-                recipeTypes.add(rivi);
-            }  
+        try {
+            InputStream stream = getFileFromResourceAsStream("recipeTypes.txt"); 
+            InputStreamReader isr = new InputStreamReader(stream);
+            BufferedReader br = new BufferedReader(isr);
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                recipeTypes.add(line);
+            }
+            br.close();
+            isr.close();
+            stream.close();
         } catch (Exception e) {
             System.out.println("Kustomoitujen reseptityyppien hakeminen epäonnistui. Ohjelma käyttää oletustyyppejä.\n");
         }

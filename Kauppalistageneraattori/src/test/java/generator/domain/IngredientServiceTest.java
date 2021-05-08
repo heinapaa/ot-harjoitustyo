@@ -1,5 +1,11 @@
 package generator.domain;
 
+import generator.services.IngredientService;
+import generator.services.InputValidator;
+import generator.models.User;
+import generator.models.Unit;
+import generator.models.Recipe;
+import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import generator.dao.UserDao;

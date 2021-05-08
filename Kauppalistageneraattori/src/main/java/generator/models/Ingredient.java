@@ -1,4 +1,6 @@
-package generator.domain;
+package generator.models;
+
+import java.util.Objects;
 
 /**
  * Yksittäistä ainesosaa vastaava luokka. 
@@ -81,6 +83,13 @@ public class Ingredient implements Comparable<Ingredient> {
         return name + ", " + amount + " " + unit;
     }
     
+    /**
+     * Metodi tarkistaa, onko reseptin nimi sama kuin annettu syöte.
+     * @param input merkkijono, johon reseptin nimeä halutaan verrata
+     * @see String#equals(java.lang.Object) 
+     * @return true jos syöte vastaa reseptin nimeä, muuten false
+     */
+    
     
     public boolean nameEquals(String input) {
         return name.equals(input.strip());
@@ -91,7 +100,6 @@ public class Ingredient implements Comparable<Ingredient> {
      * @param object    olio, johon ainesosaa halutaan verrata
      * @return true jos olio on sama kuin resepti, muuten false
      */
-
     
     @Override
     public boolean equals(Object object) {

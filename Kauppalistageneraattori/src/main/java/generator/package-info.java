@@ -1,0 +1,4 @@
+/**
+ * Kauppalistageneraattori-ohjelma
+ */
+package generator;

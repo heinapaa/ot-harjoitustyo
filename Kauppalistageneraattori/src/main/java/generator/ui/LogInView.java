@@ -1,6 +1,6 @@
 package generator.ui;
 
-import generator.domain.UserService;
+import generator.services.UserService;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

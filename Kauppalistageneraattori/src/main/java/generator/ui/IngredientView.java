@@ -1,7 +1,7 @@
 package generator.ui;
 
-import generator.domain.IngredientService;
-import generator.domain.Recipe;
+import generator.services.IngredientService;
+import generator.models.Recipe;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -85,13 +85,17 @@ public class IngredientView implements View {
             String ingredientName = ingredientNameTextField.getText();
             String ingredientAmount = ingredientAmountTextField.getText();
             if (!ingredientUnitComboBox.getSelectionModel().isEmpty() && !ingredientName.isBlank() && !ingredientAmount.isBlank()) {
-                String ingredientUnit = ingredientUnitComboBox.getSelectionModel().getSelectedItem().toString();         
-                if (ingredientService.addIngredient(recipe, ingredientName, ingredientUnit, ingredientAmount)) {
-                    clearInputFields(); 
-                    errorLabel.setText("");
-                    newIngredientsListItems.add(ingredientName + ", " + ingredientAmount + " " + ingredientUnit);
-                } else {
-                    errorLabel.setText("Virhe! Ainesosan tallennus epäonnistui!");
+                String ingredientUnit = ingredientUnitComboBox.getSelectionModel().getSelectedItem().toString();
+                try {
+                    if (ingredientService.addIngredient(recipe, ingredientName, ingredientUnit, ingredientAmount)) {
+                        clearInputFields(); 
+                        errorLabel.setText("");
+                        newIngredientsListItems.add(ingredientName + ", " + ingredientAmount + " " + ingredientUnit);
+                    } else {
+                        errorLabel.setText("Virhe! Ainesosan tallennus epäonnistui!");
+                    }                    
+                } catch (NumberFormatException e) {
+                    errorLabel.setText("Virhe! Ainesosan määrän tulee olla liukuluku.");
                 }                
             } else {
                 errorLabel.setText("Virhe! Varmista, että kaikki kentät on täytetty");

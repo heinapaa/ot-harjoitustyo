@@ -1,23 +1,18 @@
 package generator.ui;
 
-import generator.dao.IngredientDao;
-import generator.dao.RecipeDao;
-import generator.dao.SQLConnection;
-import generator.dao.SQLIngredientDao;
-import generator.dao.SQLRecipeDao;
-import generator.dao.SQLUserDao;
-import generator.dao.UserDao;
-import generator.domain.IngredientService;
-import generator.domain.InputValidator;
-import generator.domain.Recipe;
-import generator.domain.RecipeService;
-import generator.domain.ShoppingListService;
-import generator.domain.UserService;
+import generator.dao.*;
+import generator.dao.file.*;
+import generator.dao.sql.*;
+import generator.services.*;
+import generator.models.Recipe;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
@@ -27,7 +22,11 @@ public class Router extends Application {
 
     private Stage mainStage;
     public Stage shoppingListStage;
-    private Stage addIngredientStage;    
+    private Stage addIngredientStage;   
+    
+    private UserDao userDao;
+    private RecipeDao recipeDao;
+    private IngredientDao ingredientDao;
 
     private UserService userService;
     private RecipeService recipeService;
@@ -41,58 +40,30 @@ public class Router extends Application {
     
     @Override
     public void init() {
-        String userFile = "users.txt";
-        String recipeFile = "recipes.txt";
-        String ingredientFile = "ingredients.txt";
+        Properties properties = loadProperties();
+        List<String> recipeTypes = loadRecipeTypes();          
+        String userFile = properties.getProperty("userFile", "users.txt");
+        String recipeFile = properties.getProperty("recipeFile", "recipes.txt");
+        String ingredientFile = properties.getProperty("ingredientFile", "ingredients.txt");
+        String dbName = properties.getProperty("dbName", "database");
+        String dbUsername = properties.getProperty("dbUsername", "sa");
+        String dbPassword = properties.getProperty("dwPassword", "");
         
-        Properties properties = new Properties();
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();        
-        try (InputStream stream = loader.getResourceAsStream("config.properties")) {
-            if (stream != null) {
-                properties.load(stream);                 
-                userFile = properties.getProperty("userFile");
-                recipeFile = properties.getProperty("recipeFile");     
-                ingredientFile = properties.getProperty("ingredientFile");                
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
-            }            
-        } catch (Exception e) {
-            System.out.println("Kustomoitujen tiedostosijaintien asetus epäonnistui. Virhe: " + e.getMessage());
+        try {
+            this.userDao = new SQLUserDao(new SQLUserConnection(dbName, dbUsername, dbPassword));                   
+            this.recipeDao = new SQLRecipeDao(new SQLRecipeConnection(dbName, dbUsername, dbPassword));
+            this.ingredientDao = new SQLIngredientDao(new SQLIngredientConnection(dbName, dbUsername, dbPassword));            
+        } catch (ClassNotFoundException | SQLException e) {
+            try {
+                this.userDao = new FileUserDao(userFile);
+                this.recipeDao = new FileRecipeDao(recipeFile, userDao);
+                this.ingredientDao = new FileIngredientDao(ingredientFile, recipeDao);                
+            } catch (IOException ioe) {
+                System.out.println("Tietojen tallentaminen ei onnistu!");
+            }
         }
 
-        List<String> recipeTypes = new ArrayList<>();          
-        try (InputStream stream = loader.getResourceAsStream("recipeTypes.properties")) {
-            if (stream != null) {
-                properties.load(stream);                 
-                for (String type : properties.getProperty("types").split(",")) {
-                    recipeTypes.add(type);
-                }
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                }
-            }            
-        } catch (Exception e) {
-            System.out.println("Kustomoitujen reseptityyppien asettaminen epäonnistui. Virhe: " + e.getMessage());
-        }
-        
-        if (recipeTypes.isEmpty()) {
-            recipeTypes.add("kala");
-            recipeTypes.add("liha");
-            recipeTypes.add("kasvis");
-            recipeTypes.add("makea");            
-        }
-        
-        SQLConnection conn = new SQLConnection("test.db");         
-        UserDao userDao = new SQLUserDao(conn);
-        RecipeDao recipeDao = new SQLRecipeDao(conn);
-        IngredientDao ingredientDao = new SQLIngredientDao(conn);
         InputValidator validator = new InputValidator(recipeTypes);
-        
         this.userService = new UserService(userDao, validator);
         this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
         this.ingredientService = new IngredientService(ingredientDao, validator);
@@ -100,7 +71,7 @@ public class Router extends Application {
         this.logInView = new LogInView(this, userService);
         this.recipeListView = new RecipeListView(this, userService, recipeService, ingredientService, recipeTypes);
         this.ingredientView = new IngredientView(this, ingredientService);
-        this.shoppingListView = new ShoppingListView(this, shoppingListService);
+        this.shoppingListView = new ShoppingListView(this, shoppingListService, recipeTypes);
     }
     
     @Override
@@ -156,5 +127,41 @@ public class Router extends Application {
     
     public static void main(String[] args) {
         launch(Router.class);
-    }       
+    }    
+    
+    private Properties loadProperties() {
+        Properties properties = new Properties();
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();        
+        try (InputStream stream = loader.getResourceAsStream("config.properties")) {
+            properties.load(stream);
+            return properties;
+        } catch (IOException e) {
+            return properties;
+        }       
+    }
+    
+    private List<String> loadRecipeTypes() {
+        List<String> recipeTypes = new ArrayList<>();
+        try (Scanner tiedostonLukija = new Scanner(Paths.get("recipeTypes.txt"))) {
+            while (tiedostonLukija.hasNextLine()) {
+                String rivi = tiedostonLukija.nextLine();
+                recipeTypes.add(rivi);
+            }  
+        } catch (Exception e) {
+            System.out.println("Kustomoitujen reseptityyppien hakeminen epäonnistui. Ohjelma käyttää oletustyyppejä.\n");
+        }
+        if (recipeTypes.isEmpty()) {
+            recipeTypes = setDefaultRecipeTypes();
+        }
+        return recipeTypes;
+    }
+    
+    private List<String> setDefaultRecipeTypes() {
+        List<String> recipeTypes = new ArrayList<>();
+        recipeTypes.add("kala");
+        recipeTypes.add("liha");
+        recipeTypes.add("kasvis");
+        recipeTypes.add("makea");            
+        return recipeTypes;
+    }
 }

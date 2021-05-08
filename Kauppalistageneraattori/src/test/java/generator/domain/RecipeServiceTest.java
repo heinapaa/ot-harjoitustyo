@@ -1,5 +1,11 @@
 package generator.domain;
 
+import generator.services.UserService;
+import generator.services.RecipeService;
+import generator.services.InputValidator;
+import generator.models.User;
+import generator.models.Recipe;
+import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import generator.dao.UserDao;
@@ -91,7 +97,6 @@ public class RecipeServiceTest {
     public void recipeCantBeAddedWithBadInputs() {
         userService.login("testaaja1");
         recipeService.createRecipe(";;", "1", "kasvis", userService.getLoggedIn());
-        recipeService.createRecipe("nimi", "2,0", "kasvis", userService.getLoggedIn());
         recipeService.createRecipe("nimi", "1", "hyvä ruoka", userService.getLoggedIn());        
         assertFalse(recipeService.getRecipe(";;", userService.getLoggedIn()) != null);  
         assertFalse(recipeService.getRecipe("nimi", userService.getLoggedIn()) != null);         

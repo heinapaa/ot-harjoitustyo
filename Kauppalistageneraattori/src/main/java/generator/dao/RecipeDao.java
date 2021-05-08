@@ -1,7 +1,7 @@
 package generator.dao;
 
-import generator.domain.Recipe;
-import generator.domain.User;
+import generator.models.Recipe;
+import generator.models.User;
 import java.util.List;
 
 /**

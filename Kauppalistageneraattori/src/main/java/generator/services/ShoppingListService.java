@@ -1,11 +1,13 @@
-package generator.domain;
+package generator.services;
 
+import generator.models.Unit;
+import generator.models.Recipe;
+import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 

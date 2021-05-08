@@ -1,30 +1,19 @@
 package generator.ui;
 
-import generator.domain.Ingredient;
-import generator.domain.IngredientService;
-import generator.domain.Recipe;
-import generator.domain.RecipeService;
-import generator.domain.UserService;
+import generator.models.Ingredient;
+import generator.models.Recipe;
+import generator.services.IngredientService;
+import generator.services.RecipeService;
+import generator.services.UserService;
 import java.util.Collections;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -56,7 +45,7 @@ public class RecipeListView implements View {
     private final ObservableList<Ingredient> ingredientListItems;
     private final ListView<Recipe> recipeList;
     private final ListView<Ingredient> ingredientList;    
-    private List<String> acceptableTypes;
+    private final List<String> acceptableTypes;
     
     public RecipeListView(Router router, UserService userService, RecipeService recipeService, IngredientService ingredientService, List<String> acceptableTypes) {
         this.router = router;
@@ -212,14 +201,18 @@ public class RecipeListView implements View {
             String recipePortion = inputFieldRecipePortion.getText();
             if (!recipeTypeComboBox.getSelectionModel().isEmpty() && !recipeName.isBlank() && !recipePortion.isBlank()) {
                 String recipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();  
-                if (recipeService.createRecipe(recipeName, recipePortion, recipeType, userService.getLoggedIn())) {
-                    updateRecipeList();
-                    Recipe recipe = recipeService.getRecipe(recipeName.strip(), userService.getLoggedIn());
-                    recipeList.getSelectionModel().select(recipe);
-                    editRecipeMode(recipe);                
-                } else {
-                    errorLabel.setText("Virhe! Reseptin tallennus epäonnistui.");
-                }                
+                try {
+                    if (recipeService.createRecipe(recipeName, recipePortion, recipeType, userService.getLoggedIn())) {
+                        updateRecipeList();
+                        Recipe recipe = recipeService.getRecipe(recipeName.strip(), userService.getLoggedIn());
+                        recipeList.getSelectionModel().select(recipe);
+                        editRecipeMode(recipe);                
+                    } else {
+                        errorLabel.setText("Virhe! Reseptin tallennus epäonnistui.");
+                    }                     
+                } catch (NumberFormatException e) {
+                    errorLabel.setText("Virhe! Reseptin annoksen täytyy olla kokonaisluku.");
+                }              
             } else {
                 errorLabel.setText("Virhe! Varmista, että kaikki kentät on täytetty.");
             }
@@ -246,13 +239,17 @@ public class RecipeListView implements View {
             String newRecipePortion = inputFieldRecipePortion.getText();
             if (!recipeTypeComboBox.getSelectionModel().isEmpty() && !newRecipeName.isBlank() && !newRecipePortion.isBlank()) {
                 String newRecipeType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();
-                if (recipeService.updateRecipe(recipe, newRecipeName, newRecipePortion, newRecipeType, userService.getLoggedIn())) {  
-                    Recipe newRecipe = recipeService.getRecipe(newRecipeName.strip(), userService.getLoggedIn());
-                    updateRecipeList();
-                    recipeList.getSelectionModel().select(newRecipe);                         
-                    infoMode(newRecipe);               
-                } else {
-                    errorLabel.setText("Virhe! Muutosten tallennus epäonnistui.");
+                try {
+                    if (recipeService.updateRecipe(recipe, newRecipeName, newRecipePortion, newRecipeType, userService.getLoggedIn())) {  
+                        Recipe newRecipe = recipeService.getRecipe(newRecipeName.strip(), userService.getLoggedIn());
+                        updateRecipeList();
+                        recipeList.getSelectionModel().select(newRecipe);                         
+                        infoMode(newRecipe);               
+                    } else {
+                        errorLabel.setText("Virhe! Muutosten tallennus epäonnistui.");
+                    }                     
+                } catch (NumberFormatException e) {
+                    errorLabel.setText("Virhe! Reseptin annoksen täytyy olla kokonaisluku.");
                 }                
             } else {
                 errorLabel.setText("Virhe! Varmista, että kaikki kentät on täytetty.");

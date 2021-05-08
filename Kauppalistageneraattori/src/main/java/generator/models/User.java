@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.models;
 
 import java.util.Objects;
 

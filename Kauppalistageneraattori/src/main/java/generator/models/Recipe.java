@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.models;
 
 import java.util.Objects;
 
@@ -127,6 +127,7 @@ public class Recipe implements Comparable<Recipe> {
      * @return 0 jos nimet ovat samat, muuten positiivinen tai negatiivinen luku riippuen siitä miten nimet vertautuvat toisiinsa
      */
     
+    @Override
     public int compareTo(Recipe otherRecipe) {
         return this.name.compareTo(otherRecipe.getName());
     }

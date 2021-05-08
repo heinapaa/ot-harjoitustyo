@@ -1,7 +1,7 @@
 package generator.dao;
 
-import generator.domain.Ingredient;
-import generator.domain.Recipe;
+import generator.models.Ingredient;
+import generator.models.Recipe;
 import java.util.List;
 
 /**

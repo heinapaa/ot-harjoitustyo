@@ -1,6 +1,6 @@
 package generator.dao;
 
-import generator.domain.User;
+import generator.models.User;
 import java.util.List;
 
 /**

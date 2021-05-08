@@ -1,6 +1,8 @@
 package generator.domain;
 
 import generator.dao.UserDao;
+import generator.dao.UserDao;
+import generator.models.User;
 import java.util.ArrayList;
 import java.util.List;
 

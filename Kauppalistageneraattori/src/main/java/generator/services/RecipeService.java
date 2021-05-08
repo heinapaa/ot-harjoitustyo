@@ -1,8 +1,9 @@
-package generator.domain;
+package generator.services;
 
+import generator.models.Recipe;
+import generator.models.User;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,7 +44,7 @@ public class RecipeService {
      * @return          true jos uuden reseptin luonti onnistuu, muuten false.
      */
     
-    public boolean createRecipe(String name, String portion, String type, User user) {
+    public boolean createRecipe(String name, String portion, String type, User user) throws NumberFormatException {
         String nm = name.strip();
         String pn = StringUtils.deleteWhitespace(portion);
         String tp = type.strip();
@@ -71,9 +72,6 @@ public class RecipeService {
         if (getRecipe(recipe.getName(), user) == null) {
             return false;
         }
-        if (!ingredientDao.removeByRecipe(recipe)) {
-            return false;
-        }
         return recipeDao.remove(recipe);
     }    
     
@@ -91,7 +89,7 @@ public class RecipeService {
      * @return              true jos reseptin tietojen päivitys onnistuu, muuten false
      */
     
-    public boolean updateRecipe(Recipe recipe, String newName, String newPortion, String newType, User user) {
+    public boolean updateRecipe(Recipe recipe, String newName, String newPortion, String newType, User user) throws NumberFormatException {
         String newnm = newName.strip();
         String newpn = StringUtils.deleteWhitespace(newPortion); 
         String newtp = newType.strip();

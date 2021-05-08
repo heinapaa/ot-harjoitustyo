@@ -1,6 +1,9 @@
 package generator.domain;
 
 import generator.dao.RecipeDao;
+import generator.dao.RecipeDao;
+import generator.models.Recipe;
+import generator.models.User;
 import java.util.ArrayList;
 import java.util.List;
 

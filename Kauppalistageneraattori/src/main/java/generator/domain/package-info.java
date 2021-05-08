@@ -1,4 +1,0 @@
-/**
- * Sovelluslogiikka
- */
-package generator.domain;

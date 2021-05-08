@@ -1,5 +1,6 @@
 package generator.domain;
 
+import generator.services.InputValidator;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import generator.dao.UserDao;
@@ -69,21 +70,34 @@ public class InputValidatorTest {
     @Test
     public void validRecipePortionIsValid() {
         assertTrue(validator.isValidRecipePortion("3"));
-        assertTrue(validator.isValidRecipePortion("14"));        
+        assertTrue(validator.isValidRecipePortion("14"));         
     }
     
     @Test
     public void invalidRecipePortionIsInvalid() {
         assertFalse(validator.isValidRecipePortion(null));        
-        assertFalse(validator.isValidRecipePortion("annos"));
         assertFalse(validator.isValidRecipePortion(""));
         assertFalse(validator.isValidRecipePortion("  "));  
-        assertFalse(validator.isValidRecipePortion("2.0"));
         assertFalse(validator.isValidRecipePortion("  8   3 ")); 
         assertFalse(validator.isValidRecipePortion(" 3 ")); 
-        assertFalse(validator.isValidRecipePortion("2;;"));        
+        assertFalse(validator.isValidRecipePortion("2;;"));          
     } 
     
+    @Test (expected = IllegalArgumentException.class)
+    public void invalidRecipePortionThrowsRightException1() {
+        validator.isValidRecipePortion("annos");              
+    }    
+    
+    @Test (expected = IllegalArgumentException.class)
+    public void invalidRecipePortionThrowsRightException2() {
+        validator.isValidRecipePortion("2.0");              
+    }
+
+    @Test (expected = IllegalArgumentException.class)
+    public void invalidRecipePortionThrowsRightException3() {
+        validator.isValidRecipePortion("2,0");              
+    }    
+              
     @Test
     public void validRecipeTypeIsValid() {
         assertTrue(validator.isValidRecipeType("liha")); 
@@ -126,21 +140,29 @@ public class InputValidatorTest {
     public void validIngredientAmountIsValid() {
         assertTrue(validator.isValidIngredientAmount("3"));
         assertTrue(validator.isValidIngredientAmount("14")); 
-        assertTrue(validator.isValidIngredientAmount("14.7"));        
+        assertTrue(validator.isValidIngredientAmount("14.7"));      
     }
     
     @Test
     public void invalidIngredientAmountIsInvalid() {
         assertFalse(validator.isValidIngredientAmount(null));        
-        assertFalse(validator.isValidIngredientAmount("määrä"));
         assertFalse(validator.isValidIngredientAmount(""));
         assertFalse(validator.isValidIngredientAmount("  "));  
         assertFalse(validator.isValidIngredientAmount(" 3 "));
-         assertFalse(validator.isValidIngredientAmount("3;;"));       
+        assertFalse(validator.isValidIngredientAmount("3;;"));       
         assertFalse(validator.isValidIngredientAmount("  8   . 8"));         
-        assertFalse(validator.isValidIngredientAmount("  8   3 "));    
-        assertFalse(validator.isValidIngredientAmount("14,7"));         
-    }   
+        assertFalse(validator.isValidIngredientAmount("  8   3 "));         
+    } 
+    
+    @Test (expected = IllegalArgumentException.class)
+    public void invalidIngredientAmountThrowsRightException1() {
+        validator.isValidIngredientAmount("määrä");                   
+    } 
+    
+    @Test (expected = IllegalArgumentException.class)
+    public void invalidIngredientAmountThrowsRightException2() {
+        validator.isValidIngredientAmount("14,7");                
+    }    
     
     @Test
     public void validIngredientUnitIsValid() {

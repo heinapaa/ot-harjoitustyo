@@ -1,5 +1,6 @@
-package generator.domain;
+package generator.services;
 
+import generator.models.User;
 import generator.dao.UserDao;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,6 +1,9 @@
 package generator.domain;
 
 import generator.dao.IngredientDao;
+import generator.dao.IngredientDao;
+import generator.models.Ingredient;
+import generator.models.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 

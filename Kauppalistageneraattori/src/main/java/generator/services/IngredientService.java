@@ -1,5 +1,7 @@
-package generator.domain;
+package generator.services;
 
+import generator.models.Recipe;
+import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,7 @@ public class IngredientService {
      * @return                  true jos ainesosan luonti onnistuu, false jos ainesosan luonti epäonnistuu
      */
     
-    public boolean addIngredient(Recipe recipe, String ingredientName, String ingredientUnit, String ingredientAmount) {
+    public boolean addIngredient(Recipe recipe, String ingredientName, String ingredientUnit, String ingredientAmount) throws NumberFormatException {
         String nm = ingredientName.strip();
         String unit = StringUtils.deleteWhitespace(ingredientUnit);
         String amount = StringUtils.deleteWhitespace(ingredientAmount);     

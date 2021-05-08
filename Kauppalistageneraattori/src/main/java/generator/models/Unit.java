@@ -1,5 +1,4 @@
-
-package generator.domain;
+package generator.models;
 
 public enum Unit {
     KG("WEIGHT"),

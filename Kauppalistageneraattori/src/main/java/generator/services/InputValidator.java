@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.services;
 
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -54,15 +54,11 @@ public class InputValidator {
      * @return          true jos syöte täyttää vaatimukset, false muuten
      */    
     
-    public boolean isValidRecipePortion(String input) {   
+    public boolean isValidRecipePortion(String input) throws NumberFormatException {   
         if (!passesStringTest(input)) {
             return false;
         }
-        try {
-            Integer.parseInt(input);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
+        Integer.parseInt(input);
         return true;
     }
     
@@ -101,15 +97,11 @@ public class InputValidator {
      * @return          true jos syöte täyttää vaatimukset, false muuten
      */    
     
-    public boolean isValidIngredientAmount(String input) {  
+    public boolean isValidIngredientAmount(String input) throws NumberFormatException {  
         if (!passesStringTest(input)) {
             return false;
         }
-        try {
-            Double.parseDouble(input);
-        } catch (NumberFormatException nfe) {
-            return false;
-        }            
+        Double.parseDouble(input);          
         return true;    
     }
     

@@ -1,5 +1,8 @@
 package generator.domain;
 
+import generator.models.User;
+import generator.models.Recipe;
+import generator.models.Ingredient;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

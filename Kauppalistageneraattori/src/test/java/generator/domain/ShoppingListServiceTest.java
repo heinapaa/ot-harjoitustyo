@@ -1,5 +1,8 @@
 package generator.domain;
 
+import generator.services.ShoppingListService;
+import generator.models.Recipe;
+import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import java.util.ArrayList;

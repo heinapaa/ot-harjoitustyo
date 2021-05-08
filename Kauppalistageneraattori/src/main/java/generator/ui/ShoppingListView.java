@@ -1,9 +1,10 @@
 package generator.ui;
 
-import generator.domain.Recipe;
-import generator.domain.ShoppingListService;
+import generator.models.Recipe;
+import generator.services.ShoppingListService;
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -24,6 +25,7 @@ public class ShoppingListView implements View {
     
     private final Router router;
     private final ShoppingListService shoppingListService; 
+    private final List<String> recipeTypes;    
     
     private BorderPane pane;
     private FilteredList<Recipe> filteredRecipes;           
@@ -32,11 +34,12 @@ public class ShoppingListView implements View {
     private ListView<Recipe> remainingRecipesList;
     private ListView<Recipe> chosenRecipesList;      
     
-    public ShoppingListView(Router router, ShoppingListService shoppingListService) {
+    public ShoppingListView(Router router, ShoppingListService shoppingListService, List<String> recipeTypes) {
         this.router = router;
         this.shoppingListService = shoppingListService;       
         this.remainingRecipesItems = FXCollections.observableArrayList();        
-        this.chosenRecipesItems = FXCollections.observableArrayList();                   
+        this.chosenRecipesItems = FXCollections.observableArrayList();     
+        this.recipeTypes = recipeTypes;
     }
     
     @Override
@@ -57,13 +60,9 @@ public class ShoppingListView implements View {
     public void recipeChoosingMode() {      
         Label labelRecipeType = new Label("Suodata reseptin tyypin mukaan:");
         ComboBox recipeTypeComboBox = new ComboBox();
-        recipeTypeComboBox.getItems().addAll(
-            "Näytä kaikki",
-            "kala",
-            "kasvis",
-            "liha",
-            "makea"
-        ); 
+        for (String type : recipeTypes) {
+            recipeTypeComboBox.getItems().add(type);
+        }
 
         recipeTypeComboBox.setOnAction(event -> {
             String chosenType = recipeTypeComboBox.getSelectionModel().getSelectedItem().toString();

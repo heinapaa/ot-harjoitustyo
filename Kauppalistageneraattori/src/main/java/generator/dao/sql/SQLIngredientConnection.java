@@ -38,11 +38,7 @@ public class SQLIngredientConnection extends SQLConnection {
      */
 
     public void createIngredientTable() throws SQLException, ClassNotFoundException {        
-        String sql =  "CREATE TABLE IF NOT EXISTS Ingredients " + 
-                    "(name VARCHAR(255) not NULL, " +  
-                    " amount DOUBLE not NULL, " +  
-                    " unit VARCHAR(255) not NULL, " +  
-                    " recipe_id INTEGER not NULL)";         
+        String sql =  "CREATE TABLE IF NOT EXISTS Ingredients (name VARCHAR(255) NOT NULL, amount DOUBLE NOT NULL, unit VARCHAR(255) NOT NULL, recipe_id INT NOT NULL)";         
         
         System.out.println("Yhdistetään ainesosataulukkoa...");            
         Connection conn = super.connect();
@@ -120,8 +116,7 @@ public class SQLIngredientConnection extends SQLConnection {
     
     public List<Ingredient> selectAllIngredients() throws SQLException, ClassNotFoundException {
         List<Ingredient> ingredients = new ArrayList<>();
-        String sql = "SELECT * FROM Ingredients JOIN Recipes ON recipe_id = id";    
-        
+        String sql = "SELECT Ingredients.*, Recipes.* FROM Ingredients JOIN Recipes ON Ingredients.recipe_id = Recipes.id";    
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
@@ -147,7 +142,7 @@ public class SQLIngredientConnection extends SQLConnection {
     
     public List<Ingredient> selectAllIngredientsByRecipe(int recipeId) throws SQLException, ClassNotFoundException {
         List<Ingredient> ingredients = new ArrayList<>();
-        String sql = "SELECT * FROM Ingredients WHERE recipe_id = ? JOIN Recipes ON recipe_id = d";  
+        String sql = "SELECT Ingredients.*, Recipes.* FROM Ingredients JOIN Recipes ON Ingredients.recipe_id = Recipes.id WHERE Ingredients.recipe_id = ?";  
         
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql);

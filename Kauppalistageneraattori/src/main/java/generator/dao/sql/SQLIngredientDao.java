@@ -41,6 +41,7 @@ public class SQLIngredientDao implements IngredientDao {
         try {
             return connection.insertIngredient(ingredient.getName(), ingredient.getAmount(), ingredient.getUnit().toString(), ingredient.getRecipe().getId());
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -57,6 +58,7 @@ public class SQLIngredientDao implements IngredientDao {
         try {
             return connection.deleteIngredient(ingredient.getName(), ingredient.getRecipe().getId());
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -73,6 +75,7 @@ public class SQLIngredientDao implements IngredientDao {
         try {
             return connection.deleteAllIngredientsByRecipe(recipe.getId());
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -94,6 +97,7 @@ public class SQLIngredientDao implements IngredientDao {
             }
             return ingredient;            
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return null;
         }
 
@@ -111,6 +115,7 @@ public class SQLIngredientDao implements IngredientDao {
         try {
             return connection.selectAllIngredientsByRecipe(recipe.getId()); 
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -126,6 +131,7 @@ public class SQLIngredientDao implements IngredientDao {
         try {
             return connection.selectAllIngredients();    
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return new ArrayList<>();
         }  
     }

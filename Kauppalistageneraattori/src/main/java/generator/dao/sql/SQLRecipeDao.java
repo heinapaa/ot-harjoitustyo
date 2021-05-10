@@ -41,6 +41,7 @@ public class SQLRecipeDao implements RecipeDao {
         try {
             return connection.insertRecipe(recipe.getName(), recipe.getPortion(), recipe.getType(), recipe.getOwner().getUsername());
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return false;
         } 
         
@@ -58,6 +59,7 @@ public class SQLRecipeDao implements RecipeDao {
         try {
             return connection.selectOneRecipeById(id);            
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return null;
         }
     }
@@ -93,6 +95,7 @@ public class SQLRecipeDao implements RecipeDao {
         try {
             return connection.selectAllRecipesByTypeAndUser(type, user.getUsername());            
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return new ArrayList<>();
         }        
     }
@@ -125,6 +128,7 @@ public class SQLRecipeDao implements RecipeDao {
         try {
             return connection.selectAllRecipes();      
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return new ArrayList<>();
         }         
     }
@@ -143,6 +147,7 @@ public class SQLRecipeDao implements RecipeDao {
         try {
             return connection.updateRecipe(newName, newPortion, newType, recipe.getId());            
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return false;
         }         
     }
@@ -158,6 +163,7 @@ public class SQLRecipeDao implements RecipeDao {
         try {
             return connection.deleteRecipe(recipe.getId());            
         } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             return false;
         }         
     }

@@ -37,7 +37,7 @@ public class SQLRecipeConnection extends SQLConnection {
      */
     
     public void createRecipeTable() throws SQLException, ClassNotFoundException {
-        String sql =  "CREATE TABLE IF NOT EXISTS Recipes (id INT NOT NULL, name VARCHAR(255) NOT NULL, portion INTEGER NOT NULL, type VARCHAR(255) NOT NULL, user VARCHAR(255) NOT NULL)";                  
+        String sql =  "CREATE TABLE IF NOT EXISTS Recipes (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, portion INT NOT NULL, type VARCHAR(255) NOT NULL, user VARCHAR(255) NOT NULL)";                  
         
         System.out.println("Yhdistetään reseptitaulukkoa...");            
         Connection conn = super.connect();
@@ -87,7 +87,7 @@ public class SQLRecipeConnection extends SQLConnection {
     
     public Recipe selectOneRecipeById(int id) throws SQLException, ClassNotFoundException {
         Recipe recipe = null;   
-        String sql = "SELECT (id, name, portion, type, user) FROM Recipes WHERE id = ?";   
+        String sql = "SELECT * FROM Recipes WHERE id = ?";   
         
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -114,7 +114,7 @@ public class SQLRecipeConnection extends SQLConnection {
     
     public Recipe selectOneRecipeByNameAndUser(String name, String username) throws SQLException, ClassNotFoundException {
         Recipe recipe = null;   
-        String sql = "SELECT (id, name, portion, type, user) FROM Recipes WHERE name = ? AND user = ?";   
+        String sql = "SELECT * FROM Recipes WHERE name = ? AND user = ?";   
         
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql); 
@@ -141,7 +141,7 @@ public class SQLRecipeConnection extends SQLConnection {
     
     public List<Recipe> selectAllRecipesByUser(String username) throws SQLException, ClassNotFoundException {
         List<Recipe> recipes = new ArrayList<>();  
-        String sql = "SELECT (id, name , portion, type, user) FROM Recipes WHERE user = ?";
+        String sql = "SELECT * FROM Recipes WHERE user = ?";
         
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -170,7 +170,7 @@ public class SQLRecipeConnection extends SQLConnection {
     
     public List<Recipe> selectAllRecipesByTypeAndUser(String type, String user) throws SQLException, ClassNotFoundException {
         List<Recipe> recipes = new ArrayList<>();        
-        String sql = "SELECT (id, name, portion, type, user) FROM Recipes WHERE type = ? AND user = ?"; 
+        String sql = "SELECT * FROM Recipes WHERE type = ? AND user = ?"; 
         
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -196,7 +196,7 @@ public class SQLRecipeConnection extends SQLConnection {
     
     public List<Recipe> selectAllRecipes() throws SQLException, ClassNotFoundException {
         List<Recipe> recipes = new ArrayList<>();   
-        String sql = "SELECT (id, name, portion, type, user) FROM Recipes";
+        String sql = "SELECT * FROM Recipes";
         
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -224,7 +224,7 @@ public class SQLRecipeConnection extends SQLConnection {
      */
         
     public boolean updateRecipe(String newName, int newPortion, String newType, int recipeId) throws SQLException, ClassNotFoundException {
-        String sql = "UPDATE (id, name, portion, type, user) Recipes SET name = ?, portion = ?, type = ? WHERE id = ?";
+        String sql = "UPDATE Recipes SET name = ?, portion = ?, type = ? WHERE id = ?";
         
         Connection conn = super.connect();
         PreparedStatement pstmt = conn.prepareStatement(sql);

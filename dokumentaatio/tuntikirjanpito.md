@@ -28,5 +28,7 @@ päivä | h | log
 6.5.  | 5.0 | tietokantatallennus, dokumentaatiota
 7.5.  | 5.0 | javadoc, koodin siivoamista
 8.5.  | 6.0 | tietokantatallennuksen testailua, rakennekorjauksia, javadoc
+10.5. | 3.0 | tietokantatallennuksen testausta
+11.5. | 2.0 | tietokantatallennuksen testausta, toimivuuden testailua eri käyttöjärjestelmillä
 
-Yhteensä 86h
+Yhteensä 91h

@@ -23,7 +23,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
      * @param users UserDao-rajapinnan toteuttava olio
      * @throws java.io.IOException
      */
-    
+
     public FileRecipeDao(String fileName, UserDao users) throws IOException {
         super(fileName);
         this.recipes = new ArrayList<>();  

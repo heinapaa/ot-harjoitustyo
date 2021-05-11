@@ -2,8 +2,8 @@ package generator.services;
 
 import generator.models.Recipe;
 import generator.models.User;
-import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
+
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 public class RecipeService {
     
     private final RecipeDao recipeDao;
-    private final IngredientDao ingredientDao;
     private final InputValidator validator;  
     
     /**
@@ -25,9 +24,8 @@ public class RecipeService {
      * @param validator     InputValidator-olio, joka vastaa syötteiden validoinnista.
      */
     
-    public RecipeService(RecipeDao recipeDao, IngredientDao ingredientDao, InputValidator validator) {
+    public RecipeService(RecipeDao recipeDao, InputValidator validator) {
         this.recipeDao = recipeDao;
-        this.ingredientDao = ingredientDao;
         this.validator = validator;
     }    
     

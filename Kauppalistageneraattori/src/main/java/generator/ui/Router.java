@@ -9,12 +9,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Scanner;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
@@ -67,7 +65,7 @@ public class Router extends Application {
 
         InputValidator validator = new InputValidator(recipeTypes);
         this.userService = new UserService(userDao, validator);
-        this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
+        this.recipeService = new RecipeService(recipeDao, validator);
         this.ingredientService = new IngredientService(ingredientDao, validator);
         this.shoppingListService = new ShoppingListService(ingredientDao);  
         this.logInView = new LogInView(this, userService);

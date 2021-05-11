@@ -40,7 +40,7 @@ public class SQLRecipeDao implements RecipeDao {
     public boolean create(Recipe recipe) {
         try {
             return connection.insertRecipe(recipe.getName(), recipe.getPortion(), recipe.getType(), recipe.getOwner().getUsername());
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         } 
@@ -58,7 +58,7 @@ public class SQLRecipeDao implements RecipeDao {
     public Recipe findById(int id) {
         try {
             return connection.selectOneRecipeById(id);            
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -76,7 +76,7 @@ public class SQLRecipeDao implements RecipeDao {
     public Recipe findByNameAndUser(String name, User user) {
         try {
             return connection.selectOneRecipeByNameAndUser(name, user.getUsername());            
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;
         }
@@ -94,7 +94,7 @@ public class SQLRecipeDao implements RecipeDao {
     public List<Recipe> findByTypeAndUser(String type, User user) {
         try {
             return connection.selectAllRecipesByTypeAndUser(type, user.getUsername());            
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return new ArrayList<>();
         }        
@@ -111,7 +111,7 @@ public class SQLRecipeDao implements RecipeDao {
     public List<Recipe> findByUser(User user) {
         try {
             return connection.selectAllRecipesByUser(user.getUsername());            
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return new ArrayList<>();
         }         
@@ -127,7 +127,7 @@ public class SQLRecipeDao implements RecipeDao {
     public List<Recipe> findAll() {
         try {
             return connection.selectAllRecipes();      
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return new ArrayList<>();
         }         
@@ -146,7 +146,7 @@ public class SQLRecipeDao implements RecipeDao {
     public boolean update(String newName, int newPortion, String newType, Recipe recipe) {
         try {
             return connection.updateRecipe(newName, newPortion, newType, recipe.getId());            
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         }         
@@ -162,7 +162,7 @@ public class SQLRecipeDao implements RecipeDao {
     public boolean remove(Recipe recipe) {
         try {
             return connection.deleteRecipe(recipe.getId());            
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         }         

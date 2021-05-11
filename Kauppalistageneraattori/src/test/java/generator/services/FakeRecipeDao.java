@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.services;
 
 import generator.dao.RecipeDao;
 import generator.dao.RecipeDao;

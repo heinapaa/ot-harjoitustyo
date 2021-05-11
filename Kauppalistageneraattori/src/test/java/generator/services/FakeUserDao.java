@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.services;
 
 import generator.dao.UserDao;
 import generator.dao.UserDao;

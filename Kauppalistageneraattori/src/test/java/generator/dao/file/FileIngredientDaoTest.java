@@ -1,7 +1,9 @@
-package generator.dao;
+package generator.dao.file;
 
+import generator.dao.IngredientDao;
+import generator.dao.RecipeDao;
 import generator.dao.file.FileIngredientDao;
-import generator.domain.FakeRecipeDao;
+import generator.services.FakeRecipeDao;
 import generator.models.Ingredient;
 import generator.models.Recipe;
 import generator.models.User;

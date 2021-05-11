@@ -1,7 +1,9 @@
-package generator.dao;
+package generator.dao.file;
 
+import generator.dao.RecipeDao;
+import generator.dao.UserDao;
 import generator.dao.file.FileRecipeDao;
-import generator.domain.FakeUserDao;
+import generator.services.FakeUserDao;
 import generator.models.Recipe;
 import generator.models.User;
 import java.io.File;

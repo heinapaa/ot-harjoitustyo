@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.services;
 
 import generator.services.IngredientService;
 import generator.services.InputValidator;

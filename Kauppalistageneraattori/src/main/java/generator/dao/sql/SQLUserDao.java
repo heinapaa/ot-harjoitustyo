@@ -39,7 +39,7 @@ public class SQLUserDao implements UserDao {
     public boolean create(User user) {
         try {
             return connection.insertUser(user.getUsername());    
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             return false;
         }  
     }
@@ -55,7 +55,7 @@ public class SQLUserDao implements UserDao {
     public User findByUsername(String name) {
         try {
             return connection.selectOneUser(name);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             return null;
         }
     }
@@ -70,7 +70,7 @@ public class SQLUserDao implements UserDao {
     public List<User> findAll() {
         try {
             return connection.selectAllUsers();
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             return new ArrayList<>();
         }
 

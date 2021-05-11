@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.services;
 
 import generator.services.InputValidator;
 import generator.dao.IngredientDao;

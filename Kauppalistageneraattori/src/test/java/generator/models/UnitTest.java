@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.models;
 
 import generator.models.Unit;
 import generator.models.Ingredient;

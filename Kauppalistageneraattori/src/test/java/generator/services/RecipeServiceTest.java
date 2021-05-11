@@ -1,4 +1,4 @@
-package generator.domain;
+package generator.services;
 
 import generator.services.UserService;
 import generator.services.RecipeService;
@@ -55,7 +55,7 @@ public class RecipeServiceTest {
 
         InputValidator validator = new InputValidator(recipeTypes);       
         this.userService = new UserService(userDao, validator);
-        this.recipeService = new RecipeService(recipeDao, ingredientDao, validator);
+        this.recipeService = new RecipeService(recipeDao, validator);
         
         userService.logout();
     }

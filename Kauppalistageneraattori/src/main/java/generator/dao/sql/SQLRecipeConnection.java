@@ -161,7 +161,7 @@ public class SQLRecipeConnection extends SQLConnection {
         pstmt.setString(2, user);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            recipes.add(rs.getInt("id"), new Recipe(rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
+            recipes.add(new Recipe(rs.getInt("id"), rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
         }
         endPreparedConnection(pstmt, rs);
         return recipes;

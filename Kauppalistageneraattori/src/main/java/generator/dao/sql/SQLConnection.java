@@ -10,9 +10,9 @@ import java.sql.*;
 public class SQLConnection {
 
     private final String driver = "org.h2.Driver";
-    private String url;
-    private String username = "sa"; 
-    private String password = "";   
+    private final String url;
+    private final String username; 
+    private final String password;   
     
     private Connection conn;
     

@@ -1,7 +1,5 @@
 package generator.dao.sql;
 
-import generator.dao.sql.SQLUserConnection;
-
 import java.sql.SQLException;
 
 public class FakeSQLUserConnection extends SQLUserConnection{

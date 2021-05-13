@@ -36,8 +36,10 @@ public class FileUserDaoTest {
     public void usersAreReadCorrectly() {
         List<User> users = userDao.findAll();
         assertEquals(4, users.size());
-        User user= users.get(0);
-        assertEquals("eka", user.getUsername());
+        assertEquals("eka", users.get(0).getUsername());
+        assertEquals("testaaja", users.get(1).getUsername());
+        assertEquals("testaaja2", users.get(2).getUsername());
+        assertEquals("Teuvo Testaaja", users.get(3).getUsername());        
     }    
     
     @Test

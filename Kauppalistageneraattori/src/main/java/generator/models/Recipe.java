@@ -100,7 +100,8 @@ public class Recipe implements Comparable<Recipe> {
             return false;
         } else {
             Recipe resepti = (Recipe) object;
-            if (!resepti.getName().equals(this.name)
+            if (resepti.getId() != this.id
+                    || !resepti.getName().equals(this.name)
                     || resepti.getPortion() != this.portion
                     || !resepti.getType().equals(this.type)
                     || !resepti.getOwner().equals(this.owner)) {

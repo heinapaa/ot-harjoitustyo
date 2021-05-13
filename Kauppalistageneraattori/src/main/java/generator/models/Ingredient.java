@@ -122,6 +122,21 @@ public class Ingredient implements Comparable<Ingredient> {
     }   
     
     /**
+     * Metodi luo ainesosalle {@code hashCode}-avaimen
+     * @return ainesosan ominaisuuksien perusteella luotu {@code hashCode}-avain 
+     */
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + (int) (Double.doubleToLongBits(this.amount) ^ (Double.doubleToLongBits(this.amount) >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.recipe);
+        hash = 97 * hash + Objects.hashCode(this.unit);
+        return hash;
+    }
+    
+    /**
      * Metodi vertaa kahta ainesosaa toisiinsa, perustaen vertauksen niiden nimiin.
      * @param otherIngredient   toinen ainesosa, johon ainesosaa halutaan verrata
      * @see String#compareTo(java.lang.String) 

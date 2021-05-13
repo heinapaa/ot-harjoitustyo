@@ -20,7 +20,7 @@ public class SQLIngredientConnection extends SQLConnection {
     
     private final String CREATE_INGREDIENT_TABLE =  "CREATE TABLE IF NOT EXISTS Ingredients (name VARCHAR(255) NOT NULL, amount DOUBLE NOT NULL, unit VARCHAR(255) NOT NULL, recipe_id INT NOT NULL)";         
     private final String INSERT_INGREDIENT = "INSERT INTO Ingredients(name, amount, unit, recipe_id) VALUES(?,?,?,?)"; 
-    private final String SELECT_INGREDIENT_BY_NAME_AND_RECIPE = "SELECT * FROM Ingredients WHERE name = ? AND recipe_id = ?";  
+    private final String SELECT_INGREDIENT_BY_NAME_AND_RECIPE = "SELECT Ingredients.*, Recipes.* FROM Ingredients JOIN Recipes on Ingredients.recipe_id = Recipes.id WHERE Ingredients.name = ? AND Ingredients.recipe_id = ?";  
     private final String SELECT_INGREDIENTS_BY_RECIPE = "SELECT Ingredients.*, Recipes.* FROM Ingredients JOIN Recipes ON Ingredients.recipe_id = Recipes.id WHERE Ingredients.recipe_id = ?";     
     private final String SELECT_ALL_INGREDIENTS = "SELECT Ingredients.*, Recipes.* FROM Ingredients JOIN Recipes ON Ingredients.recipe_id = Recipes.id";    
     private final String DELETE_INGREDIENT_BY_NAME_AND_RECIPE = "DELETE FROM Ingredients WHERE name = ? AND recipe_id = ?";
@@ -93,7 +93,8 @@ public class SQLIngredientConnection extends SQLConnection {
         pstmt.setInt(2, recipeId);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            ingredient = new Ingredient(name, (double) rs.getFloat("amount"), rs.getString("unit"), null);                    
+            Recipe recipe = new Recipe(rs.getInt("Recipes.id"), rs.getString("Recipes.name"), rs.getInt("Recipes.portion"), rs.getString("Recipes.type"), new User(rs.getString("Recipes.user")));
+            ingredient = new Ingredient(rs.getString("Ingredients.name"), rs.getDouble("Ingredients.amount"), rs.getString("Ingredients.unit"), recipe);                            
         }
         endPreparedConnection(pstmt, rs);
         return ingredient;
@@ -112,8 +113,8 @@ public class SQLIngredientConnection extends SQLConnection {
         PreparedStatement pstmt = connect().prepareStatement(SELECT_ALL_INGREDIENTS);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            Recipe recipe = new Recipe(rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("owner")));
-            ingredients.add(new Ingredient(rs.getString("name"), rs.getDouble("amount"), rs.getString("unit"), recipe));           
+            Recipe recipe = new Recipe(rs.getInt("Recipes.id"), rs.getString("Recipes.name"), rs.getInt("Recipes.portion"), rs.getString("Recipes.type"), new User(rs.getString("Recipes.user")));
+            ingredients.add(new Ingredient(rs.getString("Ingredients.name"), rs.getDouble("Ingredients.amount"), rs.getString("Ingredients.unit"), recipe));           
         }
         endPreparedConnection(pstmt, rs);
         return ingredients;

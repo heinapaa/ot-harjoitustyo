@@ -180,8 +180,7 @@ public class SQLRecipeConnection extends SQLConnection {
         PreparedStatement pstmt = connect().prepareStatement(SELECT_ALL_RECIPES);
         ResultSet rs = pstmt.executeQuery();
         while (rs.next()) {
-            recipes.add(new Recipe(rs.getInt("id"), rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));
-            System.out.println(rs.getString("name"));              
+            recipes.add(new Recipe(rs.getInt("id"), rs.getString("name"), rs.getInt("portion"), rs.getString("type"), new User(rs.getString("user"))));            
         }
         endPreparedConnection(pstmt, rs);   
         return recipes;

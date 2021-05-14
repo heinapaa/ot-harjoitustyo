@@ -1,5 +1,6 @@
-package generator.dao.sql;
+package generator.dao;
 
+import generator.dao.sql.SQLUserDao;
 import generator.models.User;
 import java.sql.SQLException;
 import java.util.List;
@@ -14,7 +15,7 @@ public class SQLUserDaoTest {
     private FakeSQLUserConnection conn;
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws SQLException, ClassNotFoundException {
         this.conn = new FakeSQLUserConnection();
         this.userDao = new SQLUserDao(conn);
         conn.insertUser("eka");
@@ -42,6 +43,14 @@ public class SQLUserDaoTest {
         assertEquals(5, users.size());
         assertTrue(users.contains(u1));     
     }  
+    
+    @Test
+    public void canFindUserByUsername() {
+        User u1 = new User("tester");
+        userDao.create(u1);
+        assertEquals(u1, userDao.findByUsername("tester"));
+        assertNull(userDao.findByUsername("fake user"));
+    }
     
     @After
     public void tearDown() throws SQLException {

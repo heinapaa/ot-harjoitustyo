@@ -8,45 +8,65 @@ import static org.junit.Assert.*;
 
 public class RecipeTest {
     
-    User kayttaja;
-    Recipe resepti;
+    User u1;
+    Recipe r1;
     
     @Before
     public void setUp() {
-        this.kayttaja = new User("testaaja");
-        this.resepti = new Recipe("TestiResepti", 2, null, kayttaja);
+        this.u1 = new User("tester");
+        this.r1 = new Recipe(1, "recipe1", 2, "kasvis", u1);
     }
     
     @Test
-    public void konstruktoriAsettaaNimenOikein() {
-        assertEquals(resepti.getName(), "TestiResepti");
+    public void constructorSetsNameCorrectly() {
+        assertEquals(r1.getName(), "recipe1");
     }
     
     @Test
-    public void konstruktoriAsettaaAnnoskoonOikein() {
-        assertEquals(resepti.getPortion(), 2);
+    public void constructorSetsPortionCorrectly() {
+        assertEquals(r1.getPortion(), 2);
     }
     
     @Test
-    public void eiEqualKunEriNimi() {
-        Recipe toinenResepti = new Recipe("ToinenResepti", 2, "kasvis", kayttaja);
-        assertFalse(resepti.equals(toinenResepti));
+    public void notEqualWhenDifferentName() {
+        Recipe r2 = new Recipe(1, "recipe2", 2, "kasvis", u1);
+        assertFalse(r1.equals(r2));
     }
     
     @Test
-    public void eiEqualKunEriOmistaja() {
+    public void notEqualWhenDifferentUser() {
         User toinenKayttaja = new User("toinen");
-        Recipe toinenResepti = new Recipe("TestiResepti", 2, "kasvis", toinenKayttaja);
-        assertFalse(resepti.equals(toinenResepti));    
+        Recipe r2 = new Recipe(1, "recipe1", 2, "kasvis", toinenKayttaja);
+        assertFalse(r1.equals(r2));    
     }
     
-    /*
     @Test
-    public void eiEqualKunEriId() {
-        resepti.setId(1);
-        Recipe toinenResepti = new Recipe(2, "TestiResepti", 2, "kasvis", kayttaja);
-        assertFalse(resepti.equals(toinenResepti));
+    public void notEqualWhenDifferentType() {
+        Recipe r2 = new Recipe(1, "recipe1", 2, "makea", u1);
+        assertFalse(r1.equals(r2));           
     }
-    */
+    
+    @Test
+    public void notEqualWhenDifferentId() {
+        r1.setId(1);
+        Recipe r2 = new Recipe(2, "recipe1", 2, "kasvis", u1);
+        assertFalse(r1.equals(r2));
+    }  
+    
+    @Test
+    public void equalWhenEqual() {
+        Recipe r2 = new Recipe(1, "recipe1", 2, "kasvis", u1);
+        assertEquals(r1, r2);
+    }
+    
+    @Test
+    public void recipesAreComparedCorrectly() {
+        Recipe r2 = new Recipe(2, "a", 1, "makea", u1);
+        Recipe r3 = new Recipe(3, "y", 10, "kasvis", u1);
+        Recipe r4 = new Recipe(4, "recipe1", 2, "kasvis", u1);
+        assertTrue(r2.compareTo(r1)<0);
+        assertTrue(r3.compareTo(r1)>0);
+        assertTrue(r4.compareTo(r1)==0);
+    }
     
 }

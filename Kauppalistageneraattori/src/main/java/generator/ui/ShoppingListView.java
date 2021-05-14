@@ -3,7 +3,6 @@ package generator.ui;
 import generator.models.Recipe;
 import generator.services.ShoppingListService;
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -156,11 +155,11 @@ public class ShoppingListView implements View {
         Button saveShoppingList = new Button("Talenna ostoslista");
         saveShoppingList.setOnMouseClicked(event -> {
             FileChooser fileChooser = new FileChooser();
-            //FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files", "*.txt");
-            //fileChooser.getExtensionFilters().add(extFilter);
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files", "*.txt");
+            fileChooser.getExtensionFilters().add(extFilter);
             File file = fileChooser.showSaveDialog(router.shoppingListStage);
             if (file != null) {
-                saveShoppingListToFile(shoppingListBox.getText(), file);
+                shoppingListService.saveToFile(shoppingListBox.getText(), file);
             }            
         });   
         
@@ -174,17 +173,5 @@ public class ShoppingListView implements View {
         pane.setTop(new Label("Ostoslista:"));
         pane.setCenter(shoppingListBox);
         pane.setBottom(buttons);   
-    }   
-    
-    private boolean saveShoppingListToFile(String shoppingList, File file) {
-        try {
-            PrintWriter writer;
-            writer = new PrintWriter(file);
-            writer.println(shoppingList);
-            writer.close();
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }    
+    }      
 }

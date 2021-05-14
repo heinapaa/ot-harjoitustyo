@@ -32,10 +32,8 @@ public class SQLUserConnection extends SQLConnection {
      */
     
     public void createUserTable() throws SQLException {
-        System.out.println("Yhdistetään käyttäjätaulukkoa...");
         Statement stmt = super.connect().createStatement();           
         stmt.executeUpdate(CREATE_USER_TABLE);
-        System.out.println("Käyttäjätaulukko yhdistetty!\n");
         super.endConnection(stmt);
     }
     

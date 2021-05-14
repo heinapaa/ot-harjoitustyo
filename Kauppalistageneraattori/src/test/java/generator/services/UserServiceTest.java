@@ -1,5 +1,6 @@
 package generator.services;
 
+import generator.dao.FakeUserDao;
 import generator.services.UserService;
 import generator.services.InputValidator;
 import generator.models.User;

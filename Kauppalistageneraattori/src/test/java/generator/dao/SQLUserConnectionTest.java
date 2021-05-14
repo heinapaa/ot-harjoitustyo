@@ -1,5 +1,6 @@
-package generator.dao.sql;
+package generator.dao;
 
+import generator.dao.FakeSQLUserConnection;
 import java.sql.SQLException;
 import org.junit.After;
 import org.junit.Before;

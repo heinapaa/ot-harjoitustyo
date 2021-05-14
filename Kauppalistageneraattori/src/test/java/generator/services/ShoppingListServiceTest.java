@@ -1,18 +1,28 @@
 package generator.services;
 
-import generator.services.ShoppingListService;
+import generator.dao.FakeIngredientDao;
+import generator.dao.FakeRecipeDao;
 import generator.models.Recipe;
 import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 public class ShoppingListServiceTest {
+    
+    @Rule
+    public TemporaryFolder testFolder = new TemporaryFolder();      
 
     private ShoppingListService sls; 
     private IngredientDao ingredientDao;
@@ -91,7 +101,7 @@ public class ShoppingListServiceTest {
         assertEquals(100, summedList.get("w_PCS"), 0);        
     }
     
-    /*
+    
     @Test
     public void ingredientsCollectedCorrectly() {
         RecipeDao recipeDao = new FakeRecipeDao();
@@ -114,7 +124,7 @@ public class ShoppingListServiceTest {
         List<Ingredient> testList = sls.getIngredientsForAllRecipes(recipeList);
         assertEquals(3, testList.size());
     }
-    */
+    
     
     @Test
     public void listPrintedCorrectly1() {
@@ -173,7 +183,7 @@ public class ShoppingListServiceTest {
         assertEquals(s, sls.printShoppingList(summedList));
     }    
     
-    /*
+
     @Test
     public void listCreatedCorrectly1() {
         RecipeDao recipeDao = new FakeRecipeDao();
@@ -199,7 +209,7 @@ public class ShoppingListServiceTest {
                 "w, 100.0 kg\n";
         assertEquals(s, shoppingList);
     }  
-    */
+
     
     @Test
     public void listCreatedCorrectly2() {
@@ -212,5 +222,57 @@ public class ShoppingListServiceTest {
         List<Recipe> recipeList = new ArrayList<>();        
         String shoppingList = sls.createShoppingList(recipeList);   
         assertEquals("", shoppingList);
-    }     
+    } 
+
+    @Test
+    public void listSavedToFile() throws IOException {
+        String fileName = "shoppingList.txt";
+        File file = testFolder.newFile(fileName);          
+        String list = "test list";
+        sls.saveToFile(list, file);
+        assertTrue(file.exists());
+        String savedText = "";
+        Scanner fileReader = new Scanner(Paths.get(file.getAbsolutePath()));
+        while (fileReader.hasNextLine()) {
+            savedText = savedText + fileReader.nextLine() + "\n";
+        } 
+        assertEquals(list.strip(), savedText.strip());
+        file.delete();        
+    }
+    
+    @Test
+    public void listSavedToFileCorrectly() throws IOException {
+        String fileName = "shoppingList.txt";
+        File file = testFolder.newFile(fileName);          
+        String list = "a, 100.0 kpl\n" +
+                "v, 100.0 l\n" +
+                "w, 100.0 kg\n";
+        sls.saveToFile(list, file);
+        assertTrue(file.exists());
+        String savedText = "";
+        Scanner fileReader = new Scanner(Paths.get(file.getAbsolutePath()));
+        while (fileReader.hasNextLine()) {
+            savedText = savedText + fileReader.nextLine() + "\n";
+        } 
+        assertEquals(list.strip(), savedText.strip());
+        file.delete();        
+    }    
+    
+    @Test
+    public void emptyListSavedToFileCorrectly() throws IOException {
+        String fileName = "shoppingList.txt";
+        File file = testFolder.newFile(fileName);          
+        String list = "";
+        sls.saveToFile(list, file);
+        assertTrue(file.exists());
+        String savedText = "";
+        Scanner fileReader = new Scanner(Paths.get(file.getAbsolutePath()));
+        while (fileReader.hasNextLine()) {
+            savedText = savedText + fileReader.nextLine() + "\n";
+        } 
+        assertEquals(list.strip(), savedText.strip());
+        file.delete();
+    }  
+    
+    
 }

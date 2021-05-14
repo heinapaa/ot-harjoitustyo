@@ -1,15 +1,16 @@
-package generator.dao.sql;
+package generator.dao;
 
+import generator.dao.sql.SQLIngredientConnection;
 import java.sql.SQLException;
 
-public class FakeSQLRecipeConnection extends SQLRecipeConnection {
+public class FakeSQLIngredientConnection extends SQLIngredientConnection {        
     
-    public FakeSQLRecipeConnection() throws ClassNotFoundException {
+    public FakeSQLIngredientConnection() throws ClassNotFoundException {
         super("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");  
     }
 
     public void closeConnection() throws SQLException {
         connect().createStatement().execute("DROP ALL OBJECTS");
-    }    
+    }
     
 }

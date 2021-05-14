@@ -1,5 +1,8 @@
 package generator.services;
 
+import generator.dao.FakeRecipeDao;
+import generator.dao.FakeUserDao;
+import generator.dao.FakeIngredientDao;
 import generator.services.UserService;
 import generator.services.RecipeService;
 import generator.services.InputValidator;

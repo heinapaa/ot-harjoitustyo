@@ -1,4 +1,4 @@
-package generator.services;
+package generator.dao;
 
 import generator.dao.RecipeDao;
 import generator.dao.RecipeDao;

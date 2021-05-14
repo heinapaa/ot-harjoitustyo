@@ -1,6 +1,7 @@
-package generator.dao.file;
+package generator.dao;
 
 import generator.dao.UserDao;
+import generator.dao.file.FileUserDao;
 import generator.dao.file.FileUserDao;
 import generator.models.User;
 import java.io.File;
@@ -49,7 +50,16 @@ public class FileUserDaoTest {
         assertEquals(5, users.size());
         User user= users.get(4);
         assertEquals("uusi", user.getUsername());
-    }     
+    }  
+    
+    
+    @Test
+    public void canFindUserByUsername() {
+        User u1 = new User("tester");
+        userDao.create(u1);
+        assertEquals(u1, userDao.findByUsername("tester"));
+        assertNull(userDao.findByUsername("fake user"));
+    }    
     
     @After
     public void tearDown() {

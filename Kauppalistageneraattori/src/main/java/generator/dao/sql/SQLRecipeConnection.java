@@ -48,11 +48,9 @@ public class SQLRecipeConnection extends SQLConnection {
      * @see generator.dao.sql.connection.SQLConnection#endConnection(java.sql.Connection, java.sql.Statement)
      */
     
-    public void createRecipeTable() throws SQLException {
-        System.out.println("Yhdistetään reseptitaulukkoa...");            
+    public void createRecipeTable() throws SQLException {          
         Statement stmt = connect().createStatement();   
         stmt.executeUpdate(CREATE_RECIPE_TABLE);
-        System.out.println("Reseptitaulukko yhdistetty!\n");
         endConnection(stmt);
     }   
     
@@ -220,12 +218,12 @@ public class SQLRecipeConnection extends SQLConnection {
     public boolean deleteRecipe(int id) throws SQLException {
         PreparedStatement pstmt = connect().prepareStatement(DELETE_ALL_INGREDIENTS_BY_RECIPE);
         pstmt.setInt(1, id);
-        completePreparedConnection(pstmt);
+        completePreparedConnection(pstmt);    
         
         pstmt = super.connect().prepareStatement(DELETE_RECIPE_BY_ID);
         pstmt.setInt(1, id);
-        completePreparedConnection(pstmt);
-        
+        completePreparedConnection(pstmt);            
+
         return true;            
     }       
 }

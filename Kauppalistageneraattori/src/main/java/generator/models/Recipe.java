@@ -111,16 +111,6 @@ public class Recipe implements Comparable<Recipe> {
         return true;
     }  
 
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.name);
-        hash = 37 * hash + this.portion;
-        hash = 37 * hash + Objects.hashCode(this.type);
-        hash = 37 * hash + Objects.hashCode(this.owner);
-        return hash;
-    }
-    
     /**
      * Metodi vertaa kahta reseptiä toisiinsa, perustuen niiden nimiin.
      * @param otherRecipe   toinen resepti, johon reseptiä halutaan verrata

@@ -1,5 +1,6 @@
-package generator.dao.sql;
+package generator.dao;
 
+import generator.dao.FakeSQLRecipeConnection;
 import generator.models.Recipe;
 import generator.models.User;
 import java.sql.SQLException;

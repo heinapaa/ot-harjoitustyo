@@ -1,5 +1,7 @@
-package generator.dao.sql;
+package generator.dao;
 
+import generator.dao.FakeSQLRecipeConnection;
+import generator.dao.FakeSQLIngredientConnection;
 import generator.models.Ingredient;
 import generator.models.Recipe;
 import generator.models.User;

@@ -5,6 +5,7 @@ import generator.models.Recipe;
 import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -133,6 +134,13 @@ public class ShoppingListService {
     }
     
     public boolean saveToFile(String shoppingList, File file) {
+        try {
+            PrintWriter writer = new PrintWriter(file);
+            writer.println(shoppingList);
+            writer.close();
+        } catch (Exception e) {
+            return false;
+        }
         return true;
-    }
+    } 
 }

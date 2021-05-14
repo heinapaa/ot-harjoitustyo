@@ -46,11 +46,9 @@ public class SQLIngredientConnection extends SQLConnection {
      * @see generator.dao.sql.connection.SQLConnection#endConnection(java.sql.Connection, java.sql.Statement) 
      */
 
-    public void createIngredientTable() throws SQLException {               
-        System.out.println("Yhdistetään ainesosataulukkoa...");            
+    public void createIngredientTable() throws SQLException {                       
         Statement stmt = connect().createStatement();   
         stmt.execute(CREATE_INGREDIENT_TABLE);
-        System.out.println("Ainesosataulukko yhdistetty!\n");
         endConnection(stmt);                  
     }  
     

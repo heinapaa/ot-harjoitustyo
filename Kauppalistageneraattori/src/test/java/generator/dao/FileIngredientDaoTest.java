@@ -1,9 +1,6 @@
-package generator.dao.file;
+package generator.dao;
 
-import generator.dao.IngredientDao;
-import generator.dao.RecipeDao;
 import generator.dao.file.FileIngredientDao;
-import generator.services.FakeRecipeDao;
 import generator.models.Ingredient;
 import generator.models.Recipe;
 import generator.models.User;
@@ -25,10 +22,13 @@ public class FileIngredientDaoTest {
     RecipeDao recipeDao;
     IngredientDao ingredientDao;  
     
-    User u1;
-    User u2;
-    Recipe r1;
-    Recipe r2;
+    private User u1;
+    private User u2;
+    private Recipe r1;
+    private Recipe r2;
+    private Ingredient i1;
+    private Ingredient i2;
+    private Ingredient i3;
     
     @Before
     public void setUp() throws Exception {
@@ -39,6 +39,9 @@ public class FileIngredientDaoTest {
         this.u2 = new User("tester2");
         this.r1 = new Recipe(1, "recipe1", 3, "kasvis", u1);
         this.r2 = new Recipe(2, "recipe2", 5, "liha", u2);
+        this.i1 = new Ingredient("ingredient1", 3, "kpl", r1);
+        this.i2 = new Ingredient("ingredient2", 10, "kpl", r1);
+        this.i3 = new Ingredient("ingredient2", 10, "kpl", r2);        
         
         recipeDao.create(r1);
         recipeDao.create(r2);
@@ -54,43 +57,49 @@ public class FileIngredientDaoTest {
     public void ingredientsAreReadCorrectly() {
         List<Ingredient> ingredients = ingredientDao.findAll();
         assertEquals(1, ingredients.size());
-        Ingredient ingredient= ingredients.get(0);
-        assertEquals("ingredient1", ingredient.getName());
-        assertEquals(3, ingredient.getAmount(), 0);
-    }   
+        assertEquals(i1, ingredients.get(0));
+    }    
     
     @Test
     public void ingredientsAreCreatedCorrectly() {
-        ingredientDao.create(new Ingredient("ingredient2", 10, "kpl", r1));
+        ingredientDao.create(i2);
         List<Ingredient> ingredients = ingredientDao.findAll();
         assertEquals(2, ingredients.size());
-    }     
-    
+        assertTrue(ingredients.contains(i2));
+    } 
+
     @Test
     public void ingredientsAreRemovedCorrectly() {
-        List<Ingredient> ingredients = ingredientDao.findAll();
-        Ingredient ingredient= ingredients.get(0);
-        ingredientDao.remove(ingredient);
+        assertTrue(ingredientDao.remove(i1));
         List<Ingredient> remaining = ingredientDao.findAll();
-        assertEquals(0, remaining.size());
+        assertFalse(remaining.contains(i1));
     } 
     
     @Test
-    public void ingredientAreReadCorrectlyByRecipe() {
-        ingredientDao.create(new Ingredient("ingredient2", 10, "kpl", r2));
+    public void ingredientIsReadCorrectlyByNameAndRecipe() {
+        ingredientDao.create(i2);
+        ingredientDao.create(i3);
+        assertEquals(i2, ingredientDao.findByNameAndRecipe("ingredient2", r1));
+    }    
+
+    @Test
+    public void ingredientsAreReadCorrectlyByRecipe() {
+        assertTrue(ingredientDao.create(i3));
         List<Ingredient> ingredients = ingredientDao.findByRecipe(r1);
         assertEquals(1, ingredients.size());
-        assertTrue(ingredients.get(0).getName().equals("ingredient1"));
-    }
+        assertEquals(i1, ingredients.get(0));
+    }   
     
     @Test
     public void ingredientsAreRemovedCorrectlyByRecipe() {
-        ingredientDao.create(new Ingredient("ingredient2", 10, "kpl", r2));
-        ingredientDao.removeByRecipe(r1);
+        ingredientDao.create(i2);
+        ingredientDao.create(i3);   
+        assertEquals(3, ingredientDao.findAll().size());
+        assertTrue(ingredientDao.removeByRecipe(r1));
         List<Ingredient> ingredients = ingredientDao.findAll();
         assertEquals(1, ingredients.size());
-        assertTrue(ingredients.get(0).getName().equals("ingredient2"));        
-    }
+        assertEquals(i3, ingredients.get(0));       
+    }  
     
     @After
     public void tearDown() {

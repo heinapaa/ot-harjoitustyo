@@ -135,4 +135,13 @@ public class FileIngredientDao extends FileDao implements IngredientDao {
         }
         return super.writeToFile();
     }     
+
+    @Override
+    public List<Ingredient> findByRecipes(List<Recipe> recipes) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            ingredients.addAll(findByRecipe(recipe));
+        }
+        return ingredients;
+    }
 }

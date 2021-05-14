@@ -102,4 +102,18 @@ public class IngredientServiceTest {
         assertTrue(ingredients.get(1).getUnit().equals(Unit.KPL));
         assertTrue(ingredients.get(1).getAmount() == 3);        
     }
+    
+    
+    /*
+    @Test
+    public void canGetAllIngredientsByRecipes() {
+        ingredientService.addIngredient(r1, "ingredient2", "kpl", "3");  
+        ingredientService.addIngredient(r2, "ingredient1", "kg", "1");        
+        List<Recipe> recipes = new ArrayList<>();
+        recipes.add(r1);
+        recipes.add(r2);
+        List<Ingredient> ingredients = ingredientService.getIngredients(recipes);
+        assertEquals(3, ingredients.size());      
+    }  
+    */
 }

@@ -106,16 +106,11 @@ public class RecipeService {
      * 
      * @see         generator.dao.RecipeDao#findAll()
      * 
-     * @return      List-rakenne joka sisältää käyttäjään liittyvät reseptit Recipe-luokan olioina, null jos reseptejä ei ole
+     * @return      List-rakenne joka sisältää käyttäjään liittyvät reseptit Recipe-luokan olioina
      */
     
     public List<Recipe> getAllRecipesByUser(User user) {
-        List<Recipe> recipes = recipeDao.findByUser(user);
-        if (recipes.size() == 0) {
-            return null;
-        } else {
-            return recipes;
-        } 
+        return recipeDao.findByUser(user); 
     }
     
     /**

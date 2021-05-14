@@ -15,8 +15,10 @@ import java.util.List;
 import java.util.Properties;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class Router extends Application {
 
@@ -37,11 +39,13 @@ public class Router extends Application {
     private RecipeListView recipeListView;
     private IngredientView ingredientView;
     private ShoppingListView shoppingListView;
+    private Stage recipeStage;
     
     @Override
     public void init() {
         Properties properties = loadProperties();
-        List<String> recipeTypes = loadRecipeTypes();          
+        List<String> recipeTypes = loadRecipeTypes();        
+        String saveTo = properties.getProperty("saveTo", "1");
         String userFile = properties.getProperty("userFile", "users.txt");
         String recipeFile = properties.getProperty("recipeFile", "recipes.txt");
         String ingredientFile = properties.getProperty("ingredientFile", "ingredients.txt");
@@ -49,36 +53,50 @@ public class Router extends Application {
         String dbUsername = properties.getProperty("dbUsername", "sa");
         String dbPassword = properties.getProperty("dwPassword", "");
         
-        try {
-            this.userDao = new SQLUserDao(new SQLUserConnection(dbName, dbUsername, dbPassword));                   
-            this.recipeDao = new SQLRecipeDao(new SQLRecipeConnection(dbName, dbUsername, dbPassword));
-            this.ingredientDao = new SQLIngredientDao(new SQLIngredientConnection(dbName, dbUsername, dbPassword));            
-        } catch (ClassNotFoundException | SQLException e) {
-            try {
-                this.userDao = new FileUserDao(userFile);
-                this.recipeDao = new FileRecipeDao(recipeFile, userDao);
-                this.ingredientDao = new FileIngredientDao(ingredientFile, recipeDao);                
-            } catch (IOException ioe) {
-                System.out.println("Tietojen tallentaminen ei onnistu!");
+        if (saveTo.equals("1")) {
+            if (!initializeSQLDaos(dbName, dbUsername, dbPassword)) {
+                if (!initializeFileDaos(userFile, recipeFile, ingredientFile)) {
+                    terminateApplication();
+                }
             }
+        } else if (saveTo.equals("2")) {
+            if (!initializeFileDaos(userFile, recipeFile, ingredientFile)) {
+                if (!initializeSQLDaos(dbName, dbUsername, dbPassword)) {
+                    terminateApplication();
+                }
+            }            
+        } else {
+            System.out.println("Tarkista asetukset - ensisijaisen tallennustavan on oltava 1 (tietokanta) tai 2 (tiedosto)!");
+            terminateApplication();
         }
 
-        InputValidator validator = new InputValidator(recipeTypes);
-        this.userService = new UserService(userDao, validator);
-        this.recipeService = new RecipeService(recipeDao, validator);
-        this.ingredientService = new IngredientService(ingredientDao, validator);
-        this.shoppingListService = new ShoppingListService(ingredientDao);  
-        this.logInView = new LogInView(this, userService);
-        this.recipeListView = new RecipeListView(this, userService, recipeService, ingredientService, recipeTypes);
-        this.ingredientView = new IngredientView(this, ingredientService);
-        this.shoppingListView = new ShoppingListView(this, shoppingListService, recipeTypes);
+        try {
+            InputValidator validator = new InputValidator(recipeTypes);
+            this.userService = new UserService(userDao, validator);
+            this.recipeService = new RecipeService(recipeDao, validator);
+            this.ingredientService = new IngredientService(ingredientDao, validator);
+            this.shoppingListService = new ShoppingListService(ingredientDao);  
+            this.logInView = new LogInView(this, userService);
+            this.recipeListView = new RecipeListView(this, userService, recipeService, ingredientService, recipeTypes);
+            this.ingredientView = new IngredientView(this, ingredientService);
+            this.shoppingListView = new ShoppingListView(this, shoppingListService, recipeTypes);            
+        } catch (Exception e) {
+            System.out.println("Ohjelman käynnistyksessä tapahtui virhe.");
+            terminateApplication();
+        }
+
     }
     
     @Override
     public void start(Stage stage) {
         this.mainStage = stage;
-        mainStage.setWidth(900);
-        mainStage.setHeight(600);
+        mainStage.setWidth(600);
+        mainStage.setHeight(300);
+        mainStage.setTitle("Kauppalistageneraattori - kirjaudu sisään!");
+        
+        this.recipeStage = new Stage();
+        recipeStage.setWidth(900);
+        recipeStage.setHeight(600);
         mainStage.setTitle("Kauppalistageneraattori");
         
         this.shoppingListStage = new Stage();
@@ -89,7 +107,8 @@ public class Router extends Application {
         
         this.addIngredientStage = new Stage();
         addIngredientStage.initModality(Modality.APPLICATION_MODAL);
-        addIngredientStage.setWidth(300);       
+        addIngredientStage.setWidth(600);       
+        addIngredientStage.setHeight(500);
         addIngredientStage.setTitle("Syötä ainesosa");      
         
         setLogInView();
@@ -98,14 +117,23 @@ public class Router extends Application {
     
     public void setLogInView() {
         mainStage.setScene(logInView.create());
+        recipeStage.close();
+        mainStage.show();
     }
     
     public void setRecipeListView() {
-        mainStage.setScene(recipeListView.create());
+        recipeStage.setScene(recipeListView.create());
+        mainStage.close();
+        recipeStage.show();
     }
     
     public void openIngredientWindow(Recipe recipe) {    
         addIngredientStage.setScene(ingredientView.create());
+        addIngredientStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                closeIngredientWindow(recipe);
+            }
+        }); 
         ingredientView.addTo(recipe);       
         addIngredientStage.show();
     }
@@ -129,24 +157,17 @@ public class Router extends Application {
         launch(Router.class);
     }   
     
-    private InputStream getFileFromResourceAsStream(String fileName) {
-
-        // The class loader that loaded the class
+    
+    
+    private InputStream readFileToStream(String fileName) {
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
-
-        // the stream holding the file content
-        if (inputStream == null) {
-            throw new IllegalArgumentException("file not found! " + fileName);
-        } else {
-            return inputStream;
-        }
-
+        return inputStream;
     }    
 
     private Properties loadProperties() {
         Properties properties = new Properties();     
-        try (InputStream stream = getFileFromResourceAsStream("config.properties")) {
+        try (InputStream stream = readFileToStream("config.properties")) {
             properties.load(stream);
             stream.close();
             return properties;
@@ -155,23 +176,10 @@ public class Router extends Application {
         }       
     }
     
-    /*
-    private Properties loadProperties() {
-        Properties properties = new Properties();
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();        
-        try (InputStream stream = loader.getResourceAsStream("config.properties")) {
-            properties.load(stream);
-            return properties;
-        } catch (IOException e) {
-            return properties;
-        }       
-    }
-    */
-    
     private List<String> loadRecipeTypes() {
         List<String> recipeTypes = new ArrayList<>();
         try {
-            InputStream stream = getFileFromResourceAsStream("recipeTypes.txt"); 
+            InputStream stream = readFileToStream("recipeTypes.txt"); 
             InputStreamReader isr = new InputStreamReader(stream);
             BufferedReader br = new BufferedReader(isr);
             String line = null;
@@ -197,5 +205,36 @@ public class Router extends Application {
         recipeTypes.add("kasvis");
         recipeTypes.add("makea");            
         return recipeTypes;
+    }
+    
+    private boolean initializeSQLDaos(String dbName, String dbUsername, String dbPassword) {
+        try {
+            this.userDao = new SQLUserDao(dbName, dbUsername, dbPassword);                   
+            this.recipeDao = new SQLRecipeDao(dbName, dbUsername, dbPassword);
+            this.ingredientDao = new SQLIngredientDao(dbName, dbUsername, dbPassword);  
+            System.out.println("Ohjelma tallentaa tiedot tietokantaan!");  
+            return true;
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("Tietojen tallentaminen tietokantaan ei ole mahdollista.");
+            return false;
+        }
+    }
+    
+    private boolean initializeFileDaos(String userFile, String recipeFile, String ingredientFile) {
+        try {
+            this.userDao = new FileUserDao(userFile);
+            this.recipeDao = new FileRecipeDao(recipeFile, userDao);
+            this.ingredientDao = new FileIngredientDao(ingredientFile, recipeDao);   
+            System.out.println("Ohjelma tallentaa tiedot tiedostoon!"); 
+            return true;
+        } catch (IOException e) {
+            System.out.println("Tietojen tallentaminen tiedostoon ei ole mahdollista.");
+            return false;
+        }
+    }
+    
+    private void terminateApplication() {
+        System.out.println("Ohjelma sulkeutuu.");
+        System.exit(0);        
     }
 }

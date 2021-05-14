@@ -2,7 +2,10 @@ package generator.dao.sql;
 
 import generator.dao.UserDao;
 import generator.models.User;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,21 +14,18 @@ import java.util.List;
  * 
  */
 
-public class SQLUserDao implements UserDao {
+public class SQLUserDao extends SQLDao implements UserDao {
     
-    private final SQLUserConnection connection;
+    private final String createUserTable = "CREATE TABLE IF NOT EXISTS Users (name VARCHAR(255) UNIQUE not NULL)";  
+    private final String insertUser = "INSERT INTO Users (name) VALUES(?)";  
+    private final String selectUser = "SELECT * FROM Users WHERE name = ?";  
+    private final String selectAllUsers = "SELECT * FROM Users";    
     
-    /**
-     * Konstruktori, joka luo yhteyden käyttäjät sisältävään tietokantatauluun.
-     * @param connection {@code SQLConnection}-olio, jota käytetään tietokantapyyntöjen toteuttamiseen
-     * @throws java.sql.SQLException
-     * @throws java.lang.ClassNotFoundException
-     * @see generator.dao.sql.connection.SQLUserConnection#createUserTable() 
-     */
-    
-    public SQLUserDao(SQLUserConnection connection) throws SQLException, ClassNotFoundException {
-        this.connection = connection;
-        connection.createUserTable();
+    public SQLUserDao(String fileName, String username, String password) throws SQLException, ClassNotFoundException {
+        super(fileName, username, password);
+        Statement stmt = super.connect().createStatement();           
+        stmt.executeUpdate(createUserTable);
+        super.endConnection(stmt);        
     }
     
     /**
@@ -38,7 +38,10 @@ public class SQLUserDao implements UserDao {
     @Override
     public boolean create(User user) {
         try {
-            return connection.insertUser(user.getUsername());    
+            PreparedStatement pstmt = super.connect().prepareStatement(insertUser);
+            pstmt.setString(1, user.getUsername());
+            super.completePreparedConnection(pstmt);            
+            return true;               
         } catch (SQLException e) {
             return false;
         }  
@@ -54,7 +57,15 @@ public class SQLUserDao implements UserDao {
     @Override
     public User findByUsername(String name) {
         try {
-            return connection.selectOneUser(name);
+            User user = null;   
+            PreparedStatement pstmt = super.connect().prepareStatement(selectUser);
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();    
+            while (rs.next()) {
+                user = new User(rs.getString("name"));               
+            }
+            super.endPreparedConnection(pstmt, rs);
+            return user;
         } catch (SQLException e) {
             return null;
         }
@@ -68,10 +79,17 @@ public class SQLUserDao implements UserDao {
     
     @Override
     public List<User> findAll() {
-        try {
-            return connection.selectAllUsers();
+        List<User> users = new ArrayList<>();           
+        try {           
+            PreparedStatement pstmt = super.connect().prepareStatement(selectAllUsers);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                users.add(new User(rs.getString("name")));
+            }
+            super.endPreparedConnection(pstmt, rs);
+            return users;
         } catch (SQLException e) {
-            return new ArrayList<>();
+            return users;
         }
 
     }

@@ -13,8 +13,7 @@ import org.junit.Before;
 
 public class SQLRecipeDaoTest {
 
-    private FakeSQLRecipeConnection conn;
-    private RecipeDao recipeDao;
+    private SQLRecipeDao recipeDao;
     private User u1;
     private Recipe r1;
     
@@ -22,10 +21,9 @@ public class SQLRecipeDaoTest {
     public void setUp() throws SQLException, ClassNotFoundException {
         this.u1 = new User("tester");          
         this.r1 = new Recipe(1, "recipe1", 1, "kasvis", u1); 
-        this.conn = new FakeSQLRecipeConnection(); 
-        this.recipeDao = new SQLRecipeDao(conn);
-        IngredientDao ingredientDao = new SQLIngredientDao(new FakeSQLIngredientConnection());
-        conn.insertRecipe("recipe1", 1, "kasvis", "tester");
+        this.recipeDao = new SQLRecipeDao("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
+        IngredientDao ingredientDao = new SQLIngredientDao("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
+        recipeDao.create(r1);
     }
     
     @Test
@@ -112,6 +110,6 @@ public class SQLRecipeDaoTest {
     
     @After
     public void tearDown() throws SQLException {
-        conn.closeConnection();
+        recipeDao.closeConnection();
     }    
 }

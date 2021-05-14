@@ -6,6 +6,7 @@ import generator.models.Ingredient;
 import generator.models.Recipe;
 import generator.models.User;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.Test;
@@ -14,7 +15,6 @@ import org.junit.Before;
 
 public class SQLIngredientDaoTest {
 
-    private FakeSQLIngredientConnection conn;
     private SQLIngredientDao ingredientDao;
     
     private User u1;
@@ -35,13 +35,12 @@ public class SQLIngredientDaoTest {
         this.i2 = new Ingredient("ingredient2", 10, "kpl", r1);
         this.i3 = new Ingredient("ingredient2", 10, "kpl", r2);
         
-        SQLRecipeDao recipeDao = new SQLRecipeDao(new FakeSQLRecipeConnection());
+        SQLRecipeDao recipeDao = new SQLRecipeDao("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
         recipeDao.create(r1);
         recipeDao.create(r2);
         
-        this.conn = new FakeSQLIngredientConnection(); 
-        this.ingredientDao = new SQLIngredientDao(conn);
-        conn.insertIngredient("ingredient1", 3, "kpl", r1.getId());
+        this.ingredientDao = new SQLIngredientDao("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
+        ingredientDao.create(i1);
     }
     
     @Test
@@ -75,11 +74,22 @@ public class SQLIngredientDaoTest {
 
     @Test
     public void ingredientsAreReadCorrectlyByRecipe() {
-        assertTrue(ingredientDao.create(i3));
+        ingredientDao.create(i3);
         List<Ingredient> ingredients = ingredientDao.findByRecipe(r1);
         assertEquals(1, ingredients.size());
         assertEquals(i1, ingredients.get(0));
     }   
+    
+    @Test
+    public void ingredientsAreReadCorrectlyByRecipes() {        
+        ingredientDao.create(i2);        
+        ingredientDao.create(i3);
+        List<Recipe> recipes = new ArrayList<>();
+        recipes.add(r1);
+        recipes.add(r2);
+        List<Ingredient> ingredients = ingredientDao.findByRecipes(recipes);
+        assertEquals(3, ingredients.size());
+    }     
     
     @Test
     public void ingredientsAreRemovedCorrectlyByRecipe() {
@@ -94,6 +104,6 @@ public class SQLIngredientDaoTest {
 
     @After
     public void tearDown() throws SQLException {
-        conn.closeConnection();
+        ingredientDao.closeConnection();
     }     
 }

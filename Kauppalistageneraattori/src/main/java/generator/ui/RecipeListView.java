@@ -7,6 +7,7 @@ import generator.services.RecipeService;
 import generator.services.UserService;
 import java.util.Collections;
 import java.util.List;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -167,9 +168,7 @@ public class RecipeListView implements View {
         infoRecipePortion.setText("");
         infoRecipeType.setText("");
         setInfoRows();
-        
         recipeButtons.getChildren().clear();
-        
         errorLabel.setText("");  
     }
     
@@ -303,14 +302,15 @@ public class RecipeListView implements View {
     
     public void updateRecipeList() {
         recipeListItems.clear();
-        List<Recipe> allRecipes = recipeService.getAllRecipesByUser(userService.getLoggedIn());
-        if (allRecipes != null) {
+        Platform.runLater(()->{        
+            List<Recipe> allRecipes = recipeService.getAllRecipesByUser(userService.getLoggedIn());
             for (Recipe recipe : allRecipes) {
                 recipeListItems.add(recipe);
             }
-            Collections.sort(recipeListItems);            
-        }
-    } 
+            Collections.sort(recipeListItems);                  
+        });    
+
+    }   
     
     public void updateIngredientList() {
         ingredientListItems.clear();
@@ -318,13 +318,14 @@ public class RecipeListView implements View {
     
     public void updateIngredientList(Recipe recipe) {
         ingredientListItems.clear();
-        List<Ingredient> ingredients = ingredientService.getIngredients(recipe);
-        for (Ingredient ingredient : ingredients) {
-            ingredientListItems.add(ingredient);
-        }
-        Collections.sort(ingredientListItems);
+        Platform.runLater(()->{        
+            List<Ingredient> ingredients = ingredientService.getIngredients(recipe);
+            for (Ingredient ingredient : ingredients) {
+                ingredientListItems.add(ingredient);
+            }
+            Collections.sort(ingredientListItems);                
+        });   
     }    
-    
   
     public void setInputRows() {
         recipeNameRow.getChildren().clear();

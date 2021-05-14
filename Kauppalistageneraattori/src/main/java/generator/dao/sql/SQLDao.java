@@ -7,7 +7,7 @@ import java.sql.*;
  * @author heinapaa
  */
 
-public class SQLConnection {
+public class SQLDao {
 
     private final String driver = "org.h2.Driver";
     private final String url;
@@ -24,7 +24,7 @@ public class SQLConnection {
      * @throws java.lang.ClassNotFoundException
      */
     
-    public SQLConnection(String fileName, String username, String password) throws ClassNotFoundException {
+    public SQLDao(String fileName, String username, String password) throws ClassNotFoundException {
         if (fileName.startsWith("jdbc:h2")) {
             this.url = fileName;            
         } else {
@@ -57,4 +57,8 @@ public class SQLConnection {
         pstmt.close();   
         this.conn.close();
     }  
+    
+    public void closeConnection() throws SQLException {
+        connect().createStatement().execute("DROP ALL OBJECTS");
+    }    
 }

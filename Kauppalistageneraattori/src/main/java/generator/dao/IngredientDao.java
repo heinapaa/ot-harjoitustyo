@@ -59,4 +59,11 @@ public interface IngredientDao {
     
     List<Ingredient> findAll();
     
+    /**
+     * Metodi palauttaa kaikki listattuihin resepteihin liittyvät ainesosat
+     * @param recipes   List-rakenne, joka sisältää ne reseptit joihin liittyvät ainesosat halutaan
+     * @return List-rakenne, joka sisältää kaikki valittuihin resepteihin liittyvät ainesosat
+     */
+    
+    List<Ingredient> findByRecipes(List<Recipe> recipes);
 }

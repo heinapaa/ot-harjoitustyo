@@ -66,7 +66,7 @@ public class RecipeServiceTest {
     @Test
     public void noRecipesWithoutLogin() {
         List<Recipe> recipes = recipeService.getAllRecipesByUser(userService.getLoggedIn());
-        assertEquals(null, recipes);
+        assertTrue(recipes.isEmpty());
     }
     
     @Test

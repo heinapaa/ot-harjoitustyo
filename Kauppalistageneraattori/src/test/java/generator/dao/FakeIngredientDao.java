@@ -63,5 +63,14 @@ public class FakeIngredientDao implements IngredientDao {
         }
         return null;
     }
+
+    @Override
+    public List<Ingredient> findByRecipes(List<Recipe> recipes) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            ingredients.addAll(findByRecipe(recipe));
+        }
+        return ingredients;
+    }
     
 }

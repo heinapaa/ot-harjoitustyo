@@ -117,11 +117,24 @@ public class IngredientService {
      * 
      * @see             generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
      * 
-     * @return          List-rakenne joka sisältää reseptiin liittyvät ainesosat Ingredient-luokan olioina, null jos ainesosia ei ole
+     * @return          List-rakenne joka sisältää reseptiin liittyvät ainesosat Ingredient-luokan olioina
      */
     
     public List<Ingredient> getIngredients(Recipe recipe) {
         return ingredientDao.findByRecipe(recipe);
-    }    
+    }
+    
+    /**
+     * Metodi hakee kaikki tiettyihin resepteihin liittyvät ainesosat
+     * 
+     * @param recipes   List-rakenne, joka sisältää ne reseptit joiden ainesosat halutaan
+     * @see             generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
+     * 
+     * @return          List-rakenne joka sisältää resepteihin liittyvät ainesosat Ingredient-luokan olioina
+     */    
+
+    public List<Ingredient> getIngredients(List<Recipe> recipes) {
+        return ingredientDao.findByRecipes(recipes);
+    }
     
 }

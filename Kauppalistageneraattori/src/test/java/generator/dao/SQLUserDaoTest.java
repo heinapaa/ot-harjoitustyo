@@ -12,16 +12,14 @@ import org.junit.Before;
 public class SQLUserDaoTest {
 
     private SQLUserDao userDao;
-    private FakeSQLUserConnection conn;
     
     @Before
     public void setUp() throws SQLException, ClassNotFoundException {
-        this.conn = new FakeSQLUserConnection();
-        this.userDao = new SQLUserDao(conn);
-        conn.insertUser("eka");
-        conn.insertUser("testaaja");
-        conn.insertUser("testaaja2");
-        conn.insertUser("Teuvo Testaaja");
+        this.userDao = new SQLUserDao("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "sa", "");
+        userDao.create(new User("eka"));
+        userDao.create(new User("testaaja"));
+        userDao.create(new User("testaaja2"));
+        userDao.create(new User("Teuvo Testaaja"));
     }
 
     
@@ -54,7 +52,7 @@ public class SQLUserDaoTest {
     
     @After
     public void tearDown() throws SQLException {
-        conn.closeConnection();
+        userDao.closeConnection();
     }
     
 }

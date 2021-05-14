@@ -31,5 +31,6 @@ päivä | h | log
 10.5. | 3.0 | tietokantatallennuksen testausta
 11.5. | 2.0 | tietokantatallennuksen testausta, toimivuuden testailua eri käyttöjärjestelmillä
 13.5. | 1.5 | tietokantatallennuksen testausta ja korjailua
+14.5. | 2.0 | testausta ja pikkukorjauksia
 
-Yhteensä 92.5h
+Yhteensä 94.5h

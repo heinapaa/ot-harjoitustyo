@@ -112,10 +112,46 @@ eli ensin reseptin tunniste, sitten ainesosan otsikko, sitten määrä, sitten y
 
 ## Päätoiminnallisuudet
 
-Tullaan täydentämään
+Alla on kuvattu sovelluksen toimintaa muutamissa keskeisissä tilanteissa, jotka liittyvät pääosin uusien olioiden luomiseen. Kaiken kaikkiaan sovelluksen toiminta seuraa usein samaa kaavaa:
+
+1. Painikkeen painamista seuraava tapahtumakäsittelijä kutsuu sopivaa metodia sopivassa service-luokassa, käyttäen tarvittaessa kutsun parametreina käyttäjän antamia syötteitä
+2. Service-luokka tarkastaa InputValidator-luokkaa hyväksi käyttäen että käytetyt syötteet ovat kelvollisia
+3. Service-luokka suorittaa halutun toiminnon (kutsuen tarvittaessa sopivaa dao-luokkaa)
+4. Käyttöliittymän näkymä päivitetään kun haluttu toiminto on saatu päätökseen
+
+### Käyttäjän kirjaantuminen
+
+Kun kirjautumisnäkymän kenttään on syötetty hyväksyttävä käyttäjänimi ja klikataan painiketta *logIn*, etenee sovelluksen kontrolli seuraavasti:
 
 ![](kuvat/login.png)
 
+### Käyttäjän luominen
+
+Kun kirjautumisnäkymän kenttään on syötetty hyväksyttävä käyttäjänimi jota ei ole vielä olemassa ja klikataan painiketta *createNewUser*, etenee sovelluksen kontrolli seuraavasti:
+
+![](kuvat/createUser.png)
+
+### Reseptin luominen
+
+Kun reseptin luominen-näkymässä on syötetty/valittu kaikkiin kenttiin hyväksyttävät syötteet ja klikataan painiketta *commitAddRecipe*, etenee sovelluksen kontrolli seuraavasti:
+
+![](kuvat/createRecipe.png)
+
+### Ainesosan luominen
+
+Kun ainesosan lisääminen-näkymässä on syötetty/valittu kaikkiin kenttiin hyväksyttävät syötteet ja klikataan painiketta *commitAddIngredient*, etenee sovelluksen kontrolli seuraavasti:
+
+![](kuvat/createIngredient.png)
+
 ## Heikkoidet
 
-Tullaan täydentämään
+### ShoppingList-luokka
+
+Kauppalistaa kuvaava luokka voisi olla järkevämpää toteuttaa siten, että se muistaisi sisältämänsä reseptit eikä suinkaan vain listaa ainesosista (tekstimuodossa). Tämä mahdollistaisi paremmin kauppalistojen tallentamisen (yksi mahdollisista lisäominaisuuksista, joita sovellukseen voisi lisätä), ja selkeyttäisi sovelluslogiikkaa muutenkin.
+
+### Käyttöliittymä
+
+Käyttöliittymän toteutuksessa on kaiken kaikkiaan runsaasti parannettavaa. Esimerkiksi sovelluslogiikan ja käyttöliittymän tapahtumankäsittelijöiden välinen kommunikointi hukkuu tällä hetkellä näkymää rakentavan koodin sekaan, ja toteutus ei muutenkaan ole elegantein mahdollinen. Nyt käytössä oleva ohjelmallinen määrittely kannattaisikin varmasti jatkossa korvata kokonaan jollain muulla toteutuksella, esim.FXML-määrittelyllä.
+
+### SQLDao-luokkien testaus
+

@@ -12,6 +12,8 @@ Sovelluksessa on vain yksi käyttäjärooli ("normaali käyttäjä"). Mikäli so
 
 Sovellus koostuu neljästä eri päänäkymästä.
 
+![](kuvat/io.png)
+
 Sovellus aukeaa kirjautumisnäkymään. Uusi käyttäjä voidaan myös luoda tässä samassa näkymässä. Kun sisäänkirjautuminen onnistuu, ohjelma siirtyy reseptinäkymään, jossa käyttäjä voi luoda, poistaa ja muokata reseptejään. Jokaiselle näistä toiminnoista on hieman poikkeava oma versionsa päänäkymästä, minkä lisäksi näkymälle on alussa näytettävä "neutraali" versio näkymästä. Ainesosien lisäämiselle ja ostoslistan luomiselle on molemmille omat näkymät, jotka aukeavat uusiin ikkunoihin. Sillä aikaa kun tällainen lisäikkuna on avattuna, ei taustalla yhä avoinna olevaa reseptinäkymän sisältävää ikkunaa pysty käyttämään.
 
 ## Sovelluksen perustoiminnallisuus

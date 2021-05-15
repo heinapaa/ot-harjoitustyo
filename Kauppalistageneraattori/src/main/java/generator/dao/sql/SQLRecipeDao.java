@@ -30,12 +30,11 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
     
     /**
      * Konstruktori, joka luo yhteyden reseptit sisältävään tietokantatauluun.
-     * @param fileName
-     * @param username
-     * @param password
+     * @param fileName tietokantatiedoston nimi
+     * @param username tietokannan käyttäjänimi
+     * @param password tietokannan salasana
      * @throws java.sql.SQLException
      * @throws java.lang.ClassNotFoundException
-     * @see generator.dao.sql.connection.SQLRecipeConnection#createRecipeTable() 
      */    
     
     public SQLRecipeDao(String fileName, String username, String password) throws SQLException, ClassNotFoundException {
@@ -49,7 +48,6 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * Metodi tallentaa uuden ainesosan tiedot tietokantaan.
      * @param recipe    resepti, joka halutaan tallentaa
      * @return true jos reseptin tietojen tallentaminen onnistuu, muuten false
-     * @see generator.dao.sql.connection.SQLRecipeConnection#insertRecipe(java.lang.String, int, java.lang.String, java.lang.String) 
      */    
 
     @Override
@@ -72,7 +70,6 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * Metodi hakee ja palauttaa reseptin id-tunnisteen avulla.
      * @param id sen reseptin uniikki id-tunniste, jonka tiedot halutaan hakea
      * @return Haettua reseptiä vastaava {@code Recipe}-olio, null jos reseptiä ei löydy
-     * @see generator.dao.sql.connection.SQLRecipeConnection#selectOneRecipeById(int) 
      */
      
     @Override
@@ -96,8 +93,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * Metodi hakee ja palauttaa reseptin nimen ja käyttäjän avulla.
      * @param name haettavan reseptin nimi
      * @param user käyttäjä, jolle haettava resepti kuuluu
-     * @return Haettua reseptiä vastaava {@code Recipe}-olio, null jos reseptiä ei löydy
-     * @see generator.dao.sql.connection.SQLRecipeConnection#selectOneRecipeByNameAndUser(java.lang.String, java.lang.String) 
+     * @return Haettua reseptiä vastaava {@code Recipe}-olio, null jos reseptiä ei löydy 
      */    
 
     @Override
@@ -122,8 +118,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * Metodi hakee ja palauttaa kaikki tietylle käyttäjälle kuuluvat tietyntyyppiset reseptit.
      * @param type haettu reseptityyppi
      * @param user käyttäjä, jonka reseptejä haetaan
-     * @return Lista, joka sisältää kaikki hakukriteerit täyttävät reseptit {@code Recipe}-olioina
-     * @see generator.dao.sql.connection.SQLRecipeConnection#selectAllRecipesByTypeAndUser(java.lang.String, java.lang.String)  
+     * @return Lista, joka sisältää kaikki hakukriteerit täyttävät reseptit {@code Recipe}-olioina 
      */    
 
     @Override
@@ -148,7 +143,6 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * Metodi hakee ja palauttaa kaikki tietylle käyttäjälle kuuluvat reseptit.
      * @param user käyttäjä, jonka reseptejä haetaan
      * @return Lista, joka sisältää kaikki hakukriteerit täyttävät reseptit {@code Recipe}-olioina
-     * @see generator.dao.sql.connection.SQLRecipeConnection#selectAllRecipesByUser(java.lang.String) 
      */      
 
     @Override
@@ -171,7 +165,6 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
     /**
      * Metodi hakee ja palauttaa kaikki tallennetut reseptit.
      * @return Lista, joka sisältää kaikki tietokantaan tallennetut reseptit {@code Recipe}-olioina
-     * @see generator.dao.sql.connection.SQLRecipeConnection#selectAllRecipes() 
      */      
 
     @Override
@@ -228,7 +221,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
             pstmt.setInt(1, recipe.getId());
             completePreparedConnection(pstmt);                        
         } catch (SQLException e) {
-            System.out.println("Ainesosien poistaminen epäonnistui. Jatketaan reseptin poistamiseen.");;
+            System.out.println("Ainesosien poistaminen epäonnistui. Jatketaan reseptin poistamiseen.");
         }    
         try {
             PreparedStatement pstmt = super.connect().prepareStatement(deleteRecipeById);

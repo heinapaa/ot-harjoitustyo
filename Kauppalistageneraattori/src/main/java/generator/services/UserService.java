@@ -29,10 +29,6 @@ public class UserService {
      * Metodi asettaa käyttäjän sisäänkirjautuneeksi syötteenä annetun käyttäjänimen perusteella.
      * 
      * @param name  Käyttäjän syöttämä merkkijono
-     * 
-     * @see         generator.domain.InputValidator#isValidUserName(java.lang.String) 
-     * @see         generator.dao.UserDao#findByUsername(java.lang.String) 
-     * 
      * @return      true jos käyttäjä on olemassa, false jos käyttäjää ei ole olemassa
      */
           

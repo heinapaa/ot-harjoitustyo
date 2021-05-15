@@ -29,10 +29,11 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
     
     /**
      * Konstruktori, joka luo yhteyden ainesosat sisältävään tietokantatauluun.
-     * @param conn {@code SQLConnection}-olio, jota käytetään tietokantapyyntöjen toteuttamiseen
+     * @param fileName tietokantatiedoston nimi
+     * @param username tietokannan käyttäjänimi
+     * @param password tietokannan salasana
      * @throws java.sql.SQLException
      * @throws java.lang.ClassNotFoundException
-     * @see generator.dao.sql.connection.SQLIngredientConnection#createIngredientTable() 
      */
     
     public SQLIngredientDao(String fileName, String username, String password) throws SQLException, ClassNotFoundException {
@@ -46,7 +47,6 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
      * Metodi tallentaa uuden ainesosan tiedot tietokantaan.
      * @param ingredient    ainesosa, joka halutaan tallentaa
      * @return true jos ainesosan tietojen tallentaminen onnistuu, muuten false
-     * @see generator.dao.sql.connection.SQLIngredientConnection#insertIngredient(java.lang.String, double, java.lang.String, int) 
      */
 
     @Override
@@ -68,7 +68,6 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
      * Metodi poistaa valitun ainesosan tiedot tietokannasta.
      * @param ingredient    ainesosa, joka halutaan poistaa
      * @return true jos ainesosan tietojen poistaminen onnistuu, muuten false
-     * @see generator.dao.sql.connection.SQLIngredientConnection#deleteIngredient(java.lang.String, int) 
      */
 
     @Override
@@ -88,7 +87,6 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
      * Metodi poistaa kaikki tiettyyn reseptiin liittyvät ainesosat tietokannasta.
      * @param recipe    resepti, johon liittyvät ainesosat halutaan poistaa
      * @return true jos ainesosien tietojen poistaminen onnistuu, muuten false
-     * @see generator.dao.sql.connection.SQLIngredientConnection#deleteAllIngredientsByRecipe(int) 
      */
 
     @Override
@@ -109,7 +107,6 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
      * @param name  haettavan ainesosan nimi
      * @param recipe    resepti, johon haettava ainesosa liittyy
      * @return Haettava ainesosa {@code Ingredient}-olion muodossa, jos ainesosaa ei löydy niin null
-     * @see generator.dao.sql.connection.SQLIngredientConnection#selectOneIngredientByNameAndRecipe(java.lang.String, int) 
      */
 
     @Override
@@ -135,7 +132,6 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
      * Metodi hakee ja palauttaa kaikki tiettyyn reseptiin liittyvät ainesosat.
      * @param recipe resepti, johon liittyvät ainesosat halutaan
      * @return Lista, joka sisältää kaikki märiteltyyn reseptiin liittyvät ainesosat {@code Ingredient}-olioina
-     * @see generator.dao.sql.connection.SQLIngredientConnection#selectAllIngredientsByRecipe(int) 
      */
 
     @Override
@@ -160,7 +156,6 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
     /**
      * Meto hakee ja palauttaa kaikki tallennetut ainesosat.
      * @return Lista, joka sisältää kaikki tallennetut ainesosat {@code Ingredient}-olioina
-     * @see generator.dao.sql.connection.SQLIngredientConnection#selectAllIngredients() 
      */
 
     @Override

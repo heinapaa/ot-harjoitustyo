@@ -21,6 +21,12 @@ public class SQLUserDao extends SQLDao implements UserDao {
     private final String selectUser = "SELECT * FROM Users WHERE name = ?";  
     private final String selectAllUsers = "SELECT * FROM Users";    
     
+    /**
+     * Konstruktori, joka luo yhteyden käyttäjät sisältävään tietokantaan
+     * @param fileName tietokantatiedoston nimi
+     * @param username tietokannan käyttäjänimi
+     * @param password tietokannan salasana
+     */
     public SQLUserDao(String fileName, String username, String password) throws SQLException, ClassNotFoundException {
         super(fileName, username, password);
         Statement stmt = super.connect().createStatement();           
@@ -32,7 +38,6 @@ public class SQLUserDao extends SQLDao implements UserDao {
      * Metodi tallentaa uuden käyttäjän tiedot tietokantaan
      * @param user  tallennettava käyttäjä
      * @return true jos käyttäjän tietojen tallentaminen onnistuu, muuten false
-     * @see generator.dao.sql.connection.SQLUserConnection#insertUser(java.lang.String) 
      */
 
     @Override
@@ -51,7 +56,6 @@ public class SQLUserDao extends SQLDao implements UserDao {
      * Metodi hakee ja palauttaa käyttäjän käyttäjänimen perusteella.
      * @param name käyttäjänimi, jonka mukaista käyttäjää haetaan
      * @return Haettava käyttäjä {@code User}-olion muodossa, jos käyttäjää ei löydy niin null
-     * @see generator.dao.sql.connection.SQLUserConnection#selectOneUser(java.lang.String) 
      */
 
     @Override
@@ -74,7 +78,6 @@ public class SQLUserDao extends SQLDao implements UserDao {
     /**
      * Metodi hakee ja palauttaa kaikki tallennetut käyttäjät.
      * @return Lista, joka sisältää kaikki tallennetut käyttäjät {@code User}-olioina
-     * @see generator.dao.sql.connection.SQLUserConnection#selectAllUsers() 
      */
     
     @Override

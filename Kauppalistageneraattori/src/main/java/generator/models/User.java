@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class User {
     
-    private String username;
+    private final String username;
     
     /**
      * Konstruktori

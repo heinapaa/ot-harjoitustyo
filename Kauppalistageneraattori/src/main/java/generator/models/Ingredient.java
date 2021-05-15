@@ -63,7 +63,6 @@ public class Ingredient implements Comparable<Ingredient> {
     /**
      * Metodi testaa, voidaanko ainesosa laskea yhteen toisen ainesosan kanssa.
      * @param ingredient    ainesosa, jonka kanssa valittu ainesosa halutaan summata
-     * @see generator.domain.Unit#hasSameType(generator.domain.Unit) 
      * @return true jos ainesosat voidaan laskea yhteen, muuten false
      */
     
@@ -84,7 +83,6 @@ public class Ingredient implements Comparable<Ingredient> {
     /**
      * Metodi tarkistaa, onko reseptin nimi sama kuin annettu syöte.
      * @param input merkkijono, johon reseptin nimeä halutaan verrata
-     * @see String#equals(java.lang.Object) 
      * @return true jos syöte vastaa reseptin nimeä, muuten false
      */
     
@@ -122,7 +120,6 @@ public class Ingredient implements Comparable<Ingredient> {
     /**
      * Metodi vertaa kahta ainesosaa toisiinsa, perustaen vertauksen niiden nimiin.
      * @param otherIngredient   toinen ainesosa, johon ainesosaa halutaan verrata
-     * @see String#compareTo(java.lang.String) 
      * @return 0 jos nimet ovat samat, muuten positiivinen tai negatiivinen luku riippuen siitä miten nimet vertautuvat toisiinsa 
      */
 

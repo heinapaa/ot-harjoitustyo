@@ -10,7 +10,7 @@ public class Recipe implements Comparable<Recipe> {
     private String name;
     private int portion;
     private String type;
-    private User owner;
+    private final User owner;
     
   
     /**
@@ -112,7 +112,6 @@ public class Recipe implements Comparable<Recipe> {
     /**
      * Metodi vertaa kahta reseptiä toisiinsa, perustuen niiden nimiin.
      * @param otherRecipe   toinen resepti, johon reseptiä halutaan verrata
-     * @see String#compareTo(java.lang.String) 
      * @return 0 jos nimet ovat samat, muuten positiivinen tai negatiivinen luku riippuen siitä miten nimet vertautuvat toisiinsa
      */
     

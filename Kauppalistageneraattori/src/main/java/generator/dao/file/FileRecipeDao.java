@@ -15,7 +15,7 @@ import java.util.List;
 public class FileRecipeDao extends FileDao implements RecipeDao {
     
     private List<Recipe> recipes;
-    int latestId;
+    private int latestId;
     
     /**
      * Kostruktori
@@ -39,7 +39,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     }
     
     /**
-     * Metodi tallentaa reseptin.
+     * Tallentaa reseptin.
      * @param recipe    tallennettava resepti
      * @return  true jos tallentaminen onnistuu, muuten false
      */
@@ -53,7 +53,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     }
     
     /**
-     * Metodi hakee reseptin tunnisteen (id) perusteella
+     * Hakee reseptin tunnisteen (id) perusteella
      * @param id    tunniste, jota vastaava resepti halutaan löytää
      * @return tunnistetta vastaava resepti, null jos reseptiä ei löydy
      */
@@ -69,7 +69,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     }    
     
     /**
-     * Metodi hakee reseptin nimen ja käyttäjän perusteella.
+     * Hakee reseptin nimen ja käyttäjän perusteella.
      * @param name  haettavan reseptin nimi
      * @param user  käyttäjä, jolle resepti kuuluu
      * @return haettava resepti, null jos reseptiä ei löydy
@@ -87,7 +87,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     
     
     /**
-     * Metodi palauttaa kaikki tietylle käyttäjälle kuuluvat tietyntyyppiset reseptit.
+     * Palauttaa kaikki tietylle käyttäjälle kuuluvat tietyntyyppiset reseptit.
      * @param type  tyyppi, johon kuuluvia reseptejä haetaan
      * @param user  käyttäjä, johon liittyviä reseptejä haetaan
      * @return List-rakenne, joka sisältää kaikki valitulle käyttäjälle kuuluvat tietyntyyppiset reseptit
@@ -105,7 +105,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     }     
     
     /**
-     * Metodi palauttaa kaikki tietylle käyttäjälle kuuluvat reseptit.
+     * Palauttaa kaikki tietylle käyttäjälle kuuluvat reseptit.
      * @param user  käyttäjä, johon liittyviä reseptejä haetaan
      * @return List-rakenne, joka sisältää kaikki valitulle käyttäjälle kuuluvat reseptit
      */
@@ -122,7 +122,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     }   
     
     /**
-     * Metodi palauttaa kaikki reseptit
+     * Palauttaa kaikki reseptit
      * @return List-rakenne, joka sisältää kaikki tallennetut reseptit
      */
 
@@ -132,7 +132,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     }  
     
     /**
-     * Metodi päivittää valitun reseptin tietoja annettujen syötteiden perusteella.
+     * Päivittää valitun reseptin tietoja annettujen syötteiden perusteella.
      * @param newName   syötteenä annettu uusi nimi
      * @param newPortion    syötteenä annettu uusi annoskoko
      * @param newType   syötteenä annettu uusi reseptityyppi
@@ -152,7 +152,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
     }    
     
     /**
-     * Metodi poistaa valitun reseptin.
+     * Poistaa valitun reseptin.
      * @param recipe    resepti, joka halutaan poistaa
      * @return true jos reseptin poistaminen onnistuu, muuten false
      */
@@ -162,11 +162,6 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
         recipes.remove(recipe);
         return save();
     }
-    
-    /**
-     * Metodi generoi uniikin tunnisteen (id) reseptille
-     * @return kokonaisluku
-     */
     
     private int generateId() {
         latestId++;

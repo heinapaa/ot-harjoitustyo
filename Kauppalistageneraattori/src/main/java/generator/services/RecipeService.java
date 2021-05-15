@@ -20,7 +20,6 @@ public class RecipeService {
     /**
      * Konstruktori
      * @param recipeDao     RecipeDao-rajapinnan toteuttava olio, joka vastaa reseptien tallentamisesta.
-     * @param ingredientDao IngredientDao-rajapinnan toteuttava olio, joka vastaa ainesosien tallentamisesta.
      * @param validator     InputValidator-olio, joka vastaa syötteiden validoinnista.
      */
     
@@ -36,9 +35,7 @@ public class RecipeService {
      * @param portion   Syötteenä annettu annoskoko
      * @param type      Syötteenä annettu reseptin tyyppi
      * @param user      Käyttäjä, johon luotava resepti liitetään
-     * 
-     * @see             generator.dao.RecipeDao#create(generator.domain.Recipe) 
-     * 
+
      * @return          true jos uuden reseptin luonti onnistuu, muuten false.
      */
     
@@ -60,9 +57,7 @@ public class RecipeService {
      * 
      * @param recipe    poistettava resepti
      * @param user      käyttäjä, johon poistettava resepti liittyy
-     * 
-     * @see             generator.dao.RecipeDao#remove(generator.domain.Recipe)
-     * 
+
      * @return          true jos reseptin poistaminen onnistuu, muuten false
      */
     
@@ -81,9 +76,7 @@ public class RecipeService {
      * @param newPortion    Syötteenä annettu uusi annoskoko
      * @param newType       Syötteenä annettu uusi reseptityyppi.
      * @param user          Käyttäjä, johon päivitettävä resepti liittyy
-     * 
-     * @see                 generator.dao.RecipeDao#update(java.lang.String, int, java.lang.String, generator.domain.Recipe) 
-     * 
+
      * @return              true jos reseptin tietojen päivitys onnistuu, muuten false
      */
     
@@ -103,9 +96,7 @@ public class RecipeService {
      * Metodi palauttaa kaikki tiettyyn käyttäjään liittyvät reseptit.
      * 
      * @param user  Käyttäjä, johon reseptit liittyvät
-     * 
-     * @see         generator.dao.RecipeDao#findAll()
-     * 
+
      * @return      List-rakenne joka sisältää käyttäjään liittyvät reseptit Recipe-luokan olioina
      */
     
@@ -118,9 +109,7 @@ public class RecipeService {
      * 
      * @param name  Haetun reseptin nimi
      * @param user  Käyttäjä, johon resepti liittyy
-     *
-     * @see         generator.dao.RecipeDao#findByNameAndUser(java.lang.String, generator.domain.User) 
-     * 
+
      * @return      Haettua vastaava Recipe-luokan olio jos tällainen on olemassa, muuten null
      */
     

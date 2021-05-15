@@ -18,6 +18,10 @@ public class ShoppingListService {
  
     private final IngredientDao ingredientDao;
     
+    /**
+     * Konstruktori
+     * @param ingredientDao IngredientDao-rajapinnan toteuttava olio, joka vastaa ainesosien tallentamisesta
+     */
     public ShoppingListService(IngredientDao ingredientDao) {
         this.ingredientDao = ingredientDao;
     } 
@@ -26,10 +30,6 @@ public class ShoppingListService {
      * Palauttaa Recipe-luokan olioita sisältävän List-rakenteen perusteella String-muotoisen kauppalistan, jossa reseptien sisältämät ainesosat on mahdollisuuksien mukaan summattu yhteen.
      * 
      * @param recipes   List-luokan olio, joka sisältää kauppalistalle valitut reseptit Recipe-luokan olioina
-     * 
-     * @see             #getIngredientsForAllRecipes(java.util.List) 
-     * @see             #sumIngredients(java.util.List) 
-     * @see             #printShoppingList(java.util.Map) 
      * 
      * @return String-muotoinen kauppalista, jossa jokainen ainesosa määrineen on omalla rivillään.
      */
@@ -44,6 +44,12 @@ public class ShoppingListService {
         return shoppingList.toString();
     }
     
+    /**
+     * Tallentaa ostoslistan tekstitiedostoon
+     * @param shoppingList  tallennettava ostoslista String-oliona
+     * @param file tiedosto, johon ostoslista halutaan tallentaa
+     * @return
+     */
     public boolean saveToFile(String shoppingList, File file) {
         try {
             PrintWriter writer = new PrintWriter(file);

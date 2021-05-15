@@ -30,7 +30,7 @@ public class FileUserDao extends FileDao implements UserDao {
     }
     
     /**
-     * Metodi tallentaa käyttäjän.
+     * Tallentaa käyttäjän.
      * @param user  Tallennettava käyttäjä
      * @return  true jos tallennus onnistuu, muuten false
      */
@@ -42,7 +42,7 @@ public class FileUserDao extends FileDao implements UserDao {
     }
     
     /**
-     * Metodi hakee käyttäjän käyttäjänimen perusteella.
+     * Hakee käyttäjän käyttäjänimen perusteella.
      * @param name  syötteenä annettu käyttäjänimi
      * @return käyttäjä jos nimeä vastaava olio löytyy, muuten null
      */
@@ -62,7 +62,7 @@ public class FileUserDao extends FileDao implements UserDao {
     
     
     /**
-     * Metodi hakee kaikki rekisteröidyt käyttäjät.
+     * Hakee kaikki rekisteröidyt käyttäjät.
      * @return List-rakenne, joka sisältää kaikki rekisteröityneet käyttäjät
      */    
 

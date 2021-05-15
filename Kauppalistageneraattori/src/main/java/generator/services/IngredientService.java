@@ -33,13 +33,6 @@ public class IngredientService {
      * @param ingredientName    Syötteenä annettu nimi
      * @param ingredientUnit    Syötteenä annettu yksikkö 
      * @param ingredientAmount  Syötteenä annettu määrä
-     * 
-     * @see                     generator.domain.InputValidator#isValidIngredientName(java.lang.String) 
-     * @see                     generator.domain.InputValidator#isValidIngredientUnit(java.lang.String)
-     * @see                     generator.domain.InputValidator#isValidIngredientAmount(java.lang.String)
-     * @see                     #ingredientExists(generator.domain.Recipe, java.lang.String) 
-     * @see                     generator.dao.IngredientDao#create(generator.domain.Ingredient) 
-     * 
      * @return                  true jos ainesosan luonti onnistuu, false jos ainesosan luonti epäonnistuu
      */
     
@@ -62,11 +55,6 @@ public class IngredientService {
      * 
      * @param recipe        Resepti, johon poistettava ainesosa liittyy
      * @param ingredient    Poistettavan ainesosa
-     * 
-     * @see                 #ingredientExists(generator.domain.Recipe, java.lang.String) 
-     * @see                 generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
-     * @see                 generator.dao.IngredientDao#remove(generator.domain.Ingredient) 
-     * 
      * @return              true jos ainesosan poistaminen onnistuu, false jos ainesosan poistaminen epäonnistuu
      */
     
@@ -88,9 +76,6 @@ public class IngredientService {
      * 
      * @param recipe            Resepti, johon ainesosa liittyy
      * @param ingredientName    Syötteenä annettu ainesosan nimi
-     * 
-     * @see                     generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
-     * 
      * @return                  true jos ainesosa on olemassa, false jos ainesosaa ei ole olemassa
      */
     
@@ -114,9 +99,6 @@ public class IngredientService {
      * Metodi hakee kaikki tiettyyn reseptiin liittyvät ainesosat
      * 
      * @param recipe    Resepti, johon ainesosat liittyvät
-     * 
-     * @see             generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
-     * 
      * @return          List-rakenne joka sisältää reseptiin liittyvät ainesosat Ingredient-luokan olioina
      */
     
@@ -126,10 +108,7 @@ public class IngredientService {
     
     /**
      * Metodi hakee kaikki tiettyihin resepteihin liittyvät ainesosat
-     * 
-     * @param recipes   List-rakenne, joka sisältää ne reseptit joiden ainesosat halutaan
-     * @see             generator.dao.IngredientDao#findByRecipe(generator.domain.Recipe) 
-     * 
+     * @param recipes   List-rakenne, joka sisältää ne reseptit joiden ainesosat halutaan 
      * @return          List-rakenne joka sisältää resepteihin liittyvät ainesosat Ingredient-luokan olioina
      */    
 

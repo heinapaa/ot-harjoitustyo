@@ -152,6 +152,3 @@ Kauppalistaa kuvaava luokka voisi olla järkevämpää toteuttaa siten, että se
 ### Käyttöliittymä
 
 Käyttöliittymän toteutuksessa on kaiken kaikkiaan runsaasti parannettavaa. Esimerkiksi sovelluslogiikan ja käyttöliittymän tapahtumankäsittelijöiden välinen kommunikointi hukkuu tällä hetkellä näkymää rakentavan koodin sekaan, ja toteutus ei muutenkaan ole elegantein mahdollinen. Nyt käytössä oleva ohjelmallinen määrittely kannattaisikin varmasti jatkossa korvata kokonaan jollain muulla toteutuksella, esim.FXML-määrittelyllä.
-
-### SQLDao-luokkien testaus
-

@@ -5,6 +5,7 @@ import generator.models.Ingredient;
 import generator.dao.IngredientDao;
 import generator.models.ShoppingList;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class ShoppingListService {
             PrintWriter writer = new PrintWriter(file);
             writer.println(shoppingList);
             writer.close();
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             return false;
         }
         return true;

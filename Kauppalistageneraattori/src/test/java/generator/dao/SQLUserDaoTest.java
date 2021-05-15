@@ -2,6 +2,7 @@ package generator.dao;
 
 import generator.dao.sql.SQLUserDao;
 import generator.models.User;
+
 import java.sql.SQLException;
 import java.util.List;
 import org.junit.After;

@@ -1,7 +1,5 @@
 package generator.dao;
 
-import generator.dao.RecipeDao;
-import generator.dao.RecipeDao;
 import generator.models.Recipe;
 import generator.models.User;
 import java.util.ArrayList;

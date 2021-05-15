@@ -3,10 +3,10 @@ package generator.services;
 import generator.dao.FakeUserDao;
 import generator.dao.FakeIngredientDao;
 import generator.dao.FakeRecipeDao;
-import generator.services.InputValidator;
 import generator.dao.IngredientDao;
 import generator.dao.RecipeDao;
 import generator.dao.UserDao;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Before;

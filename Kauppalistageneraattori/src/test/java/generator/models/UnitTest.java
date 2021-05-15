@@ -1,7 +1,5 @@
 package generator.models;
 
-import generator.models.Unit;
-import generator.models.Ingredient;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;

@@ -1,9 +1,8 @@
 package generator.dao;
 
-import generator.dao.UserDao;
-import generator.dao.file.FileUserDao;
 import generator.dao.file.FileUserDao;
 import generator.models.User;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.util.List;

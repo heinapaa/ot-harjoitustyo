@@ -4,6 +4,7 @@ import generator.dao.sql.SQLIngredientDao;
 import generator.dao.sql.SQLRecipeDao;
 import generator.models.User;
 import generator.models.Recipe;
+
 import java.sql.SQLException;
 import java.util.List;
 import org.junit.After;

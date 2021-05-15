@@ -1,7 +1,5 @@
 package generator.models;
 
-import java.util.Objects;
-
 /**
  * Yksittäistä ainesosaa vastaava luokka. 
  */

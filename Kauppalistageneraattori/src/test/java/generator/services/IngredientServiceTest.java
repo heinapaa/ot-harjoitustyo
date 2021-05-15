@@ -3,8 +3,6 @@ package generator.services;
 import generator.dao.FakeIngredientDao;
 import generator.dao.FakeRecipeDao;
 import generator.dao.FakeUserDao;
-import generator.services.IngredientService;
-import generator.services.InputValidator;
 import generator.models.User;
 import generator.models.Unit;
 import generator.models.Recipe;
@@ -103,8 +101,6 @@ public class IngredientServiceTest {
         assertTrue(ingredients.get(1).getAmount() == 3);        
     }
     
-    
-    /*
     @Test
     public void canGetAllIngredientsByRecipes() {
         ingredientService.addIngredient(r1, "ingredient2", "kpl", "3");  
@@ -115,5 +111,5 @@ public class IngredientServiceTest {
         List<Ingredient> ingredients = ingredientService.getIngredients(recipes);
         assertEquals(3, ingredients.size());      
     }  
-    */
+
 }

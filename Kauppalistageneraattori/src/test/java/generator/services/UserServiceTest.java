@@ -1,12 +1,10 @@
 package generator.services;
 
 import generator.dao.FakeUserDao;
-import generator.services.UserService;
-import generator.services.InputValidator;
 import generator.models.User;
 import generator.dao.UserDao;
+
 import java.util.ArrayList;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

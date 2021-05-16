@@ -31,6 +31,8 @@ Testaus on suoritettu siten, että sovelluksen käynnistyshakemistossa on käytt
 
 Sovellusta on testattu sekä tietokanta- että tiedostotallennusmoodissa, ja molemmissa tapauksissa sekä tilanteessa, jossa tallenntavat tiedostot ovat olemassa ja jossa niitä ei ole olemassa. Jälkimmäisessä tapauksessa sovellus loi tarvittavat tiedostot.
 
+Ohjelmisto toimii halutusta sekä OSX- että Linux-ympäristöissä, mutta eri ympäristöissä laaditut jar-pakkaukset eivät toimi ristiin (eli esim. OSX-koneella laadittu jar ei välttämättä toimi Linux-koneella ja päin vastoin).
+
 ### Toiminnallisuudet
 Määrittelydokumentin ja käyttöohjeen listaamat toiminnallisuudet on käyty läpi, ja ne ovat toimineet kuvatun laisesti. Kaikkien toiminnallisuuksien yhteydessä on yritetty täyttää myös virheellisiä arvoja, ja jättää arvoja täyttämättä.
 

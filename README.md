@@ -19,6 +19,8 @@ Sovellus on luotu Helsingin yliopiston Tietojenkäsittelytieteen kurssin *Ohjelm
 
 [Viikko 6](https://github.com/heinapaa/ot-harjoitustyo/releases/tag/viikko6)
 
+[Loppupalautus](https://github.com/heinapaa/ot-harjoitustyo/releases/tag/loppupalautus)
+
 ## Komentorivitoiminnot
 
 ### Ohjelman ajaminen

@@ -21,7 +21,7 @@ public class FileIngredientDao extends FileDao implements IngredientDao {
      * Konstruktori
      * @param fileName  Tiedoston nimi, johon ainesosat halutaan tallentaa
      * @param recipes   RecipeDao-rajapinnan toteuttava olio
-     * @throws java.io.IOException
+     * @throws java.io.IOException tiedoston lukemisessa tapahtuu virhe (virheen lähde luokassa FileDao)
      */
     
     public FileIngredientDao(String fileName, RecipeDao recipes) throws IOException {
@@ -123,6 +123,21 @@ public class FileIngredientDao extends FileDao implements IngredientDao {
     public List<Ingredient> findAll() {
         return ingredients;
     }  
+    
+    /**
+     * Metodi palauttaa kaikki listattuihin resepteihin liittyvät ainesosat
+     * @param recipes   List-rakenne, joka sisältää ne reseptit joihin liittyvät ainesosat halutaan
+     * @return List-rakenne, joka sisältää kaikki valittuihin resepteihin liittyvät ainesosat
+     */
+    
+    @Override
+    public List<Ingredient> findByRecipes(List<Recipe> recipes) {
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (Recipe recipe : recipes) {
+            ingredients.addAll(findByRecipe(recipe));
+        }
+        return ingredients;
+    }    
         
     private boolean save() {
         super.lines = new ArrayList<>();
@@ -135,13 +150,4 @@ public class FileIngredientDao extends FileDao implements IngredientDao {
         }
         return super.writeToFile();
     }     
-
-    @Override
-    public List<Ingredient> findByRecipes(List<Recipe> recipes) {
-        List<Ingredient> ingredients = new ArrayList<>();
-        for (Recipe recipe : recipes) {
-            ingredients.addAll(findByRecipe(recipe));
-        }
-        return ingredients;
-    }
 }

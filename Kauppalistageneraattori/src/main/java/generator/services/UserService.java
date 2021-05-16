@@ -29,6 +29,8 @@ public class UserService {
      * Metodi asettaa käyttäjän sisäänkirjautuneeksi syötteenä annetun käyttäjänimen perusteella.
      * 
      * @param name  Käyttäjän syöttämä merkkijono
+     * @see generator.services.InputValidator#isValidUserName(java.lang.String) 
+     * @see generator.dao.UserDao#findByUsername(java.lang.String) 
      * @return      true jos käyttäjä on olemassa, false jos käyttäjää ei ole olemassa
      */
           
@@ -59,7 +61,9 @@ public class UserService {
      * Metodi luo uuden käyttäjän syötteenä annetun käyttäjänimen perusteella.
      * 
      * @param name  Käyttäjän syöttämä merkkijono
-     * 
+     * @see generator.services.InputValidator#isValidUserName(java.lang.String) 
+     * @see generator.dao.UserDao#findByUsername(java.lang.String) 
+     * @see generator.dao.UserDao#create(generator.models.User) 
      * @return      true jos uuden käyttäjän luominen onnistuu, muuten false
      */
     

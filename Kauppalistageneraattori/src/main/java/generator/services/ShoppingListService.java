@@ -30,7 +30,7 @@ public class ShoppingListService {
      * Palauttaa Recipe-luokan olioita sisältävän List-rakenteen perusteella String-muotoisen kauppalistan, jossa reseptien sisältämät ainesosat on mahdollisuuksien mukaan summattu yhteen.
      * 
      * @param recipes   List-luokan olio, joka sisältää kauppalistalle valitut reseptit Recipe-luokan olioina
-     * 
+     * @see generator.dao.IngredientDao#findByRecipes(java.util.List) 
      * @return String-muotoinen kauppalista, jossa jokainen ainesosa määrineen on omalla rivillään.
      */
     
@@ -48,7 +48,7 @@ public class ShoppingListService {
      * Tallentaa ostoslistan tekstitiedostoon
      * @param shoppingList  tallennettava ostoslista String-oliona
      * @param file tiedosto, johon ostoslista halutaan tallentaa
-     * @return
+     * @return true jos tallennus onnistuu, muuten false
      */
     public boolean saveToFile(String shoppingList, File file) {
         try {

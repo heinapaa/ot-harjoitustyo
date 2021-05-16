@@ -29,6 +29,9 @@ public class ShoppingList {
     /**
      * Lisää ostoslistalle parametrina annetut ainesosat
      * @param ingredients List-rakenne, joka sisältää ainesosat jotka halutaan lisätä kauppalistalle
+     * @see generator.models.Unit#isAmount() 
+     * @see generator.models.Unit#isVolume() 
+     * @see generator.models.Unit#isWeight() 
      */
     
     public void addToList(List<Ingredient> ingredients) {     

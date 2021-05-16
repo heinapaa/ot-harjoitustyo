@@ -59,6 +59,7 @@ public class Ingredient implements Comparable<Ingredient> {
     /**
      * Metodi testaa, voidaanko ainesosa laskea yhteen toisen ainesosan kanssa.
      * @param ingredient    ainesosa, jonka kanssa valittu ainesosa halutaan summata
+     * @see generator.models.Unit#hasSameType(generator.models.Unit) 
      * @return true jos ainesosat voidaan laskea yhteen, muuten false
      */
     

@@ -4,6 +4,7 @@ import generator.dao.IngredientDao;
 import generator.models.Ingredient;
 import generator.models.Recipe;
 import generator.models.User;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -32,8 +33,9 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
      * @param fileName tietokantatiedoston nimi
      * @param username tietokannan käyttäjänimi
      * @param password tietokannan salasana
-     * @throws java.sql.SQLException
-     * @throws java.lang.ClassNotFoundException
+     * @see generator.dao.sql.SQLDao#endConnection(java.sql.Statement) 
+     * @throws java.sql.SQLException tietokantakyselyn suorittaminen epäonnistuu
+     * @throws java.lang.ClassNotFoundException virhe tietokanta-ajurin tunnistamisessa
      */
     
     public SQLIngredientDao(String fileName, String username, String password) throws SQLException, ClassNotFoundException {
@@ -46,6 +48,7 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
     /**
      * Metodi tallentaa uuden ainesosan tiedot tietokantaan.
      * @param ingredient    ainesosa, joka halutaan tallentaa
+     * @see generator.dao.sql.SQLDao#completePreparedConnection(java.sql.PreparedStatement) 
      * @return true jos ainesosan tietojen tallentaminen onnistuu, muuten false
      */
 
@@ -67,6 +70,7 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
     /**
      * Metodi poistaa valitun ainesosan tiedot tietokannasta.
      * @param ingredient    ainesosa, joka halutaan poistaa
+     * @see generator.dao.sql.SQLDao#completePreparedConnection(java.sql.PreparedStatement) 
      * @return true jos ainesosan tietojen poistaminen onnistuu, muuten false
      */
 
@@ -86,6 +90,7 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
     /**
      * Metodi poistaa kaikki tiettyyn reseptiin liittyvät ainesosat tietokannasta.
      * @param recipe    resepti, johon liittyvät ainesosat halutaan poistaa
+     * @see generator.dao.sql.SQLDao#completePreparedConnection(java.sql.PreparedStatement) 
      * @return true jos ainesosien tietojen poistaminen onnistuu, muuten false
      */
 
@@ -106,6 +111,7 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
      * Metodi hakee ja palauttaa ainesosan nimen ja reseptin perusteella.
      * @param name  haettavan ainesosan nimi
      * @param recipe    resepti, johon haettava ainesosa liittyy
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Haettava ainesosa {@code Ingredient}-olion muodossa, jos ainesosaa ei löydy niin null
      */
 
@@ -131,6 +137,7 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
     /**
      * Metodi hakee ja palauttaa kaikki tiettyyn reseptiin liittyvät ainesosat.
      * @param recipe resepti, johon liittyvät ainesosat halutaan
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Lista, joka sisältää kaikki märiteltyyn reseptiin liittyvät ainesosat {@code Ingredient}-olioina
      */
 
@@ -154,7 +161,8 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
     }
     
     /**
-     * Meto hakee ja palauttaa kaikki tallennetut ainesosat.
+     * Hakee ja palauttaa kaikki tallennetut ainesosat.
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Lista, joka sisältää kaikki tallennetut ainesosat {@code Ingredient}-olioina
      */
 
@@ -174,6 +182,12 @@ public class SQLIngredientDao extends SQLDao implements IngredientDao {
             return new ArrayList<>();
         }  
     }
+    
+    /**
+     * Hakee ja palauttaa kaikkien listattujen reseptien ainesosat
+     * @param recipes   lista, joka sisältää Recipe-olioina ne reseptit joiden ainesosat halutaan
+     * @return lista, joka sisältää haetut ainesosat Ingredient-olioina
+     */
     
     @Override
     public List<Ingredient> findByRecipes(List<Recipe> recipes) {

@@ -26,6 +26,9 @@ public class SQLUserDao extends SQLDao implements UserDao {
      * @param fileName tietokantatiedoston nimi
      * @param username tietokannan käyttäjänimi
      * @param password tietokannan salasana
+     * @throws java.sql.SQLException tietokantakyselyn suorittaminen epäonnistuu
+     * @throws java.lang.ClassNotFoundException virhe tietokanta-ajurin tunnistamisessa
+     * @see generator.dao.sql.SQLDao#endConnection(java.sql.Statement) 
      */
     public SQLUserDao(String fileName, String username, String password) throws SQLException, ClassNotFoundException {
         super(fileName, username, password);
@@ -37,6 +40,7 @@ public class SQLUserDao extends SQLDao implements UserDao {
     /**
      * Metodi tallentaa uuden käyttäjän tiedot tietokantaan
      * @param user  tallennettava käyttäjä
+     * @see generator.dao.sql.SQLDao#completePreparedConnection(java.sql.PreparedStatement) 
      * @return true jos käyttäjän tietojen tallentaminen onnistuu, muuten false
      */
 
@@ -55,6 +59,7 @@ public class SQLUserDao extends SQLDao implements UserDao {
     /**
      * Metodi hakee ja palauttaa käyttäjän käyttäjänimen perusteella.
      * @param name käyttäjänimi, jonka mukaista käyttäjää haetaan
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Haettava käyttäjä {@code User}-olion muodossa, jos käyttäjää ei löydy niin null
      */
 
@@ -77,6 +82,7 @@ public class SQLUserDao extends SQLDao implements UserDao {
     
     /**
      * Metodi hakee ja palauttaa kaikki tallennetut käyttäjät.
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Lista, joka sisältää kaikki tallennetut käyttäjät {@code User}-olioina
      */
     

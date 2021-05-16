@@ -51,7 +51,8 @@ public enum Unit {
     }
     
     /**
-     * Vertaa yksikköä toiseen yksikköön ja palauttaa tiedon siitä, ovatko ne saman tyyppisiä.
+     * Vertaa yksikköä toiseen yksikköön ja palauttaa tiedon siitä, ovatko ne saman tyyppisiä (paino/tilavuus/kpl).
+     * @param otherUnit se toinen yksikkö, johon vertailu halutaan suorittaa
      * @return true jos yksiköt ovat saman tyyppisiä, muuten false
      */    
 

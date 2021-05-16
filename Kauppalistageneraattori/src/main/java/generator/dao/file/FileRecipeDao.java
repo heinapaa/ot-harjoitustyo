@@ -21,7 +21,7 @@ public class FileRecipeDao extends FileDao implements RecipeDao {
      * Kostruktori
      * @param fileName  Tiedoston nimi, johon reseptit halutaan tallentaa
      * @param users UserDao-rajapinnan toteuttava olio
-     * @throws java.io.IOException
+     * @throws java.io.IOException tiedoston lukemisessa tapahtuu virhe (virheen lähde luokassa FileDao)
      */
 
     public FileRecipeDao(String fileName, UserDao users) throws IOException {

@@ -17,7 +17,7 @@ public class FileUserDao extends FileDao implements UserDao {
     /**
      * Konstruktori
      * @param fileName  Tiedoston nimi, johon käyttäjät halutaan tallentaa
-     * @throws java.io.IOException
+     * @throws java.io.IOException tiedoston lukemisessa tapahtuu virhe (virheen lähde luokassa FileDao)
      */
     
     public FileUserDao(String fileName) throws IOException {

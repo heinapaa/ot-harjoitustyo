@@ -3,6 +3,7 @@ package generator.dao.sql;
 import generator.dao.RecipeDao;
 import generator.models.Recipe;
 import generator.models.User;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,8 +34,9 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * @param fileName tietokantatiedoston nimi
      * @param username tietokannan käyttäjänimi
      * @param password tietokannan salasana
-     * @throws java.sql.SQLException
-     * @throws java.lang.ClassNotFoundException
+     * @see generator.dao.sql.SQLDao#endConnection(java.sql.Statement) 
+     * @throws java.sql.SQLException tietokantakyselyn suorittaminen epäonnistuu
+     * @throws java.lang.ClassNotFoundException virhe tietokanta-ajurin tunnistamisessa
      */    
     
     public SQLRecipeDao(String fileName, String username, String password) throws SQLException, ClassNotFoundException {
@@ -47,6 +49,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
     /**
      * Metodi tallentaa uuden ainesosan tiedot tietokantaan.
      * @param recipe    resepti, joka halutaan tallentaa
+     * @see generator.dao.sql.SQLDao#completePreparedConnection(java.sql.PreparedStatement) 
      * @return true jos reseptin tietojen tallentaminen onnistuu, muuten false
      */    
 
@@ -69,6 +72,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
     /**
      * Metodi hakee ja palauttaa reseptin id-tunnisteen avulla.
      * @param id sen reseptin uniikki id-tunniste, jonka tiedot halutaan hakea
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Haettua reseptiä vastaava {@code Recipe}-olio, null jos reseptiä ei löydy
      */
      
@@ -93,6 +97,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * Metodi hakee ja palauttaa reseptin nimen ja käyttäjän avulla.
      * @param name haettavan reseptin nimi
      * @param user käyttäjä, jolle haettava resepti kuuluu
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Haettua reseptiä vastaava {@code Recipe}-olio, null jos reseptiä ei löydy 
      */    
 
@@ -118,6 +123,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * Metodi hakee ja palauttaa kaikki tietylle käyttäjälle kuuluvat tietyntyyppiset reseptit.
      * @param type haettu reseptityyppi
      * @param user käyttäjä, jonka reseptejä haetaan
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Lista, joka sisältää kaikki hakukriteerit täyttävät reseptit {@code Recipe}-olioina 
      */    
 
@@ -142,6 +148,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
     /**
      * Metodi hakee ja palauttaa kaikki tietylle käyttäjälle kuuluvat reseptit.
      * @param user käyttäjä, jonka reseptejä haetaan
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Lista, joka sisältää kaikki hakukriteerit täyttävät reseptit {@code Recipe}-olioina
      */      
 
@@ -164,6 +171,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
     
     /**
      * Metodi hakee ja palauttaa kaikki tallennetut reseptit.
+     * @see generator.dao.sql.SQLDao#endPreparedConnection(java.sql.PreparedStatement, java.sql.ResultSet) 
      * @return Lista, joka sisältää kaikki tietokantaan tallennetut reseptit {@code Recipe}-olioina
      */      
 
@@ -189,6 +197,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
      * @param newPortion reseptin uusi annoskoko
      * @param newType reseptin uusi tyyppi
      * @param recipe muokattava resepti
+     * @see generator.dao.sql.SQLDao#completePreparedConnection(java.sql.PreparedStatement) 
      * @return true jos reseptin uusien tietojen tallennus onnistuu, muuten false
      */
 
@@ -211,6 +220,7 @@ public class SQLRecipeDao extends SQLDao implements RecipeDao {
     /**
      * Metodi poistaa valitun reseptin.
      * @param recipe resepti joka halutaan poistaa
+     * @see generator.dao.sql.SQLDao#completePreparedConnection(java.sql.PreparedStatement) 
      * @return true jos reseptin poistaminen onnistuu, muuten false
      */
 

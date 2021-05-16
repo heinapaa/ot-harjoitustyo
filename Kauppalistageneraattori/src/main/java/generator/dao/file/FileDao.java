@@ -28,7 +28,7 @@ public class FileDao {
     /**
      * Konstruktori, joka tarkistaa onko <code>fileName</code>-nimistä tiedostoa olemassa, ja joko luo tarvittaessa uuden tiedoston tai lukee tiedoston sisältämät arvot  merkkijonoina listaan {@code lines}.
      * @param fileName  luettavan tekstitiedoston nimi
-     * @throws java.io.IOException
+     * @throws java.io.IOException tiedoston lukemisessa tapahtuu virhe
      */
 
     public FileDao(String fileName) throws IOException {

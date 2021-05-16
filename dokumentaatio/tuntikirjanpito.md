@@ -32,6 +32,7 @@ päivä | h | log
 11.5. | 2.0 | tietokantatallennuksen testausta, toimivuuden testailua eri käyttöjärjestelmillä
 13.5. | 1.5 | tietokantatallennuksen testausta ja korjailua
 14.5. | 5.0 | testausta ja pikkukorjauksia + rakenteen korjailua (esim. ostoslista omaksi luokaksi)
-15.5  | 5.0 | testausta, javadoc, pikkukorjauksia, dokumentaatiota
+15.5  | 6.0 | testausta, javadoc, pikkukorjauksia, dokumentaatiota
+16.5  | 3.0 | testausta, viimeistelyä, javadoc, dokumentaatiota
 
-Yhteensä 99.5h
+Yhteensä 103.5h

@@ -90,7 +90,7 @@ public class Router extends Application {
     @Override
     public void start(Stage stage) {
         this.mainStage = stage;
-        mainStage.setWidth(600);
+        mainStage.setWidth(900);
         mainStage.setHeight(300);
         mainStage.setTitle("Kauppalistageneraattori - kirjaudu sisään!");
         

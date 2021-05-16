@@ -42,7 +42,7 @@ Suoritettava jar-tiedosto generoidaan komennolla
 ```
 mvn package
 ```
-Generoinnin jälkeen tiedosto löytyy hakemistosta *target* nimellä *Kauppalistageneraattori-1.0-SNAPSHOT.jar*
+Generoinnin jälkeen tiedosto löytyy hakemistosta *target* nimellä *Kauppalistageneraattori-1.0.jar*
 
 ### JavaDoc
 JavaDoc generoidaan komennolla

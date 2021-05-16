@@ -68,6 +68,32 @@ public class ShoppingListServiceTest {
         String shoppingList = sls.createShoppingList(recipeList);   
         assertEquals("", shoppingList);
     } 
+    
+    @Test
+    public void listCreatedCorrectly4() {
+        RecipeDao recipeDao = new FakeRecipeDao();
+        Recipe r1 = new Recipe(1, "r1", 1, "kasvis", null);
+        Recipe r2 = new Recipe(2, "r2", 2, "kala", null);
+        Recipe r3 = new Recipe(3, "r3", 3, "makea", null);
+        recipeDao.create(r1);
+        recipeDao.create(r2);
+        recipeDao.create(r3);
+        Ingredient ingredient1 = new Ingredient("a", 100, "kpl", recipeDao.findById(1));
+        Ingredient ingredient2 = new Ingredient("a", 100, "l", recipeDao.findById(2));  
+        Ingredient ingredient3 = new Ingredient("a", 100, "kg", recipeDao.findById(3)); 
+        ingredientDao.create(ingredient1);
+        ingredientDao.create(ingredient2);
+        ingredientDao.create(ingredient3);
+        List<Recipe> recipeList = new ArrayList<>();
+        recipeList.add(recipeDao.findById(1));
+        recipeList.add(recipeDao.findById(2));
+        recipeList.add(recipeDao.findById(3));
+        String shoppingList = sls.createShoppingList(recipeList);   
+        String s = "a, 100.0 kg\n" +
+                "a, 100.0 kpl\n" +
+                "a, 100.0 l\n";
+        assertEquals(s, shoppingList);
+    }      
 
     @Test
     public void listSavedToFile() throws IOException {

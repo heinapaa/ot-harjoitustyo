@@ -7,6 +7,7 @@ import generator.models.User;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
@@ -90,6 +91,17 @@ public class FileIngredientDaoTest {
         assertEquals(1, ingredients.size());
         assertEquals(i1, ingredients.get(0));
     }   
+    
+    @Test
+    public void ingredientsAreReadCorrectlyByRecipes() {        
+        ingredientDao.create(i2);        
+        ingredientDao.create(i3);
+        List<Recipe> recipes = new ArrayList<>();
+        recipes.add(r1);
+        recipes.add(r2);
+        List<Ingredient> ingredients = ingredientDao.findByRecipes(recipes);
+        assertEquals(3, ingredients.size());
+    }    
     
     @Test
     public void ingredientsAreRemovedCorrectlyByRecipe() {

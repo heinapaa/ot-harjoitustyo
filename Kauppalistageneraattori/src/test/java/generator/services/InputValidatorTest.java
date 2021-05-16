@@ -51,6 +51,7 @@ public class InputValidatorTest {
         assertFalse(validator.isValidUserName(" h h h "));     
         assertFalse(validator.isValidUserName("Teuvo Testaaja"));   
         assertFalse(validator.isValidUserName("test;;aaja"));
+            assertFalse(validator.isValidUserName(null));
     }
     
     @Test
@@ -67,7 +68,8 @@ public class InputValidatorTest {
         assertFalse(validator.isValidRecipeName(""));
         assertFalse(validator.isValidRecipeName("   "));
         assertFalse(validator.isValidRecipeName(" r r r "));   
-        assertFalse(validator.isValidRecipeName("rese;;pti"));      
+        assertFalse(validator.isValidRecipeName("rese;;pti"));   
+        assertFalse(validator.isValidRecipeName(null));
     }
     
     @Test
@@ -83,21 +85,22 @@ public class InputValidatorTest {
         assertFalse(validator.isValidRecipePortion("  "));  
         assertFalse(validator.isValidRecipePortion("  8   3 ")); 
         assertFalse(validator.isValidRecipePortion(" 3 ")); 
-        assertFalse(validator.isValidRecipePortion("2;;"));          
+        assertFalse(validator.isValidRecipePortion("2;;"));   
+        assertFalse(validator.isValidRecipePortion(null));
     } 
     
     @Test (expected = IllegalArgumentException.class)
-    public void invalidRecipePortionThrowsRightException1() {
+    public void invalidRecipePortionThrowsIllegalArgumentException1() {
         validator.isValidRecipePortion("annos");              
     }    
     
     @Test (expected = IllegalArgumentException.class)
-    public void invalidRecipePortionThrowsRightException2() {
+    public void invalidRecipePortionThrowsIllegalArgumentException2() {
         validator.isValidRecipePortion("2.0");              
     }
 
     @Test (expected = IllegalArgumentException.class)
-    public void invalidRecipePortionThrowsRightException3() {
+    public void invalidRecipePortionThrowsIllegalArgumentException3() {
         validator.isValidRecipePortion("2,0");              
     }    
               
@@ -119,7 +122,8 @@ public class InputValidatorTest {
         assertFalse(validator.isValidRecipeType("2"));
         assertFalse(validator.isValidRecipeType("juusto")); 
         assertFalse(validator.isValidRecipeType("/liha"));
-        assertFalse(validator.isValidRecipeType(" liha"));         
+        assertFalse(validator.isValidRecipeType(" liha"));    
+        assertFalse(validator.isValidRecipeType(null));
     }     
 
     @Test
@@ -137,6 +141,7 @@ public class InputValidatorTest {
         assertFalse(validator.isValidIngredientName("   "));
         assertFalse(validator.isValidIngredientName(" a a "));  
         assertFalse(validator.isValidIngredientName("aines;;osa"));
+        assertFalse(validator.isValidIngredientName(null));
     }
     
     @Test
@@ -154,16 +159,17 @@ public class InputValidatorTest {
         assertFalse(validator.isValidIngredientAmount(" 3 "));
         assertFalse(validator.isValidIngredientAmount("3;;"));       
         assertFalse(validator.isValidIngredientAmount("  8   . 8"));         
-        assertFalse(validator.isValidIngredientAmount("  8   3 "));         
+        assertFalse(validator.isValidIngredientAmount("  8   3 "));   
+        assertFalse(validator.isValidIngredientAmount(null));
     } 
     
     @Test (expected = IllegalArgumentException.class)
-    public void invalidIngredientAmountThrowsRightException1() {
+    public void invalidIngredientAmountThrowsIllegalArgumentException1() {
         validator.isValidIngredientAmount("määrä");                   
     } 
     
     @Test (expected = IllegalArgumentException.class)
-    public void invalidIngredientAmountThrowsRightException2() {
+    public void invalidIngredientAmountThrowsIllegalArgumentException2() {
         validator.isValidIngredientAmount("14,7");                
     }    
     
@@ -182,6 +188,7 @@ public class InputValidatorTest {
         assertFalse(validator.isValidIngredientUnit("kpl;;"));        
         assertFalse(validator.isValidIngredientUnit(""));      
         assertFalse(validator.isValidIngredientUnit(" "));    
-        assertFalse(validator.isValidIngredientUnit(" g"));        
+        assertFalse(validator.isValidIngredientUnit(" g"));   
+        assertFalse(validator.isValidIngredientUnit(null));
     }
 }

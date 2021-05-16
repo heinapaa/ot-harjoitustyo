@@ -3,6 +3,7 @@ package generator.services;
 import generator.models.Recipe;
 import generator.models.User;
 import generator.dao.RecipeDao;
+import java.util.ArrayList;
 
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,9 @@ public class RecipeService {
      */
     
     public boolean createRecipe(String name, String portion, String type, User user) throws NumberFormatException {
+        if (name == null || portion == null || type == null || user == null) {
+            return false;
+        }
         String nm = name.strip();
         String pn = StringUtils.deleteWhitespace(portion);
         String tp = type.strip();
@@ -62,6 +66,9 @@ public class RecipeService {
      */
     
     public boolean removeRecipe(Recipe recipe, User user) {
+        if (recipe == null || user == null) {
+            return false;
+        }
         if (getRecipe(recipe.getName(), user) == null) {
             return false;
         }
@@ -81,6 +88,9 @@ public class RecipeService {
      */
     
     public boolean updateRecipe(Recipe recipe, String newName, String newPortion, String newType, User user) throws NumberFormatException {
+        if (recipe == null || newName == null || newPortion == null || newType == null || user == null) {
+            return false;
+        }
         String newnm = newName.strip();
         String newpn = StringUtils.deleteWhitespace(newPortion); 
         String newtp = newType.strip();
@@ -101,6 +111,9 @@ public class RecipeService {
      */
     
     public List<Recipe> getAllRecipesByUser(User user) {
+        if (user == null) {
+            return new ArrayList<>();
+        }
         return recipeDao.findByUser(user); 
     }
     
@@ -114,6 +127,9 @@ public class RecipeService {
      */
     
     public Recipe getRecipe(String name, User user) {
+        if (name == null || user == null) {
+            return null;
+        }
         String nm = name.strip();
         return recipeDao.findByNameAndUser(nm, user);
     }

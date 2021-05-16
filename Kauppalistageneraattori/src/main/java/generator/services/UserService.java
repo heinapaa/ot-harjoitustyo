@@ -33,6 +33,9 @@ public class UserService {
      */
           
     public boolean login(String name) {
+        if (name == null) {
+            return false;
+        }
         String nm = StringUtils.deleteWhitespace(name);
         if (!validator.isValidUserName(nm)) {
             return false;
@@ -61,6 +64,9 @@ public class UserService {
      */
     
     public boolean addNewUser(String name) {
+        if (name == null) {
+            return false;
+        }
         String nm = StringUtils.deleteWhitespace(name); 
         if (!validator.isValidUserName(nm)) {
             return false;

@@ -1,5 +1,9 @@
 package generator.models;
 
+/**
+ * Yksittäistä kauppalistaa vastaava luokka.
+ */
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,15 +16,23 @@ public class ShoppingList {
     private Map<String, Double> volumeList;
     private Map<String, Double> pcsList;
     
+    /**
+     * Konstruktori
+     */
+    
     public ShoppingList() {
         this.weightList = new HashMap<>();
         this.volumeList = new HashMap<>();
         this.pcsList = new HashMap<>();        
     }
     
+    /**
+     * Lisää ostoslistalle parametrina annetut ainesosat
+     * @param ingredients List-rakenne, joka sisältää ainesosat jotka halutaan lisätä kauppalistalle
+     */
+    
     public void addToList(List<Ingredient> ingredients) {     
         for (Ingredient ingredient : ingredients) {
-            String name = ingredient.getName();
             if (ingredient.getUnit().isWeight()) {
                 addToWeightList(ingredient);
             } else if (ingredient.getUnit().isVolume()) {              
@@ -30,6 +42,11 @@ public class ShoppingList {
             }
         }       
     }
+    
+    /**
+     * Palauttaa ostoslistan String-muodossa
+     * @return String-muotoinen esitys ostoslistasta, jossa jokainen ainesosa on omalla rivillään (esim. "jauheliha, 0.4 kg") ja rivit on järjestetty aakkosjärjestykseen
+     */
        
     @Override
     public String toString() {
@@ -48,17 +65,17 @@ public class ShoppingList {
         return shoppingList.toString();        
     }    
     
-    private void addToWeightList(Ingredient ingredient){
+    private void addToWeightList(Ingredient ingredient) {
         weightList.putIfAbsent(ingredient.getName(), 0.0);
         weightList.put(ingredient.getName(), weightList.get(ingredient.getName()) + convertWeight(ingredient));        
     }
     
-    private void addToVolumeList(Ingredient ingredient){
+    private void addToVolumeList(Ingredient ingredient) {
         volumeList.putIfAbsent(ingredient.getName(), 0.0);
         volumeList.put(ingredient.getName(), volumeList.get(ingredient.getName()) + convertVolume(ingredient));        
     }
 
-    private void addToPcsList(Ingredient ingredient){
+    private void addToPcsList(Ingredient ingredient) {
         pcsList.putIfAbsent(ingredient.getName(), 0.0);
         pcsList.put(ingredient.getName(), pcsList.get(ingredient.getName()) + ingredient.getAmount());        
     }   

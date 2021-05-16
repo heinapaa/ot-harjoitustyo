@@ -63,20 +63,56 @@ public class IngredientServiceTest {
     
     @Test
     public void canAddIngredient() {
-        ingredientService.addIngredient(r1, "newIngredient", "kpl", "4");
+        assertTrue(ingredientService.addIngredient(r1, "newIngredient", "kpl", "4"));
         assertTrue(ingredientService.ingredientExists(r1, "newIngredient"));  
     }    
     
     @Test
+    public void cantAddIngredientWithBadRecipeInput() {
+        assertFalse(ingredientService.addIngredient(null, "newIngredient", "kpl", "4"));
+        assertFalse(ingredientService.ingredientExists(null, "newIngredient"));
+    }
+    
+    @Test
+    public void cantAddIngredientWithBadNameInput() {
+        assertFalse(ingredientService.addIngredient(r1, "ingred;;ient", "kpl", "4"));
+        assertFalse(ingredientService.ingredientExists(r1, "ingred;;ient")); 
+        
+        assertFalse(ingredientService.addIngredient(r1, null, "kpl", "4"));
+        assertFalse(ingredientService.ingredientExists(r1, null));         
+    }
+    
+    @Test
+    public void cantAddIngredientWithBadUnitInput() {
+        assertFalse(ingredientService.addIngredient(r1, "newIngredient", null, "4"));
+        assertFalse(ingredientService.ingredientExists(r1, "newIngredient"));          
+
+        assertFalse(ingredientService.addIngredient(r1, "newIngredient", "300", "4"));
+        assertFalse(ingredientService.ingredientExists(r1, "newIngredient"));          
+    }  
+    
+    @Test
+    public void cantAddIngredientWithEmptyAmountInput() {
+        assertFalse(ingredientService.addIngredient(r1, "newIngredient", "kpl", null));     
+        assertFalse(ingredientService.ingredientExists(r1, "newIngredient"));         
+    }     
+    
+    @Test(expected = NumberFormatException.class)
+    public void cantAddIngredientWithBadAmountInput() {
+        assertFalse(ingredientService.addIngredient(r1, "newIngredient", "kpl", "four"));     
+        assertFalse(ingredientService.ingredientExists(r1, "newIngredient"));         
+    }    
+    
+    @Test
     public void cantAddIngredientWithSameRecipeAndSameName() {
-        ingredientService.addIngredient(r1, "ingredient1", "kpl", "3");
+        assertFalse(ingredientService.addIngredient(r1, "ingredient1", "kpl", "3"));
         List<Ingredient> recipes = ingredientDao.findByRecipe(r1);
         assertEquals(1, recipes.size());
     }
     
     @Test
     public void canAddIngredientWithDifferentRecipeAndSameName() {
-        ingredientService.addIngredient(r2, "ingredient1", "kg", "1");
+        assertTrue(ingredientService.addIngredient(r2, "ingredient1", "kg", "1"));
         assertTrue(ingredientService.ingredientExists(r2, "ingredient1"));  
     } 
     
@@ -84,13 +120,20 @@ public class IngredientServiceTest {
     public void canRemoveIngredient() {
         List<Ingredient> ingredients = ingredientService.getIngredients(r1);
         Ingredient ingredient = ingredients.get(0);
-        ingredientService.removeIngredient(r1, ingredient);
+        assertTrue(ingredientService.removeIngredient(r1, ingredient));
         assertFalse(ingredientService.ingredientExists(r1, "ingredient2"));
     }
     
     @Test
+    public void emptyListIfSearchingIngredientsForNull() {
+        Recipe recipe = null;
+        List<Ingredient> ingredients = ingredientService.getIngredients(recipe);
+        assertEquals(0, ingredients.size());
+    }    
+    
+    @Test
     public void canGetAllIngredientsByRecipe() {
-        ingredientService.addIngredient(r1, "ingredient2", "kpl", "3");        
+        assertTrue(ingredientService.addIngredient(r1, "ingredient2", "kpl", "3"));        
         List<Ingredient> ingredients = ingredientService.getIngredients(r1);
         assertEquals(2, ingredients.size());
         assertTrue(ingredients.get(0).getName().equals("ingredient1"));
@@ -103,8 +146,8 @@ public class IngredientServiceTest {
     
     @Test
     public void canGetAllIngredientsByRecipes() {
-        ingredientService.addIngredient(r1, "ingredient2", "kpl", "3");  
-        ingredientService.addIngredient(r2, "ingredient1", "kg", "1");        
+        assertTrue(ingredientService.addIngredient(r1, "ingredient2", "kpl", "3"));  
+        assertTrue(ingredientService.addIngredient(r2, "ingredient1", "kg", "1"));        
         List<Recipe> recipes = new ArrayList<>();
         recipes.add(r1);
         recipes.add(r2);

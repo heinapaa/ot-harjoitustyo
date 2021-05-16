@@ -3,6 +3,7 @@ package generator.services;
 import generator.models.Recipe;
 import generator.models.Ingredient;
 import generator.dao.IngredientDao;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -37,6 +38,9 @@ public class IngredientService {
      */
     
     public boolean addIngredient(Recipe recipe, String ingredientName, String ingredientUnit, String ingredientAmount) throws NumberFormatException {
+        if (recipe == null || ingredientName == null || ingredientUnit == null || ingredientAmount == null) {
+            return false;
+        }
         String nm = ingredientName.strip();
         String unit = StringUtils.deleteWhitespace(ingredientUnit);
         String amount = StringUtils.deleteWhitespace(ingredientAmount);     
@@ -59,6 +63,9 @@ public class IngredientService {
      */
     
     public boolean removeIngredient(Recipe recipe, Ingredient ingredient) {
+        if (recipe == null || ingredient == null) {
+            return false;
+        }        
         if (!ingredientExists(recipe, ingredient.getName())) {
             return false;
         }
@@ -80,7 +87,7 @@ public class IngredientService {
      */
     
     public boolean ingredientExists(Recipe recipe, String ingredientName) {
-        if (recipe == null) {
+        if (recipe == null || ingredientName == null) {
             return false;
         }           
         List<Ingredient> existingIngredients = ingredientDao.findByRecipe(recipe);
@@ -103,6 +110,9 @@ public class IngredientService {
      */
     
     public List<Ingredient> getIngredients(Recipe recipe) {
+        if (recipe == null) {
+            return new ArrayList<>();
+        }
         return ingredientDao.findByRecipe(recipe);
     }
     
@@ -113,6 +123,9 @@ public class IngredientService {
      */    
 
     public List<Ingredient> getIngredients(List<Recipe> recipes) {
+        if (recipes == null) {
+            return new ArrayList<>();
+        }        
         return ingredientDao.findByRecipes(recipes);
     }
     

@@ -56,10 +56,6 @@ public class Ingredient implements Comparable<Ingredient> {
         return recipe;
     }
     
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-    
     /**
      * Metodi testaa, voidaanko ainesosa laskea yhteen toisen ainesosan kanssa.
      * @param ingredient    ainesosa, jonka kanssa valittu ainesosa halutaan summata

@@ -127,10 +127,7 @@ public class InputValidator {
      */    
     
     private boolean passesStringTest(String input) {
-        if (input == null) {
-            return false;
-        } else if (input.isBlank()
-                || StringUtils.trimToEmpty(input).isEmpty()
+        if (StringUtils.trimToEmpty(input).isEmpty()
                 || StringUtils.startsWith(input, " ")
                 || StringUtils.endsWith(input, " ")
                 || StringUtils.containsIgnoreCase(input, ";;")) {

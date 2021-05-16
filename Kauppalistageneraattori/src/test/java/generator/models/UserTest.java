@@ -15,28 +15,34 @@ import static org.junit.Assert.*;
  */
 public class UserTest {
     
-    private User kayttaja;
+    private User u1;
     
     @Before
     public void setUp() {
-        this.kayttaja = new User("testaaja");
+        this.u1 = new User("tester");
     }
     
     @Test
-    public void konstruktoriAsettaaNimenOikein() {
-        assertEquals(kayttaja.getUsername(), "testaaja");
+    public void constructorSetsNameCorrectly() {
+        assertEquals(u1.getUsername(), "tester");
     }
     
     @Test
-    public void equalKunSamaNimi() {
-        User toinenKayttaja = new User("testaaja");
-        assertTrue(kayttaja.equals(toinenKayttaja));
+    public void equalWhenSameName() {
+        User toinenKayttaja = new User("tester");
+        assertTrue(u1.equals(toinenKayttaja));
     }
     
     @Test
-    public void eiEqualKunEriNimi() {
-        User toinenKayttaja = new User("toinenTestaaja");
-        assertFalse(kayttaja.equals(toinenKayttaja));
+    public void notEqualWhenDifferentName() {
+        User u2 = new User("tester2");
+        assertFalse(u1.equals(u2));
+    }
+    
+    @Test
+    public void notEqualWhenDifferentType() {
+        String s = "tester";
+        assertFalse(u1.equals(s));
     }
 
 }

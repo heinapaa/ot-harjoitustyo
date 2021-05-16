@@ -57,6 +57,7 @@ public class UserServiceTest {
     public void cantChooseBadUsername() {
         assertFalse(userService.addNewUser("tes;;ter"));
         assertFalse(userService.addNewUser(""));
-        assertFalse(userService.addNewUser("   "));     
+        assertFalse(userService.addNewUser("   "));   
+        assertFalse(userService.addNewUser(null));
     }
 }

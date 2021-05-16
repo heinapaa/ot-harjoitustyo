@@ -5,12 +5,20 @@ Lataa tiedosto [Kauppalistageneraattori-1.0-SNAPSHOT.jar](https://github.com/hei
 
 ## Konfigurointi
 
-Ohjelma olettaa, että sen hakemistossa käynnistyshakemistossa on konfiguraatiotiedosto config.properties, joka määrittelee niiden tiedostojen nimet, mihin käyttäjät, reseptit ja ainesosat tallennetaan. Oletusarvoisesti tiedosto on seuraavanlainen:
+Ohjelma olettaa, että sen hakemistossa on konfiguraatiotiedosto config.properties, joka määrittelee ensisijaisen tallennustyypin; tietokantatiedoston nimen, käyttäjätunnuksen ja salasanan; sekä niiden tiedostojen nimet, mihin käyttäjät, reseptit ja ainesosat tallennetaan. Oletusarvoisesti tiedosto on seuraavanlainen:
 ```
+saveTo=1
+
+dbName=database
+dbUsername=sa
+dbPassword=
+
 userFile=users.txt
 recipeFile=recipes.txt
 ingredientFile=ingredients.txt
 ```
+Ensisijainen tallennustyyppi määritellään 1. rivillä (asetus *saveTo*). Luku 1 merkitsee tietokantatallennusta ja luku 2 tiedostotallennusta. Molemmissa tapauksissa ensisijaisen metodin epäonnistuessa sovellus yrittää toissijaisesti toista metodia. Mikäli kumpikaan metodi ei onnistu, tai mikäli asetuksen syötteeksi on annettu jotain muuta kuin 1 tai 2, ohjelma sulkeutuu.
+
 Lisäksi ohjelma hakee käynnistyshakemistosta tiedoston recipeTypes.properties, joka sisältää listan sallituista reseptityypeistä. Oletusarvoisesti tiedosto on seuraavanlainen:
 ```
 types=kala,liha,kasvis,makea
@@ -22,7 +30,7 @@ Mikäli recipeTypes.properties -tiedostoa ei löydy, käyttää ohjelma hyväksy
 Ohjelma käynnistetään komennolla
 
 ```
-java -jar Kauppalistageneraattori-1.0-SNAPSHOT.jar
+java -jar Kauppalistageneraattori-1.0.jar
 ```
 Huomioi että sinun tulee olla samassa hakemistossa kuin mihin jar-tiedosto on sijoitettu komennon toimimiseksi.
 
@@ -84,11 +92,11 @@ Ainesosien lisääminen tapahtuu painamalla nappia 'Lisää ainesosa'. Tämä av
 
 ### Ainesosan lisääminen
 
-Ainesosan nimeen pätevät samat vaatimukset kuin reseptin nimeen. Ainesosan määrän tulee olla luku. Desimaaliluvuissa käytetään erottimena pistettä. Ainesosan yksikkö valitaan listasta. Mahdollisia yksikköjä ovat kilogramma (kg), gramma (g), litra (l), desilitra (dl) ja kappale (kpl). Ohjelma ei tällä hetkellä tuo muita yksiköitä.
+Ainesosan nimeen pätevät samat vaatimukset kuin reseptin nimeen. Ainesosan määrän tulee olla luku. Desimaaliluvuissa käytetään erottimena pistettä. Ainesosan yksikkö valitaan listasta. Mahdollisia yksikköjä ovat kilogramma (kg), gramma (g), litra (l), desilitra (dl) ja kappale (kpl). Ohjelma ei tuo muita yksiköitä.
 
 Kun lomake on täytetty, uusi ainesosa luodaan painamalla nappia 'Lisää ainesosa'. Mikäli ainesosaa ei halutakaan luoda, voidaan ainesosan luomisesta poistua painamalla nappia 'Sulje ikkuna'. Ohjelma ilmoittaa, mikäli lomakkeeseen syötetyt tiedot eivät kelpaa tai mikäli ainesosan luominen ei muusta syystä onnistu. Mikäli ainesosan luominen onnistuu, lisätään sen lomakkeen alla olevalle listalle. Ohjelma tyhjentää lomakkeen, ja siihen voidaan syöttää seuraavan ainesosan tiedot.
 
-Kun kaikki halutut ainesosat on syötetty, näkymästä poistutaan painamalla nappia 'Sulje ikkuna'. Tällöin uudet ainesosat päivittyvät reseptinäkymän oikeanpuoleiseen paneeliin. Mikäli ikkunasta poistutaan muilla keinoin ei reseptinäkymän ainesosalistaus päivity. Tällöin uudet ainesosat saadaan näkyvii valitsemalla kyseinen resepti uudelleen keskipaneelin listauksesta.
+Kun kaikki halutut ainesosat on syötetty, näkymästä poistutaan joko painamalla nappia 'Sulje ikkuna' tai sulkemalla ikkuna muuten. Tällöin uudet ainesosat päivittyvät reseptinäkymän oikeanpuoleiseen paneeliin.
 
 ### Ainesosan poistaminen
 
@@ -112,6 +120,6 @@ Ohjelma laskee valittujen reseptien perusteella kokonaismäärät niiden sisält
 
 ![](kuvat/view_shoppinglist_view.png)
 
-Mikäli listalta halutaan tässä vaiheessa poistaa tai lisätä resepti, voidaan reseptien valintanäkymään palata painamalla nappia 'Palaa reseptien valintaan'. Tekstikentässä kauppalistaan voidaan tehdä myös manuaalisia muutoksia. Tallennustoiminto ei kuitenkaan ole vielä käytössä. Kauppalistan tarkastelusta poistutaan painamalla nappia 'Sulje ikkuna'. Ohjelma sulkee kauppalistanäkymän ja palaa reseptinäkymään.
+Mikäli listalta halutaan tässä vaiheessa poistaa tai lisätä resepti, voidaan reseptien valintanäkymään palata painamalla nappia 'Palaa reseptien valintaan'. Tekstikentässä kauppalistaan voidaan tehdä myös manuaalisia muutoksia. Kauppalistan tallennus tekstitiedostona onnistuu painamalla nappia 'Tallenna'. Kauppalistan tarkastelusta poistutaan painamalla nappia 'Sulje ikkuna' tai sulkemalla ikkuna muuten. Ohjelma sulkee kauppalistanäkymän ja palaa reseptinäkymään.
 
 Kannattaa huomioida, että ohjelma ei tallenna kauppalistaa eikä reseptivalintoja vaan seuraavan kerran kauppalistan luonti alkaa vastaavasti "tyhjältä pöydältä".

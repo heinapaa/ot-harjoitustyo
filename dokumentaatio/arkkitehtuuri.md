@@ -147,7 +147,11 @@ Kun ainesosan lisääminen-näkymässä on syötetty/valittu kaikkiin kenttiin h
 
 ### ShoppingList-luokka
 
-Kauppalistaa kuvaava luokka voisi olla järkevämpää toteuttaa siten, että se muistaisi sisältämänsä reseptit eikä suinkaan vain listaa ainesosista (tekstimuodossa). Tämä mahdollistaisi paremmin kauppalistojen tallentamisen (yksi mahdollisista lisäominaisuuksista, joita sovellukseen voisi lisätä), ja selkeyttäisi sovelluslogiikkaa muutenkin.
+Kauppalistaa kuvaava luokka voisi olla järkevämpää toteuttaa siten, että se muistaisi sisältämänsä reseptit eikä suinkaan vain listaa ainesosista (tekstimuodossa). Tämä mahdollistaisi paremmin kauppalistojen tallentamisen (yksi mahdollisista lisäominaisuuksista, joita sovellukseen voisi lisätä), ja selkeyttäisi sovelluslogiikkaa muutenkin. ShoppingList-luokkaa olisi muutenkin hyvä tarkastella uudemman kerran, ja pohtia sitä ovatko sen nyt tarjoamat metodit riittäviä/tarkoituksenmukaisia.
+
+### Tiedoston kirjoittaminen
+
+Sovelluksessa tapahtuu tiedoston lukemista ja kirjoittamista useammassa paikassa (FileDao-luokissa ja ShoppingList-luokassa). Tiedostojen käsittely olisi hyvä antaa yhden luokan tehtäväksi (esim. oma palvelu-tason luokka?).
 
 ### Käyttöliittymä
 

@@ -17,9 +17,9 @@ SQLDao-luokkien toiminnallisuus on testattu luomalla testeissä tilapäinen tiet
 FileDao-luokkien toiminnallisuus on testattu luomalla testeissä tilapäinen tiedosto.
 
 ### Testauskattavuus
-(kuva)
-Testaamatta jäivät etenkin monet SQLException-virheen tuottavat tilanteet.
-Lisäksi ohjeiden mukaisesti käyttöliittymää ei testattu automatisoiduin testein.
+Käyttöliittymää lukuunottamatta sovelluksen testauksen rivikattavuus on 95% ja haarautumakattavuus 87%.
+![](kuvat/jacoco.png)
+Testaamatta jäivät etenkin monet SQLException-virheen tuottavat tilanteet, sekä osa tilanteissa joissa sovelluslogiikalle annettaisiin tyhjiä (null) syötteitä.
 
 ## Järjestelmätestaus
 Järjestelmätason testaus on suoritettu manuaalisesti.
@@ -37,5 +37,5 @@ Määrittelydokumentin ja käyttöohjeen listaamat toiminnallisuudet on käyty l
 ## Puutteet testauksessa
 - Tietokantatallennuksen testaus ei ole kovin syvällistä. JUnit-testausta ei ole suoritettu sellaisille tilanteille, joissa luokat tuottavat SQLException-virheen. Myöskään esim. kyselyiden tehokkuuteen ei ole kiinnitetty huomioita, eikä ole tutkittu sitä, miten sovellus suoriutuisi tilanteessa, jossa tallennettava tiedon määrä olisi suuri.
 - Sovellusta ei ole testattu tilanteessa, joissa tallentaviin tiedostoihin ei ole tarvittavia luku- tai kirjoitusoikeuksia.
-- Sovellusta ei ole testattu tilanteessa, joissa config.Properties -tiedoston syötteet ovat virheellisiä (lukuun ottamatta edellä mainittua)
+- Sovellusta ei ole testattu tilanteessa, joissa config.Properties -tiedoston syötteet ovat virheellisiä (lukuun ottamatta edellä mainittua), tai joissa tiedosto puuttuisi kokonaan.
 - Järjestelmätestausta ei tehty Windows-ympäristössä. Tämäkin voisi olla tarpeellista.

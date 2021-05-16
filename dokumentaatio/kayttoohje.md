@@ -2,7 +2,7 @@
 
 Lataa tiedosto [Kauppalistageneraattori-1.0.jar](https://github.com/heinapaa/ot-harjoitustyo/releases/tag/loppupalautus).
 
-Huom! Releasesta löytyvä jar toimii Cubbli Linux-koneilla.  Jos jar-tiedoston ajaminen ei jossain muussa ympäsitössä onnistu, kopioi koko sovellus ja generoi jar itse [README:n](https://github.com/heinapaa/ot-harjoitustyo/blob/main/README.md) ohjeita seuraten. Näin laaditun jarin avulla sovellus käynnistyy myös esim. OSX-ympäristössä. Virhe vaikuttaisi liittyvän siihen, mikä versio javafx:stä pakataan jar-tiedostoon mukaan.
+Huom! Releasesta löytyvä jar toimii Cubbli Linux-koneilla.  Jos jar-tiedoston ajaminen ei jossain muussa ympäsitössä onnistu, kopioi koko sovellus ja generoi jar itse [README:n](https://github.com/heinapaa/ot-harjoitustyo/blob/main/README.md) ohjeita seuraten. Näin laaditun jarin avulla sovellus käynnistyy myös esim. OSX-ympäristössä. Ongelma vaikuttaisi mahdollisesti liittyvän siihen, mikä versio javafx:stä pakataan jar-tiedostoon mukaan.
 
 
 ## Konfigurointi

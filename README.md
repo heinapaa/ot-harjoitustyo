@@ -10,6 +10,8 @@ Sovellus on luotu Helsingin yliopiston Tietojenkäsittelytieteen kurssin *Ohjelm
 
 [Käyttöohje](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/kayttoohje.md)
 
+[Testausdokumentti](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/testaus.md)
+
 [Tuntikirjanpito](https://github.com/heinapaa/ot-harjoitustyo/blob/main/dokumentaatio/tuntikirjanpito.md)
 
 ## Releaset

@@ -1,6 +1,6 @@
 # Käyttöohje
 
-Lataa tiedosto [Kauppalistageneraattori-1.0-SNAPSHOT.jar](https://github.com/heinapaa/ot-harjoitustyo/releases/tag/viikko6).
+Lataa tiedosto [Kauppalistageneraattori-1.0.jar](https://github.com/heinapaa/ot-harjoitustyo/releases/tag/loppupalautus).
 
 
 ## Konfigurointi
